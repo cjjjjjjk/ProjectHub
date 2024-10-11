@@ -3,4 +3,5 @@ client/node_modules
 
 # Hai
 # enviroment variable 
-.env 
+server/.env
+client/.env
