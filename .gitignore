@@ -1,2 +1,6 @@
 server/node_modules
 client/node_modules
+
+# Hai
+# enviroment variable 
+.env 
