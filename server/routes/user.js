@@ -1,33 +1,49 @@
 const express = require('express')
 const router = express.Router()
 const { Users } = require('../models')
+const bcrypt = require('bcrypt')
 
-// Hai ------------------------------ user routing
+
+// Hai =============================== user routing
+// helper ========================================
+// hash password
+const hashPassword = async (password) => {
+    const saltRound = 10;
+    const passwordHashed = await bcrypt.hash(password, saltRound)
+    return passwordHashed;
+}
+
+// routing =======================================
 router.get('/', async (req, res) => {
     res.send("Hello fuck you")
 })
-// create new user -------------------
+// create new user ------------------------------
 router.post('/', async (req, res) => {
     try {
-        const user = req.body
-        const newUser = await Users.create(user)
-        return res.json({ message: "User created successfully!", id: newUser.id });
-    } catch (err) {
-        if (err.name === 'SequelizeValidationError') {
-            const errors = err.errors
+        const { username, email, password } = req.body
 
-            let errorList = []
+        // hash password -------
+        const hashpw = await hashPassword(password);
+
+        const newUser = await Users.create({ username, email, password: hashpw })
+        return res.json({ message: "User created successfully!", id: newUser.id });
+
+    } catch (err) {
+        let errorList = []
+        if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+            const errors = err.errors
             errors.map(e => {
                 errorList.push(e.message)
                 return errorList;
             })
-            return res.status(400).json({
-                success: false,
-                message: errorList
-            })
         } else {
-            next(new ErrorResponse(`Create user ERR:${req.body.name}`, 404))
+            console.log("CREATE USER ERROR !", err)
+            errorList.push(err.message)
         }
+        return res.status(400).json({
+            success: false,
+            message: errorList
+        })
     }
 })
 
