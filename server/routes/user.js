@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         const { username, email, password } = req.body
 
         // hash password -------
-        const hashpw = await hashPassword(password);
+        const hashpw = (password) ? hashPassword(password) : null;
 
         const newUser = await Users.create({ username, email, password: hashpw })
         return res.json({ message: "User created successfully!", id: newUser.id });
