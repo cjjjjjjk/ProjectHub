@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { Users } = require('../models')
 const bcrypt = require('bcrypt')
+const { where } = require('sequelize')
 
 
 // Hai =============================== user routing
@@ -45,6 +46,31 @@ router.post('/', async (req, res) => {
             message: errorList
         })
     }
+})
+// login ----------------------
+router.post("/login", async (req, res) => {
+    try {
+
+        const { username, password } = req.body
+
+        if (!username || !password) {
+            throw new Error("Username and password can not be empty !")
+        }
+
+        const user = await Users.findOne({ where: { username: username } })
+        if (!user) { throw new Error("Incorrect username or password.") };
+
+        // compare password -------
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw new Error("Incorrect username or password.");
+        }
+
+        return res.json({ success: true, message: `Login success, userID: ${user.id}` })
+    } catch (err) {
+        res.status(404).json({ message: err.message })
+    }
+
 })
 
 module.exports = router
