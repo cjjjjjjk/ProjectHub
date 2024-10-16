@@ -20,12 +20,12 @@ router.get('/', async (req, res) => {
 // create new user ------------------------------
 router.post('/', async (req, res) => {
     try {
-        const { username, email, password } = req.body
+        const { username, email, name, password } = req.body
 
         // hash password -------
-        const hashpw = (password) ? hashPassword(password) : null;
+        const hashpw = (password) ? await hashPassword(password) : null;
 
-        const newUser = await Users.create({ username, email, password: hashpw })
+        const newUser = await Users.create({ username, email, name, password: hashpw })
         return res.json({ message: "User created successfully!", id: newUser.id });
 
     } catch (err) {

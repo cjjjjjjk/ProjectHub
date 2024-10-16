@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                msg: 'Email address already exists.'
+            },
             validate: {
                 isEmail: {
                     args: true,
@@ -23,11 +26,23 @@ module.exports = (sequelize, DataTypes) => {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                msg: 'username  already exists.'
+            },
             validate: {
                 notNull: {
-                    msg: 'Name can not be empty !',
+                    msg: 'Username can not be empty !',
                 },
             },
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: "Name can not be empty !"
+                }
+            }
         },
 
         password: {
@@ -35,12 +50,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'Please enter your name',
+                    msg: 'Password can not be empty !',
                 },
             },
         },
 
     });
-   
+
     return Users;
 };
