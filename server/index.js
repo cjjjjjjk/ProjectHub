@@ -6,9 +6,11 @@ app.use(express.json());// parse the data sent by client in json format
 const cors = require('cors');
 app.use(cors());
 
-const userRouter = require('./routes/user')
-app.use('/user', userRouter)
 
+db.sequelize.sync().then(() => {
 app.listen(3001, () => {
   console.log('Server running on port 3001');
-}); 
+}); });
+
+const userRouter = require('./routes/users')
+app.use('/users', userRouter)
