@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const { Users } = require('../models')
 const bcrypt = require('bcrypt')
-const { where } = require('sequelize')
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 
 // Hai =============================== user routing
@@ -19,7 +20,8 @@ router.get('/', async (req, res) => {
     res.send("Hello fuck you")
 })
 // create new user ------------------------------
-router.post('/', async (req, res) => {
+// POST: http://localhost:3001/api/users/sign-up
+router.post('/sign-up', async (req, res) => {
     try {
         const { username, email, name, password } = req.body
 
@@ -47,10 +49,40 @@ router.post('/', async (req, res) => {
         })
     }
 })
-// login ----------------------
+// update user --------------
+// PATCH: http://localhost:3001/api/users/update/<userID>
+router.patch('/update/:id', async (req, res) => {
+    const { id } = req.params
+    const update = req.body
+
+    try {
+        if (Object.keys(update).length === 0) {
+            const error = new Error("Nothing to update!");
+            error.status = 400;
+            throw error;
+        }
+
+        const user = await Users.findOne({ where: { id } });
+        if (!user) {
+            throw new Error(`User ID:${id} not found !`)
+        }
+
+        await Users.update(update, {
+            where: { id }
+        });
+
+        return res.json({ message: `User ${id} updated`, update: update })
+    } catch (err) {
+
+        if (err.name == "SequelizeUniqueConstraintError") return res.status(404).json({ message: "Email or username already exists !" })
+        return res.status(404).json({ message: err.message })
+    }
+
+})
+// login -------------------------------
+// POST: http://localhost:3001/api/users/login?username=hai123&password=123456
 router.post("/login", async (req, res) => {
     try {
-
         const { username, password } = req.body
 
         if (!username || !password) {
@@ -66,11 +98,14 @@ router.post("/login", async (req, res) => {
             throw new Error("Incorrect username or password.");
         }
 
-        return res.json({ success: true, message: `Login success, userID: ${user.id}` })
+        // json web token ---------------
+        // file .env : SCRET_KEY = <scret_key>
+        const token = jwt.sign({ user: { id: user.id, username: user.username } }, process.env.SCRET_KEY)
+
+        return res.json({ success: true, message: `Login success!`, id: user.id, token: token })
     } catch (err) {
         res.status(404).json({ message: err.message })
     }
-
 })
 
 module.exports = router
