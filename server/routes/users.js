@@ -3,6 +3,7 @@ const router = express.Router()
 const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { where } = require('sequelize')
 require('dotenv').config();
 
 
@@ -52,7 +53,7 @@ router.post('/sign-up', async (req, res) => {
 // update user --------------
 // PATCH: http://localhost:3001/api/users/update/<userID>
 router.patch('/update/:id', async (req, res) => {
-    const { id } = req.params
+    const id = req.params.id
     const update = req.body
 
     try {
@@ -108,4 +109,23 @@ router.post("/login", async (req, res) => {
     }
 })
 
+
+// remove user ---------------------------
+// DELETE: http://localhost:3001/api/users/delete/<userID>
+router.delete("/delete/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const user = await Users.findOne({ where: { id } });
+        if (!user) {
+            throw new Error(`User ID:${id} not found !`)
+        }
+        Users.destroy({
+            where: { id }
+        })
+        return res.json({ message: `User Id:${id} deleted !` })
+    } catch (err) {
+        return res.status(404).json({ message: err.message })
+    }
+
+})
 module.exports = router
