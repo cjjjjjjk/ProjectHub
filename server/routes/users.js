@@ -101,7 +101,8 @@ router.post("/login", async (req, res) => {
 
         // json web token ---------------
         // file .env : SCRET_KEY = <scret_key>
-        const token = jwt.sign({ user: { id: user.id, username: user.username } }, process.env.SCRET_KEY)
+        const secret_key = process.env.SECRET_KEY
+        const token = jwt.sign({ user: { id: user.id, username: user.username } }, (secret_key) ? secret_key : "abcd-1234")
 
         return res.json({ success: true, message: `Login success!`, id: user.id, token: token })
     } catch (err) {
