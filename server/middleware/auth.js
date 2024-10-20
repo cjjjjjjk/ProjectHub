@@ -5,7 +5,11 @@ require('dotenv').config();
 function validateToken(req, res, next) {
 
     // get token
-    const token_PMbearer = req.headers.authorization.split(' ')[1];
+    const pm_bearer_token_string = req.headers.authorization;
+    let token_PMbearer;
+    if (pm_bearer_token_string) {
+        token_PMbearer = pm_bearer_token_string.split(' ')[1];
+    }
     const token = (req.headers['token']) ? req.headers['token'] : token_PMbearer;
 
     if (!token) return res.status(401).json('Token expired !');

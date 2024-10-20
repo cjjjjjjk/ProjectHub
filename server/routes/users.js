@@ -4,6 +4,7 @@ const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { validateToken } = require('../middleware/auth')
+const { where } = require('sequelize')
 require('dotenv').config();
 
 
@@ -62,34 +63,30 @@ router.post('/sign-up', async (req, res) => {
     }
 })
 // update user --------------
-// PATCH: http://localhost:3001/api/users/update/<userID>
-router.patch('/update/:id', validateToken, async (req, res) => {
-    const id = req.params.id
+// PUT: http://localhost:3001/api/users/update-profile
+router.put('/update-profile', validateToken, async (req, res) => {
     const update = req.body
-
     try {
-        if (Object.keys(update).length === 0) {
-            const error = new Error("Nothing to update!");
-            error.status = 400;
-            throw error;
-        }
+        const userId = req.user['user'].id;
+        const user = await Users.findByPk(userId);
 
-        const user = await Users.findOne({ where: { id } });
-        if (!user) {
-            throw new Error(`User ID:${id} not found !`)
-        }
+        await Users.update({
+            bio: update.bio !== null ? update.bio : user.bio,
+            phone: update.phone !== null ? update.phone : user.phone,
+            social_link: update.social_link !== null ? update.social_link : user.social_link,
+            company: update.company !== null ? update.company : user.company,
+            location: update.location !== null ? update.location : user.location,
+            image: update.image !== null ? update.image : user.image,
+            email: update.email !== null ? update.email : user.email,
+            username: update.username !== null ? update.username : user.username
+        }, { where: { id: userId } });
 
-        await Users.update(update, {
-            where: { id }
-        });
-
-        return res.json({ message: `User ${id} updated`, update: update })
+        return res.json({ message: `User ${userId} updated !`, update: update })
     } catch (err) {
 
         if (err.name == "SequelizeUniqueConstraintError") return res.status(404).json({ message: "Email or username already exists !" })
         return res.status(404).json({ message: err.message })
     }
-
 })
 // login -------------------------------
 // POST: http://localhost:3001/api/users/login?username=hai123&password=123456
@@ -113,7 +110,7 @@ router.post("/login", async (req, res) => {
         // json web token ---------------
         // file .env : SCRET_KEY = <scret_key>
         const secret_key = process.env.SECRET_KEY
-        const token = jwt.sign({ user: { id: user.id, username: user.username } }, (secret_key) ? secret_key : "abcd-1234")
+        const token = jwt.sign({ user: { id: user.id, username: user.username } }, (secret_key) ? secret_key : "abcd-1234", { expiresIn: process.env.EXPIRED_TOKEN })
 
         return res.json({ success: true, message: `Login success!`, token: token })
     } catch (err) {
