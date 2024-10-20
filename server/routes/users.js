@@ -3,7 +3,7 @@ const router = express.Router()
 const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { where } = require('sequelize')
+const { validateToken } = require('../middleware/auth')
 require('dotenv').config();
 
 
@@ -29,7 +29,18 @@ router.post('/sign-up', async (req, res) => {
         // hash password -------
         const hashpw = (password) ? await hashPassword(password) : null;
 
-        const newUser = await Users.create({ username, email, name, password: hashpw })
+        const newUser = await Users.create({
+            username,
+            email,
+            name,
+            password: hashpw,
+            bio: "",
+            phone: "",
+            social_link: "",
+            company: "",
+            location: "",
+            image: ""
+        })
         return res.json({ message: "User created successfully!", id: newUser.id });
 
     } catch (err) {
@@ -52,7 +63,7 @@ router.post('/sign-up', async (req, res) => {
 })
 // update user --------------
 // PATCH: http://localhost:3001/api/users/update/<userID>
-router.patch('/update/:id', async (req, res) => {
+router.patch('/update/:id', validateToken, async (req, res) => {
     const id = req.params.id
     const update = req.body
 
@@ -104,7 +115,7 @@ router.post("/login", async (req, res) => {
         const secret_key = process.env.SECRET_KEY
         const token = jwt.sign({ user: { id: user.id, username: user.username } }, (secret_key) ? secret_key : "abcd-1234")
 
-        return res.json({ success: true, message: `Login success!`, id: user.id, token: token })
+        return res.json({ success: true, message: `Login success!`, token: token })
     } catch (err) {
         res.status(404).json({ message: err.message })
     }

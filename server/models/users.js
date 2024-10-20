@@ -1,3 +1,4 @@
+const { DATE } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define('Users', {
         id: {
@@ -54,6 +55,38 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
         },
+
+        // PROFILE:
+        bio: {
+            type: DataTypes.STRING,
+            allowNull: true
+
+        },
+
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+
+        social_link: {
+            type: DataTypes.STRING,
+            allowNullL: true
+        },
+
+        company: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+
+        location: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+
+        image: {
+            type: DataTypes.STRING,
+            allowNull: true
+        }
 
     });
 

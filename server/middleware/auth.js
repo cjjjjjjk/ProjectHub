@@ -3,8 +3,12 @@ require('dotenv').config();
 
 // Hai ----------------- jwt verification .
 function validateToken(req, res, next) {
-    const token = req.headers['token']
-    if (!token) return res.status(401).json('User not login !');
+
+    // get token
+    const token_PMbearer = req.headers.authorization.split(' ')[1];
+    const token = (req.headers['token']) ? req.headers['token'] : token_PMbearer;
+
+    if (!token) return res.status(401).json('Token expired !');
 
     const scret_key = (process.env.SECRET_KEY) ? process.env.SECRET_KEY : 'abcd-1234';
     try {
@@ -16,4 +20,6 @@ function validateToken(req, res, next) {
         return res.status(403).json({ message: `Token (jwt) verification failed: ${err.message}` })
     }
 }
+
+
 module.exports = { validateToken };
