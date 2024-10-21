@@ -4,6 +4,9 @@ const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { validateToken } = require('../middleware/auth')
+const { upload } = require('../middleware/upload')
+const path = require('path')
+const fs = require('fs');
 const { where } = require('sequelize')
 require('dotenv').config();
 
@@ -64,13 +67,32 @@ router.post('/sign-up', async (req, res) => {
 })
 // update user --------------
 // PUT: http://localhost:3001/api/users/update-profile
-router.put('/update-profile', validateToken, async (req, res) => {
+router.put('/update-profile', validateToken, upload.single('image'), async (req, res) => {
     const update = req.body
     try {
         const userId = req.user['user'].id;
         const user = await Users.findByPk(userId);
 
+        // update profile picture ----------
+        if (req.file) {
+            try {
+                // remove old profile picture------
+                const oldImagePath = path.join(__dirname, '../', user.image);
+                if (user.image) {
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                    }
+                }
+                const imagePath = path.join("uploads", req.file.filename);
+                update.image = imagePath;
+
+            } catch (err) {
+                throw new Error(err.message)
+            }
+        }
+
         await Users.update({
+            name: update.name != null ? update.name : user.name,
             bio: update.bio !== null ? update.bio : user.bio,
             phone: update.phone !== null ? update.phone : user.phone,
             social_link: update.social_link !== null ? update.social_link : user.social_link,
