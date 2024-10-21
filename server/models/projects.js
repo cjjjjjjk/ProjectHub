@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         startDate: {
-            type: sequelize.DATE,
+            type: DATE,
             allowNull: false,
             validate: {
                 notNull: {
@@ -32,13 +32,13 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         endDate: {
-            type: sequelize.DATE,
+            type: DATE,
             allowNull: true
         },
         leaderId: {
             type: DataTypes.INTEGER,
             references: {
-                model: Users,
+                model: 'Users',
                 key: 'id',
             }
 
