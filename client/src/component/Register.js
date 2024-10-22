@@ -1,5 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { MdEmail } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { FaRepeat } from "react-icons/fa6";
+
 const Register = () => {
   return (
     <div className="h-[100vh]  text-white bg-violet-300 flex justify-center items-center">
@@ -19,6 +23,7 @@ const Register = () => {
             >
               Email
             </label>
+            <MdEmail className="absolute right-3 top-4 size-6"></MdEmail>
           </div>
 
           <div className="relative my-4 p-2 pt-4 border border-black rounded-lg hover:border-amber-500">
@@ -32,6 +37,7 @@ const Register = () => {
             >
               Password
             </label>
+            <RiLockPasswordFill className="absolute right-3 top-4 size-6"></RiLockPasswordFill>
           </div>
 
           <div className="relative my-4 p-2 pt-4 border border-black rounded-lg hover:border-amber-500">
@@ -45,11 +51,12 @@ const Register = () => {
             >
               Confirm password
             </label>
+            <FaRepeat className="absolute right-3 top-4 size-5" />
           </div>
 
           <button
             type="submit"
-            className="w-full mb-4 py-2 text-[18px] mt-6 rounded-full bg-white text-emerald-800 hover:bg-emerald-600 hover:text-white "
+            className="w-full mb-4 py-2 text-[18px] mt-6 rounded-full bg-white text-black hover:bg-black hover:text-white "
           >
             Register
           </button>
