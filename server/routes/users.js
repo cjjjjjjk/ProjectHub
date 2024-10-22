@@ -3,8 +3,9 @@ const router = express.Router()
 const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const axios = require('axios')
 const { validateToken } = require('../middleware/auth')
-const { upload } = require('../middleware/upload')
+// const { upload } = require('../middleware/upload')
 const path = require('path')
 const fs = require('fs');
 const { where } = require('sequelize')
@@ -67,49 +68,50 @@ router.post('/sign-up', async (req, res) => {
 })
 // update user --------------
 // PUT: http://localhost:3001/api/users/update-profile
-router.put('/update-profile', validateToken, upload.single('image'), async (req, res) => {
-    const update = req.body
-    try {
-        const userId = req.user['user'].id;
-        const user = await Users.findByPk(userId);
+router.put('/update-profile', validateToken,
+    // upload.single('image'), 
+    async (req, res) => {
+        const update = req.body
+        try {
+            const userId = req.user['user'].id;
+            const user = await Users.findByPk(userId);
 
-        // update profile picture ----------
-        if (req.file) {
-            try {
-                // remove old profile picture------
-                const oldImagePath = path.join(__dirname, '../', user.image);
-                if (user.image) {
-                    if (fs.existsSync(oldImagePath)) {
-                        fs.unlinkSync(oldImagePath);
-                    }
-                }
-                const imagePath = path.join("uploads", req.file.filename);
-                update.image = imagePath;
+            // update profile picture -------- local:
+            // if (req.file) {
+            //     try {
+            //         // remove old profile picture------
+            //         const oldImagePath = path.join(__dirname, '../', user.image);
+            //         if (user.image) {
+            //             if (fs.existsSync(oldImagePath)) {
+            //                 fs.unlinkSync(oldImagePath);
+            //             }
+            //         }
+            //         const imagePath = path.join("uploads", req.file.filename);
+            //         update.image = imagePath;
+            //     } catch (err) {
+            //         throw new Error(err.message)
+            //     }
+            // }
 
-            } catch (err) {
-                throw new Error(err.message)
-            }
+            await Users.update({
+                name: update.name != null ? update.name : user.name,
+                bio: update.bio !== null ? update.bio : user.bio,
+                phone: update.phone !== null ? update.phone : user.phone,
+                social_link: update.social_link !== null ? update.social_link : user.social_link,
+                company: update.company !== null ? update.company : user.company,
+                location: update.location !== null ? update.location : user.location,
+                image: update.image !== null ? update.image : user.image,
+                email: update.email !== null ? update.email : user.email,
+                username: update.username !== null ? update.username : user.username
+            }, { where: { id: userId } });
+
+            return res.json({ message: `User ${userId} updated !`, update: update })
+        } catch (err) {
+
+            if (err.name == "SequelizeUniqueConstraintError") return res.status(404).json({ message: "Email or username already exists !" })
+            return res.status(404).json({ message: err.message })
         }
-
-        await Users.update({
-            name: update.name != null ? update.name : user.name,
-            bio: update.bio !== null ? update.bio : user.bio,
-            phone: update.phone !== null ? update.phone : user.phone,
-            social_link: update.social_link !== null ? update.social_link : user.social_link,
-            company: update.company !== null ? update.company : user.company,
-            location: update.location !== null ? update.location : user.location,
-            image: update.image !== null ? update.image : user.image,
-            email: update.email !== null ? update.email : user.email,
-            username: update.username !== null ? update.username : user.username
-        }, { where: { id: userId } });
-
-        return res.json({ message: `User ${userId} updated !`, update: update })
-    } catch (err) {
-
-        if (err.name == "SequelizeUniqueConstraintError") return res.status(404).json({ message: "Email or username already exists !" })
-        return res.status(404).json({ message: err.message })
-    }
-})
+    })
 // login -------------------------------
 // POST: http://localhost:3001/api/users/login?username=hai123&password=123456
 router.post("/login", async (req, res) => {
