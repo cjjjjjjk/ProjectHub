@@ -44,7 +44,7 @@ router.post('/sign-up', async (req, res) => {
             social_link: "",
             company: "",
             location: "",
-            image: ""
+            avatar: ""
         })
         return res.json({ message: "User created successfully!", id: newUser.id });
 
@@ -69,29 +69,13 @@ router.post('/sign-up', async (req, res) => {
 // update user --------------
 // PUT: http://localhost:3001/api/users/update-profile
 router.put('/update-profile', validateToken,
-    // upload.single('image'), 
+    // upload.single('avatar'), 
     async (req, res) => {
         const update = req.body
         try {
             const userId = req.user['user'].id;
             const user = await Users.findByPk(userId);
 
-            // update profile picture -------- local:
-            // if (req.file) {
-            //     try {
-            //         // remove old profile picture------
-            //         const oldImagePath = path.join(__dirname, '../', user.image);
-            //         if (user.image) {
-            //             if (fs.existsSync(oldImagePath)) {
-            //                 fs.unlinkSync(oldImagePath);
-            //             }
-            //         }
-            //         const imagePath = path.join("uploads", req.file.filename);
-            //         update.image = imagePath;
-            //     } catch (err) {
-            //         throw new Error(err.message)
-            //     }
-            // }
 
             await Users.update({
                 name: update.name != null ? update.name : user.name,
@@ -100,7 +84,7 @@ router.put('/update-profile', validateToken,
                 social_link: update.social_link !== null ? update.social_link : user.social_link,
                 company: update.company !== null ? update.company : user.company,
                 location: update.location !== null ? update.location : user.location,
-                image: update.image !== null ? update.image : user.image,
+                avatar: update.avatar !== null ? update.avatar : user.avatar,
                 email: update.email !== null ? update.email : user.email,
                 username: update.username !== null ? update.username : user.username
             }, { where: { id: userId } });

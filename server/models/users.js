@@ -57,6 +57,12 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         // PROFILE:
+        dob: {
+            type: DATE,
+            allowNull: true
+
+        },
+
         bio: {
             type: DataTypes.STRING,
             allowNull: true
@@ -83,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
 
-        image: {
+        avatar: {
             type: DataTypes.STRING,
             allowNull: true
         }
