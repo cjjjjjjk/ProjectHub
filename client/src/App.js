@@ -28,17 +28,17 @@ function App() {
       >
         <div className="flex flex-col gap-4 font-medium">
           <div>
-            <NavLink to="page/Profile"  className={({ isActive }) =>`text-base ${isActive ? 'text-blue-500 font-bold' : 'text-black'}`}>
+            <NavLink to="page/Profile"  className={({ isActive }) =>`text-base p-2 ${isActive ? 'flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center ' : 'text-black'}`}>
             Profile
             </NavLink>
           </div>
           <div>
-          <NavLink to="page/Project"  className={({ isActive }) =>`text-base ${isActive ? 'text-blue-500 font-bold' : 'text-black'}`}>
+          <NavLink to="page/Project"  className={({ isActive }) =>`text-base p-2 ${isActive ? 'flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center' : 'text-black'}`}>
              Your Project
           </NavLink>
           </div>
           <div>
-            <button className="text-base">
+            <button className="text-base pl-2 hover:opacity-50">
             Sign out
             </button>
           </div>
