@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { MdEmail } from "react-icons/md";
 import axios from 'axios';
 
 import { FaEyeSlash } from "react-icons/fa";
@@ -14,14 +13,24 @@ const Login = () => {
   const handleShowPass = () => {
     setShowPass(!showPass);
   };
+  // Hai -------- Quên mật khẩu
+  const handleResetPassword_req = async () => {
+    const email = prompt("Enter your email !")
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users/reset-password`, { "email": `${email}` })
+      console.log(res)
+    } catch (e) {
+      console.error(e.response.data.message)
+    }
+  }
+
   const handleLogin = async (e) => {
     // e.preventDefault()
     const account = { username, password };
     try {
       // send login request.
       const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users/login`, account)
-      // response
-      console.log("RESPONSE: ", res.data)
+      console.log(res.data)
     } catch (e) {
       console.error(e.response.data.message)
     }
@@ -47,7 +56,6 @@ const Login = () => {
             >
               Username
             </label>
-            <MdEmail className="absolute right-3 top-4 size-6"></MdEmail>
           </div>
           <div className="relative my-8 p-2 pt-4 border-2 border-black rounded-lg">
             <input
@@ -78,9 +86,9 @@ const Login = () => {
               <input type="checkbox" name="" id=""></input>
               <label htmlFor="">Remember Me</label>
             </div>
-            <Link to="" className="text-blue-500">
+            <button onClick={handleResetPassword_req} className="text-blue-500">
               Forgot Password?
-            </Link>
+            </button>
           </div>
           <button
             type="submit"
