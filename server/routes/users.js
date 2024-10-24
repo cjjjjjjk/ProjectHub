@@ -5,26 +5,28 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
 const { validateToken } = require('../middleware/auth')
-// const { upload } = require('../middleware/upload')
-const path = require('path')
-const fs = require('fs');
-const { where } = require('sequelize')
 require('dotenv').config();
-
+const {
+    resetPassword_req,
+    resetPassword
+} = require('./reset-password')
 
 // Hai =============================== user routing
 // helper ========================================
-// hash password
+// hash password ---------------------------------
 const hashPassword = async (password) => {
-    const saltRound = 10;
-    const passwordHashed = await bcrypt.hash(password, saltRound)
+    const passwordHashed = await bcrypt.hash(password, Number(process.env.SALT_ROUND))
     return passwordHashed;
 }
-
 // routing =======================================
+
 router.get('/', async (req, res) => {
     res.send("Hello fuck you")
 })
+// reset password --------------------------------
+router.post('/reset-password', resetPassword_req)
+router.post('/reset-password/:token', resetPassword)
+
 // create new user ------------------------------
 // POST: http://localhost:3001/api/users/sign-up
 router.post('/sign-up', async (req, res) => {
