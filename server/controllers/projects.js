@@ -1,4 +1,4 @@
-// controllers/projectsController.js
+// controllers/projects.js
 const { Projects } = require("../models");
 const { Op } = require("sequelize");
 
@@ -54,7 +54,9 @@ const createProject = async (req, res) => {
       name,
       description,
       userId: req.user.id,
+      document: req.file ? req.file.path : null,
     });
+
     res.json(newProject);
   } catch (error) {
     res

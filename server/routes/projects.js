@@ -8,14 +8,15 @@ const {
   updateProject,
   deleteProject,
   getProjectDetails,
-} = require("../controllers/projectsController");
+} = require("../controllers/projects");
 const checkProjectOwnership = require("../middleware/checkProjectOwnership");
+const { upload } = require("../middleware/upload");
 
 // GET: Lấy tất cả projects
 router.get("/", validateToken, getAllProjects);
 
 // POST: Tạo mới project
-router.post("/", validateToken, createProject);
+router.post("/", validateToken, upload.single("document"), createProject);
 
 // GET: Lấy thông tin chi tiết của một dự án
 router.get("/:id", validateToken, getProjectDetails);
