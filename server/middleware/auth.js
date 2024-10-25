@@ -1,21 +1,29 @@
-// server/middleware/auth.js
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
-const validateToken = (req, res, next) => {
-  // Lấy token từ header Authorization
-  const token = req.header("Authorization");
+// Hai ----------------- jwt verification .
+function validateToken(req, res, next) {
 
-  if (!token) {
-    return res.status(401).json({ error: "Access Denied" });
-  }
+    // get token
+    const pm_bearer_token_string = req.headers.authorization;
+    let token_PMbearer;
+    if (pm_bearer_token_string) {
+        token_PMbearer = pm_bearer_token_string.split(' ')[1];
+    }
+    const token = (req.headers['token']) ? req.headers['token'] : token_PMbearer;
 
-  try {
-    const verified = jwt.verify(token, "secretKey");
-    req.user = verified;
-    next();
-  } catch (err) {
-    return res.status(400).json({ error: "Invalid Token" });
-  }
-};
+    if (!token) return res.status(401).json('Token expired !');
+
+    const scret_key = (process.env.SECRET_KEY) ? process.env.SECRET_KEY : 'abcd-1234';
+    try {
+        const decoded = jwt.verify(token, scret_key);
+        req.user = decoded;
+        if (decoded)
+            return next();
+    } catch (err) {
+        return res.status(403).json({ message: `Token (jwt) verification failed: ${err.message}` })
+    }
+}
+
 
 module.exports = { validateToken };
