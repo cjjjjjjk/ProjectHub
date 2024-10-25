@@ -1,11 +1,5 @@
-import { Layout } from "antd";
-
 function Project() {
-    return (
-      <div>
-        
-      </div>
-    );
-  }
-  
-  export default Project;
+  return <div>Project</div>;
+}
+
+export default Project;
