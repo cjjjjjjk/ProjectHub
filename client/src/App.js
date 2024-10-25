@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-function App() {
- 
-  return (
-    <div className="bg-emerald-600 text-white text-center">
-      hello
-
-=======
 import React from "react";
 import Login from "./component/Login";
 import Register from "./component/Register";
@@ -25,7 +15,6 @@ function App() {
         <Route path="/Register" element={<Register />} />
 
       </Routes>
->>>>>>> hai
     </div>
   );
 }
