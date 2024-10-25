@@ -45,15 +45,15 @@ function App() {
         </div>
       </Drawer>
       <div className="max-w-screen-xl grid grid-cols-2 items-center p-4">
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 justify-center">
           <button onClick={()=>{setOpenMenu(true)}} className="hover:opacity-30">
             <img className="h-8 w-8"src="https://i.imgur.com/ghrAiTG_d.webp?maxwidth=128&shape=square"></img>
           </button>
           <div>Logo</div>
           <div className="text-xl font-bold">ProjectHub</div>
-        
         </div>
-        <div className="flex flex-row gap-6 justify-end relative right-8 font-medium" >
+
+        <div className="flex flex-row gap-4 justify-center font-medium" >
             <NavLink to="/page/Home"className={({ isActive }) =>`text-base ${isActive ? 'text-blue-500 font-bold' : 'text-black'}`}>
                 Home
             </NavLink>
