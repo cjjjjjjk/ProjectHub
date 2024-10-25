@@ -52,7 +52,11 @@ module.exports = (sequelize, DataTypes) => {
                     msg: `Project's type can not be empty!`
                 }
             }
-        }
+        },
+        status: {
+            type: DataTypes.ENUM('active', 'completed', 'archived'),
+            defaultValue: 'active',
+        },
     });
     return Projects;
 }
