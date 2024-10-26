@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 function Register() {
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
+  // bien nay de kiem tra xem mk nhap lai co dung ko
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    console.log(confirmPass);
+    if (password === confirmPass) setShowError(false);
+    else setShowError(true);
+  }, [confirmPass, password]);
+
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 z-50 backdrop-blur-[2px]">
       <div
@@ -15,6 +30,7 @@ function Register() {
               type="text"
               required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              onChange={(e) => setFullName(e.target.value)}
             ></input>
             <label
               htmlFor=""
@@ -30,6 +46,7 @@ function Register() {
               type="email"
               required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
             <label
               htmlFor=""
@@ -38,12 +55,14 @@ function Register() {
               Email
             </label>
           </div>
+
           {/* User name */}
           <div className="relative w-72 my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="text"
               required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              onChange={(e) => setUsername(e.target.value)}
             ></input>
             <label
               htmlFor=""
@@ -58,6 +77,7 @@ function Register() {
             <input
               type="password"
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
             <label
               htmlFor=""
@@ -69,10 +89,15 @@ function Register() {
 
           {/*Confirm Password */}
 
-          <div className="relative w-56 my-2 p-2 pt-4 border-2 border-black rounded-lg ">
+          <div
+            className={`relative w-56 my-2 p-2 pt-4 border-2 rounded-lg ${
+              showError ? "border-red-600" : "border-black"
+            } `}
+          >
             <input
               type="password"
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              onChange={(e) => setConfirmPass(e.target.value)}
             ></input>
             <label
               htmlFor=""
@@ -82,13 +107,20 @@ function Register() {
             </label>
           </div>
         </form>
+
+        {/* Hien thong bao nhap mk ko dung */}
+        {showError ? (
+          <div className="text-red-600">Confirm password doesn't match</div>
+        ) : (
+          <div></div>
+        )}
+
+        {/* Nut tao tk moi */}
         <button
           type="submit"
           className="w-1/2 mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
         >
-          <Link className="text-white px-2" to="/page/Login">
-            Create an Account
-          </Link>
+          Create an Account
         </button>
         <div className="flex justify-center">
           <span className="m-2">
