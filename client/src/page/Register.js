@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 function Register() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  {/*}
+  const handleSubmit = (e) => {
+    console.log("Tên đầy đủ:", fullName);
+    console.log("Email:", email);
+    console.log("Tên đăng nhập:", username);
+    console.log("Mật khẩu:", password);
+    console.log("Xác nhận mật khẩu:", confirmPassword);
+  };
+  */}
+
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 z-50 backdrop-blur-[2px]">
       <div
@@ -8,12 +24,12 @@ function Register() {
       rounded-3xl animate-fadeIn shadow-[0_0_15px_3px_rgba(255,255,255,0.6)] flex flex-col items-center"
       >
         <h1 className="text-4xl font-bold text-center mb-6">Sign up</h1>
-        <form action="" className="grid grid-cols-2 gap-x-4  ">
+        <form action="" className="grid grid-cols-2 gap-x-4  " >
           {/* Tên người dùng */}
           <div className=" relative  my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="text"
-              required
+              required onChange={(e) => setFullName(e.target.value)}
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             ></input>
             <label
@@ -28,7 +44,7 @@ function Register() {
           <div className="relative  my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="email"
-              required
+              required onChange={(e) => setEmail(e.target.value)}
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             ></input>
             <label
@@ -42,7 +58,7 @@ function Register() {
           <div className="relative w-72 my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="text"
-              required
+              required onChange={(e) => setUsername(e.target.value)}
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             ></input>
             <label
@@ -56,7 +72,7 @@ function Register() {
           {/* Password */}
           <div className="relative w-56 my-2 p-2 pt-4 border-2 border-black rounded-lg">
             <input
-              type="password"
+              type="password" onChange={(e) => setPassword(e.target.value)}
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             ></input>
             <label
@@ -71,7 +87,7 @@ function Register() {
 
           <div className="relative w-56 my-2 p-2 pt-4 border-2 border-black rounded-lg ">
             <input
-              type="password"
+              type="password" onChange={(e) => setConfirmPassword(e.target.value)}
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             ></input>
             <label
@@ -86,7 +102,9 @@ function Register() {
           type="submit"
           className="w-1/2 mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
         >
-          <Link className="text-white px-2" to="/page/Login">
+          <Link className="text-white px-2" to="/page/Login"
+          /*onClick={handleSubmit}*/
+          >
             Create an Account
           </Link>
         </button>
