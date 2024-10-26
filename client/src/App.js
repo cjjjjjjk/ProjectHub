@@ -7,6 +7,7 @@ import Profile from "./page/Profile";
 import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 import { Drawer, Popover } from "antd";
+import Register from "./page/Register";
 
 function App() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -101,15 +102,20 @@ function App() {
               <NavLink
                 to="/page/Home"
                 className={({ isActive }) =>
-                  ` ${isActive ? "text-blue-500 font-bold" : "text-black"}`
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  }`
                 }
               >
                 Home
               </NavLink>
+
               <NavLink
                 to="/page/Project"
                 className={({ isActive }) =>
-                  ` ${isActive ? "text-blue-500 font-bold" : "text-black"}`
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  }`
                 }
               >
                 Project
@@ -117,7 +123,9 @@ function App() {
               <NavLink
                 to="/page/Login"
                 className={({ isActive }) =>
-                  ` ${isActive ? "text-blue-500 font-bold" : "text-black"}`
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  }`
                 }
               >
                 Login
@@ -154,6 +162,7 @@ function App() {
           <Route path="/page/Project" element={<Project />} />
           <Route path="/page/Login" element={<Login />} />
           <Route path="/page/Profile" element={<Profile />} />
+          <Route path="/page/Register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>
