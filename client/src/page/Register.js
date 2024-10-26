@@ -28,7 +28,6 @@ function Register() {
           <div className=" relative  my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="text"
-              required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               onChange={(e) => setFullName(e.target.value)}
             ></input>
@@ -44,7 +43,6 @@ function Register() {
           <div className="relative  my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="email"
-              required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               onChange={(e) => setEmail(e.target.value)}
             ></input>
@@ -60,7 +58,6 @@ function Register() {
           <div className="relative w-72 my-2 p-2 pt-4 border-2 border-black rounded-lg col-span-2">
             <input
               type="text"
-              required
               className="block w-full py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               onChange={(e) => setUsername(e.target.value)}
             ></input>
@@ -75,7 +72,6 @@ function Register() {
           {/* Password */}
           <div className="relative w-56 my-2 p-2 pt-4 border-2 border-black rounded-lg">
             <input
-              type="password"
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               onChange={(e) => setPassword(e.target.value)}
             ></input>
@@ -95,7 +91,6 @@ function Register() {
             } `}
           >
             <input
-              type="password"
               className="block w-full py-2.3 px-0 text-lg  bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               onChange={(e) => setConfirmPass(e.target.value)}
             ></input>
