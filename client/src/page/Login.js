@@ -26,7 +26,7 @@ function Login() {
       // Login thành công
       if (res?.data?.success) {
         sessionStorage.setItem('token', res.data.token);
-        navigate('/Profile')
+        navigate('/page/Profile')
       } else throw new Error("Login response err !")
     } catch (err) {
       // Login không được, xử lý login k thành công: (để trống, sai,..)

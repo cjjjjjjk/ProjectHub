@@ -21,6 +21,10 @@ function App() {
   const handleOpenChange = (newOpen) => {
     setOpenNotification(newOpen);
   };
+  const handleSignout = () => {
+    sessionStorage.removeItem('token')
+    window.location.href = '/page/Login';
+  }
   return (
     <div>
       <BrowserRouter>
@@ -60,7 +64,7 @@ function App() {
                 </NavLink>
               </div>
               <div>
-                <button className="text-base pl-2 hover:opacity-50">
+                <button className="text-base pl-2 hover:opacity-50" onClick={handleSignout}>
                   Sign out
                 </button>
               </div>
