@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
@@ -10,6 +10,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const navigate = useNavigate()
 
   const handleShowPass = () => {
     setShowPass(!showPass);
@@ -24,9 +25,9 @@ function Login() {
 
       // Login thành công
       if (res?.data?.success) {
-
-
-      } else throw new Error("Response err !")
+        sessionStorage.setItem('token', res.data.token);
+        navigate('/Profile')
+      } else throw new Error("Login response err !")
     } catch (err) {
       // Login không được, xử lý login k thành công: (để trống, sai,..)
       if (err.code === 'ERR_NETWORK') {
