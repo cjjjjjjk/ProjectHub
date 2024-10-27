@@ -29,17 +29,16 @@ module.exports = (sequelize, DataTypes) => {
     code: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: function () {
-        return uuidv4();
-      },
+      unique: true,
+      defaultValue: () => nanoid(10),
     },
 
-      state: {
+    state: {
       type: DataTypes.ENUM("Not Started", "In Progress", "Done"),
       allowNull: false,
       defaultValue: "Not Started",
-      },
-    
+    },
+
     model: {
       type: DataTypes.ENUM("Kanban", "Scrum", "Extreme Program", "Custom"),
       allowNull: false,

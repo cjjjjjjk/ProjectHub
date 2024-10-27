@@ -106,7 +106,7 @@ const deleteProject = async (req, res) => {
 
 // Route
 router.get("/", validateToken, getAllProjects);
-router.post("/", validateToken,upload.single("document"), createProject);
+router.post("/", validateToken, upload.single("document"), createProject);
 router.put("/:id", validateToken, checkProjectOwnership, updateProject);
 router.delete("/:id", validateToken, checkProjectOwnership, deleteProject);
 
