@@ -22,7 +22,7 @@ function Profile() {
     try {
       const token = sessionStorage.getItem('token')
       if (!token) throw new Error("No token in sesstion storage !")
-      const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/users/profile`, {
+      const res = await axios.get(`${process.env.REACT_APP_SERVER}/users/profile`, {
         headers: {
           token: `${token}`
         }

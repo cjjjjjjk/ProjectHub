@@ -26,7 +26,7 @@ function Register() {
       if (newAccount.name.trim() === "") throw new Error("Name can not be empty !");
       if (newAccount.username.trim() === "") throw new Error("Username can not be empty !");
 
-      const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users/sign-up`, newAccount)
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/users/sign-up`, newAccount)
 
       // Đăng ký thành công
       if (res?.data?.success) {

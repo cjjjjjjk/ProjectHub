@@ -14,4 +14,4 @@ db.sequelize.sync().then(() => {
 });
 
 const userRouter = require('./routes/users')
-app.use('/api/users', userRouter)
+app.use('/users', userRouter)

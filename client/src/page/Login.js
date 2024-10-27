@@ -21,7 +21,7 @@ function Login() {
     e.preventDefault()
     const account = { username, password };
     try {
-      const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users/login`, account)
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/users/login`, account)
 
       // Login thành công
       if (res?.data?.success) {
