@@ -1,5 +1,5 @@
 // models/projects.js
-const { v4: uuidv4 } = require("uuid");
+const { nanoid } = require("nanoid");
 
 module.exports = (sequelize, DataTypes) => {
   const Projects = sequelize.define("Projects", {
