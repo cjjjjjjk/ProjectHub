@@ -32,7 +32,6 @@ router.post('/reset-password/:token', resetPassword)
 router.post('/sign-up', async (req, res) => {
     try {
         const { username, email, name, password } = req.body
-
         // hash password -------
         const hashpw = (password) ? await hashPassword(password) : null;
 
@@ -48,7 +47,7 @@ router.post('/sign-up', async (req, res) => {
             location: "",
             avatar: ""
         })
-        return res.json({ message: "User created successfully!", id: newUser.id });
+        return res.json({ success: true, message: "User created successfully!", id: newUser.id });
 
     } catch (err) {
         let errorList = []
