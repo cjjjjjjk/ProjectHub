@@ -80,7 +80,6 @@ router.post('/sign-up', async (req, res) => {
 // update user --------------
 // PUT: http://localhost:3001/api/users/update-profile
 router.put('/update-profile', validateToken,
-    // upload.single('avatar'), 
     async (req, res) => {
         const update = req.body
         try {
