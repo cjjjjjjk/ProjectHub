@@ -31,7 +31,7 @@ function Login() {
           <div className=" relative text-gray-900">
             <div className="flex justify-center items-center ">
               <h1 className="text-3xl font-bold text-center mb-6 pt-4">
-                Sign in
+                {forgotPass ? "Reset Password" : "Sign in"}
               </h1>
 
               <Link to="/">
@@ -74,7 +74,7 @@ function Login() {
                   htmlFor=""
                   className="absolute text-lg  duration-300 transform -translate-y-5 scale-75  top-4 -z-10 origin-[0] peer-focus:left peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 "
                 >
-                  Password
+                  {forgotPass ? "New password" : "Password"}
                 </label>
                 <button
                   type="button"
@@ -113,7 +113,7 @@ function Login() {
                   type="submit"
                   className="w-full mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
                 >
-                  Reset PassWord
+                  Reset Password
                 </button>
               ) : (
                 <button
