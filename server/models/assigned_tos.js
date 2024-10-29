@@ -24,5 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Association =====================================
+  // ------------------------------------ author: Hai 
+  AssignedTos.associate = function (models) {
+    AssignedTos.belongsTo(models["Users"], {
+      foreignKey: 'user_id',
+    });
+    AssignedTos.belongsTo(models["Tasks"], {
+      foreignKey: 'task_id',
+      onDelete: 'CASCADE'
+    })
+  }
+  // =================================================
+
   return AssignedTos;
 };

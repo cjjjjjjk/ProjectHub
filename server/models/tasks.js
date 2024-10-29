@@ -44,39 +44,19 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  // Hook kiểm tra loại task có hợp lệ với mô hình dự án không
-  Tasks.beforeCreate(async (task, options) => {
 
-    try {
-
-      // Lấy dự án dựa trên project_id
-      const project = await sequelize.models.Projects.findByPk(task.project_id);
-
-      // Kiểm tra nếu project không tồn tại
-      if (!project) {
-        throw new Error("Project not found");
-      }
-
-      // Các loại task theo mô hình
-      const taskTypes = {
-        Kanban: ["Backlog", "In progress", "Review", "Completed"],
-        Scrum: ["To Do", "In progress", "Test", "Review"],
-        "Extreme Program": ["Planning", "Designing", "Coding", "Testing", "Listening"],
-        Custom: [], // Nếu có mô hình Custom thì ta có thể xử lý loại task theo nhu cầu
-      };
-
-      // Lấy các loại task hợp lệ cho mô hình dự án
-      const validTaskTypes = taskTypes[project.model];
-
-      // Nếu loại task của project không hợp lệ, báo lỗi
-      if (!validTaskTypes.includes(task.type)) {
-        throw new Error(
-          `Invalid task type for ${project.model} model. Valid types: ${validTaskTypes.join(", ")}`
-        );
-      }
-    } catch (err) {
-      console.log(err.message)
-    }
-  });
+  // Association ===========================author: Hai
+  Tasks.associate = function (models) {
+    Tasks.hasMany(models["TaskComments"], {
+      foreignKey: 'task_id',
+    });
+    Tasks.hasMany(models["AssignedTos"], {
+      foreignKey: 'task_id'
+    });
+    Tasks.hasMany(models["Reports"], {
+      foreignKey: "task_id"
+    })
+  }
+  //===================================================
   return Tasks;
 };

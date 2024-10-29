@@ -1,4 +1,3 @@
-const { DATE } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define('Users', {
         id: {
@@ -56,9 +55,8 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
 
-        // PROFILE:
         dob: {
-            type: DATE,
+            type: DataTypes.DATE,
             allowNull: true
 
         },
@@ -95,6 +93,23 @@ module.exports = (sequelize, DataTypes) => {
         }
 
     });
+
+    // Association ===================================
+    Users.associate = function (models) {
+        // project association ----------- author: Hai
+        Users.hasMany(models["ProjectJoineds"], {
+            foreignKey: 'participant_id',
+        });
+        // task association --------------------------
+        Users.hasMany(models["AssignedTos"], {
+            foreignKey: 'user_id',
+        });
+        // task comment association ------------------
+        Users.hasMany(models["TaskComments"], {
+            foreignKey: 'user_id',
+        })
+    }
+    // ===============================================
 
     return Users;
 };

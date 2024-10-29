@@ -24,5 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Association ===================================
+  // ------------------------------------author: Hai
+  Posts.associate = function (models) {
+    Posts.hasMany(models["PostComments"], {
+      foreignKey: 'project_id',
+    })
+  }
+  //------------------------------------------------
+
   return Posts;
 };
