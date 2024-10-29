@@ -14,9 +14,9 @@ function validateToken(req, res, next) {
 
     if (!token) return res.status(401).json('Token expired !');
 
-    const scret_key = (process.env.SECRET_KEY) ? process.env.SECRET_KEY : 'abcd-1234';
+    const secret_key = (process.env.SECRET_KEY) ? process.env.SECRET_KEY : 'abcd-1234';
     try {
-        const decoded = jwt.verify(token, scret_key);
+        const decoded = jwt.verify(token, secret_key);
         req.user = decoded;
         if (decoded)
             return next();

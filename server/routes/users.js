@@ -109,6 +109,7 @@ router.put('/update-profile', validateToken,
     })
 // login -------------------------------
 // POST: http://localhost:3001/api/users/login?username=hai123&password=123456
+// hieuDV : 123thanhgiong567
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body
