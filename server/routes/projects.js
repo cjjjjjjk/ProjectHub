@@ -1,5 +1,3 @@
-// routes/projects.js
-
 const express = require("express");
 const router = express.Router();
 const { Projects } = require("../models");
@@ -9,18 +7,28 @@ const { Op } = require("sequelize");
 
 // Middleware để kiểm tra quyền sở hữu project
 const checkProjectOwnership = async (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   const projectId = req.params.id;
   const userId = req.user.id;
 
-  const project = await Projects.findOne({
-    where: { id: projectId, userId: userId },
-  });
-  if (!project) {
-    return res
-      .status(403)
-      .json({ error: "You do not have permission to access this project" });
+  try {
+    const project = await Projects.findOne({
+      where: { id: projectId, userId: userId },
+    });
+
+    if (!project) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to access this project" });
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).json({ error: "Error occurred while checking ownership" });
   }
-  next();
 };
 
 // Tạo mới project
@@ -43,6 +51,7 @@ const createProject = async (req, res) => {
 
     res.json(newProject);
   } catch (error) {
+    console.error("Error creating project:", error);
     res
       .status(500)
       .json({ error: "An error occurred while creating the project" });
@@ -52,23 +61,26 @@ const createProject = async (req, res) => {
 // Lấy tất cả projects
 const getAllProjects = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.query;
+  const pageNumber = parseInt(page, 10) || 1;
+  const limitNumber = parseInt(limit, 10) || 10;
 
   try {
     const projects = await Projects.findAndCountAll({
       where: {
         name: { [Op.like]: `%${search}%` },
       },
-      limit: parseInt(limit),
-      offset: (page - 1) * limit,
+      limit: limitNumber,
+      offset: (pageNumber - 1) * limitNumber,
     });
 
     res.json({
       total: projects.count,
       projects: projects.rows,
-      currentPage: page,
-      totalPages: Math.ceil(projects.count / limit),
+      currentPage: pageNumber,
+      totalPages: Math.ceil(projects.count / limitNumber),
     });
   } catch (error) {
+    console.error("Error retrieving projects:", error);
     res
       .status(500)
       .json({ error: "An error occurred while retrieving projects" });
@@ -80,10 +92,17 @@ const updateProject = async (req, res) => {
   const { name, description } = req.body;
   const projectId = req.params.id;
 
+  if (!name && !description) {
+    return res
+      .status(400)
+      .json({ error: "Please provide name or description to update" });
+  }
+
   try {
     await Projects.update({ name, description }, { where: { id: projectId } });
     res.json({ message: "Project updated successfully" });
   } catch (error) {
+    console.error("Error updating project:", error);
     res
       .status(500)
       .json({ error: "An error occurred while updating the project" });
@@ -98,6 +117,7 @@ const deleteProject = async (req, res) => {
     await Projects.destroy({ where: { id: projectId } });
     res.json({ message: "Project deleted successfully" });
   } catch (error) {
+    console.error("Error deleting project:", error);
     res
       .status(500)
       .json({ error: "An error occurred while deleting the project" });

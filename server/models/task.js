@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
   Tasks.associate = (models) => {
     Tasks.belongsTo(models.Projects, {
       foreignKey: "project_id",
-      as: "project",
+      as: "projects",
     });
 
     Tasks.belongsToMany(models.Users, {
