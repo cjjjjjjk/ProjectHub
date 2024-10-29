@@ -4,14 +4,23 @@ import { MdEmail } from "react-icons/md";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
+
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [forgotPass, setForgotPass] = useState(false);
 
   const handleShowPass = () => {
     setShowPass(!showPass);
   };
+
+  const handleForgotPass = () => {
+    setForgotPass(!forgotPass);
+  };
+
   return (
     <div>
       <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 z-50 backdrop-blur-[2px]">
@@ -30,25 +39,35 @@ function Login() {
               </Link>
             </div>
             <form action="">
+              {/* {Username} */}
               <div className="relative my-4 p-2 pt-4 border-2 border-black rounded-lg">
                 <input
                   type="text"
-                  className="block w-72 py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0  focus:border-blue-600 peer"
-                  onChange={(e) => setUsername(e.target.value)}
+                  className="block w-full py-2.3 pr-7 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0  focus:border-blue-600 peer"
+                  onChange={(e) => {
+                    if (forgotPass) setEmail(e.target.value);
+                    else setUsername(e.target.value);
+                  }}
                 ></input>
 
                 <label
                   htmlFor=""
                   className="absolute text-lg  duration-300 transform -translate-y-5 scale-75 top-4  -z-10 origin-[0] peer-focus:left peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75"
                 >
-                  Username
+                  {forgotPass ? "Email" : "User name"}
                 </label>
-                <MdEmail className="absolute right-3 top-4 size-6"></MdEmail>
+                {forgotPass ? (
+                  <MdEmail className="absolute right-3 top-4 size-6" />
+                ) : (
+                  <FaUser className="absolute right-3 top-4 size-6" />
+                )}
               </div>
+
+              {/* PassWord */}
               <div className="relative mb-2 p-2 pt-4 border-2 border-black rounded-lg">
                 <input
                   type={showPass ? "text" : "password"}
-                  className="block w-72 py-2.3 px-0 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0  focus:border-blue-600 peer"
+                  className="block w-72 py-2.3 pr-7 text-lg bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0  focus:border-blue-600 peer"
                   onChange={(e) => setPassword(e.target.value)}
                 ></input>
                 <label
@@ -69,21 +88,41 @@ function Login() {
                   )}
                 </button>
               </div>
-              <div className="flex justify-between items-center ">
-                <div className="flex">
-                  <input type="checkbox" name="" id=""></input>
-                  <label htmlFor="">Remember Me</label>
+
+              {!forgotPass && (
+                <div className="flex justify-between items-center ">
+                  <div className="flex">
+                    <input type="checkbox" name="" id=""></input>
+                    <label htmlFor="">Remember Me</label>
+                  </div>
+
+                  {/* Forgot PassWord */}
+
+                  <button
+                    type="button"
+                    className="text-blue-500"
+                    onClick={handleForgotPass}
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
-                <Link to="" className="text-blue-500">
-                  Forgot Password?
-                </Link>
-              </div>
-              <button
-                type="submit"
-                className="w-full mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
-              >
-                Login
-              </button>
+              )}
+
+              {forgotPass ? (
+                <button
+                  type="submit"
+                  className="w-full mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
+                >
+                  Reset PassWord
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
+                >
+                  Login
+                </button>
+              )}
             </form>
             <div className="flex justify-center">
               <span>
