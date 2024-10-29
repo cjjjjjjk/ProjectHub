@@ -8,9 +8,10 @@ app.use(cors());
 
 
 db.sequelize.sync().then(() => {
-app.listen(3001, () => {
-  console.log('Server running on port 3001');
-}); });
+  app.listen(3001, () => {
+    console.log('Server running on port 3001');
+  });
+});
 
 const userRouter = require('./routes/users')
 app.use('/users', userRouter)
