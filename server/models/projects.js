@@ -39,11 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("Kanban", "Scrum", "Extreme Program", "Custom"),
       allowNull: false,
       defaultValue: "Custom",
-    },
-    document: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+    }
   });
 
   return Projects;

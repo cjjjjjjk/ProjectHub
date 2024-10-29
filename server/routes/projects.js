@@ -22,8 +22,7 @@ const createProject = async (req, res) => {
       end_date: end_date || null,
       code,
       state,
-      model,
-      document: req.file ? req.file.path : null,
+      model
     });
 
     res.json(newProject);
