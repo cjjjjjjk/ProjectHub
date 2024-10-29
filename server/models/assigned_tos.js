@@ -1,6 +1,5 @@
-// models/assigned_to.js
 module.exports = (sequelize, DataTypes) => {
-  const AssignedTo = sequelize.define("AssignedTo", {
+  const AssignedTos = sequelize.define("AssignedTos", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -25,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return AssignedTo;
+  return AssignedTos;
 };

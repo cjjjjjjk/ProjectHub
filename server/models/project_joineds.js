@@ -1,6 +1,5 @@
-// models/project_joined.js
 module.exports = (sequelize, DataTypes) => {
-  const ProjectJoined = sequelize.define("ProjectJoined", {
+  const ProjectJoineds = sequelize.define("ProjectJoineds", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -30,5 +29,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return ProjectJoined;
+  return ProjectJoineds;
 };

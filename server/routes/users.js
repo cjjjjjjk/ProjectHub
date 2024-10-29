@@ -19,9 +19,19 @@ const hashPassword = async (password) => {
     return passwordHashed;
 }
 // routing =======================================
+// Get user infor-----------------------------------
+// GET: http://localhost:3001/api/users/profile
+router.get('/profile', validateToken, async (req, res) => {
+    try {
+        const userId = req.user['user'].id;
 
-router.get('/', async (req, res) => {
-    res.send("Hello fuck you")
+        const user = await Users.findByPk(userId);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 })
 // reset password --------------------------------
 router.post('/reset-password', resetPassword_req)
@@ -32,7 +42,6 @@ router.post('/reset-password/:token', resetPassword)
 router.post('/sign-up', async (req, res) => {
     try {
         const { username, email, name, password } = req.body
-
         // hash password -------
         const hashpw = (password) ? await hashPassword(password) : null;
 
@@ -48,7 +57,7 @@ router.post('/sign-up', async (req, res) => {
             location: "",
             avatar: ""
         })
-        return res.json({ message: "User created successfully!", id: newUser.id });
+        return res.json({ success: true, message: "User created successfully!", id: newUser.id });
 
     } catch (err) {
         let errorList = []

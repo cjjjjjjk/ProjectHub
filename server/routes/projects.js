@@ -1,62 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const { Projects } = require("../models");
-const { validateToken } = require("../middleware/auth");
 const { upload } = require("../middleware/upload");
 const { Op } = require("sequelize");
 
-// Middleware để kiểm tra quyền sở hữu project
-const checkProjectOwnership = async (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const projectId = req.params.id;
-  const userId = req.user.id;
-
-  try {
-    const project = await Projects.findOne({
-      where: { id: projectId, userId: userId },
-    });
-
-    if (!project) {
-      return res
-        .status(403)
-        .json({ error: "You do not have permission to access this project" });
-    }
-
-    next();
-  } catch (error) {
-    res.status(500).json({ error: "Error occurred while checking ownership" });
-  }
-};
-
 // Tạo mới project
 const createProject = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, start_date, end_date, code, state, model } = req.body;
 
-  if (!name || !description) {
+  if (!name || !code || !state || !model) {
     return res
       .status(400)
-      .json({ error: "Please provide name and description for the project" });
+      .json({ error: "Vui lòng cung cấp đầy đủ name, code, state và model cho dự án." });
   }
 
   try {
     const newProject = await Projects.create({
       name,
-      description,
-      userId: req.user.id,
+      description: description || null,
+      start_date: start_date || null,
+      end_date: end_date || null,
+      code,
+      state,
+      model,
       document: req.file ? req.file.path : null,
     });
 
     res.json(newProject);
   } catch (error) {
-    console.error("Error creating project:", error);
+    console.error("Lỗi khi tạo dự án:", error.message);
     res
       .status(500)
-      .json({ error: "An error occurred while creating the project" });
+      .json({ error: "Đã xảy ra lỗi khi tạo dự án." });
   }
 };
+
 
 // Lấy tất cả projects
 const getAllProjects = async (req, res) => {
@@ -125,9 +103,9 @@ const deleteProject = async (req, res) => {
 };
 
 // Route
-router.get("/", validateToken, getAllProjects);
-router.post("/", validateToken, upload.single("document"), createProject);
-router.put("/:id", validateToken, checkProjectOwnership, updateProject);
-router.delete("/:id", validateToken, checkProjectOwnership, deleteProject);
+router.get("/", getAllProjects);
+router.post("/", upload.single("document"), createProject);
+router.put("/:id", updateProject);
+router.delete("/:id", deleteProject);
 
 module.exports = router;

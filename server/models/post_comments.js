@@ -1,4 +1,3 @@
-// models/post_comments.js
 module.exports = (sequelize, DataTypes) => {
   const PostComments = sequelize.define("PostComments", {
     id: {

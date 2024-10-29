@@ -1,4 +1,3 @@
-// models/task_comments.js
 module.exports = (sequelize, DataTypes) => {
   const TaskComments = sequelize.define("TaskComments", {
     id: {
