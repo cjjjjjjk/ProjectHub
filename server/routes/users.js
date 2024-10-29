@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { Users } = require('../models')
+const { validateToken } = require('../middleware/auth')
 
 // Hai ------------------------------ user routing
 router.get('/', async (req, res) => {
