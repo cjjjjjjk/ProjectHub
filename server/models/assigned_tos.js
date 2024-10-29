@@ -1,16 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
-  const PostComments = sequelize.define("PostComments", {
+  const AssignedTos = sequelize.define("AssignedTos", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    post_id: {
+    task_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Posts",
+        model: "Tasks",
         key: "id",
       },
     },
@@ -22,11 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         key: "id",
       },
     },
-    comment: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
   });
 
-  return PostComments;
+  return AssignedTos;
 };

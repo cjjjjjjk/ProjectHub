@@ -1,6 +1,3 @@
-// models/projects.js
-const { nanoid } = require("nanoid");
-
 module.exports = (sequelize, DataTypes) => {
   const Projects = sequelize.define("Projects", {
     id: {
@@ -29,8 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     code: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      defaultValue: () => nanoid(10),
+      unique: true
     },
 
     state: {

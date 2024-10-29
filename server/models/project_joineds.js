@@ -1,20 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-  const PostComments = sequelize.define("PostComments", {
+  const ProjectJoineds = sequelize.define("ProjectJoineds", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    post_id: {
+    project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Posts",
+        model: "Projects",
         key: "id",
       },
     },
-    user_id: {
+    participant_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -22,11 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         key: "id",
       },
     },
-    comment: {
-      type: DataTypes.TEXT,
+    isManager: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   });
 
-  return PostComments;
+  return ProjectJoineds;
 };
