@@ -1,4 +1,3 @@
-const { DATE } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define('Users', {
         id: {
@@ -10,9 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: {
-                msg: 'Email address already exists.'
-            },
             validate: {
                 isEmail: {
                     args: true,
@@ -27,23 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: {
-                msg: 'username  already exists.'
-            },
             validate: {
                 notNull: {
-                    msg: 'Username can not be empty !',
+                    msg: 'Name can not be empty !',
                 },
             },
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notNull: {
-                    msg: "Name can not be empty !"
-                }
-            }
         },
 
         password: {
@@ -51,50 +35,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'Password can not be empty !',
+                    msg: 'Please enter your name',
                 },
             },
         },
 
-        // PROFILE:
-        dob: {
-            type: DATE,
-            allowNull: true
-
-        },
-
-        bio: {
-            type: DataTypes.STRING,
-            allowNull: true
-
-        },
-
-        phone: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-
-        social_link: {
-            type: DataTypes.STRING,
-            allowNullL: true
-        },
-
-        company: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-
-        location: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-
-        avatar: {
-            type: DataTypes.STRING,
-            allowNull: true
-        }
-
     });
-
+   
     return Users;
 };

@@ -44,8 +44,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "devDependencies": {
-    "ajv": "^7.2.4",
-    "tailwindcss": "^3.4.14"
+    "ajv": "^7.2.4"
   },
   "author": "",
   "license": "ISC"
