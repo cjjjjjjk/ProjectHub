@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 function Register() {
   const [username, setUsername] = useState("");
@@ -7,6 +7,7 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const navigate = useNavigate()
 
   // bien nay de kiem tra xem mk nhap lai co dung ko
   const [showError, setShowError] = useState(false);
@@ -31,6 +32,9 @@ function Register() {
       // Đăng ký thành công
       if (res?.data?.success) {
         console.log(res.data)
+        setTimeout(() => {
+          navigate("/page/Login")
+        }, 200);
       } else throw new Error("Response err !")
     } catch (err) {
       if (err.code === 'ERR_NETWORK') {

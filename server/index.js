@@ -3,10 +3,6 @@ const app = express();
 const db = require('./models');
 
 
-const userRouter = require('./routes/users')
-const projectRouter = require("./routes/projects");
-
-
 app.use(express.json());// parse the data sent by client in json format
 const cors = require('cors');
 app.use(cors());
@@ -18,5 +14,11 @@ db.sequelize.sync().then(() => {
     console.log(`Server running on port ${PORT}`);
   })
 })
+
+
+// ROUTER ====================
+const userRouter = require('./routes/users')
 app.use('/users', userRouter)
+
+const projectRouter = require("./routes/projects");
 app.use("/projects", projectRouter);
