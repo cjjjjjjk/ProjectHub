@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
+import axios from "axios";
+
 import { FaUser } from "react-icons/fa";
 
 function Login() {
@@ -12,6 +14,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [forgotPass, setForgotPass] = useState(false);
+  const navigate = useNavigate();
 
   const handleShowPass = () => {
     setShowPass(!showPass);
@@ -20,6 +23,33 @@ function Login() {
   const handleForgotPass = () => {
     setForgotPass(!forgotPass);
   };
+
+  // Handle login ====================== author: Hai
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const account = { username, password };
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER}/users/login`,
+        account
+      );
+
+      // Login thành công
+      if (res?.data?.success) {
+        sessionStorage.setItem("token", res.data.token);
+        navigate("/page/Profile");
+      } else throw new Error("Login response err !");
+    } catch (err) {
+      // Login không được, xử lý login k thành công: (để trống, sai,..)
+      if (err.code === "ERR_NETWORK") {
+        console.error("Server is NOT responding !");
+        alert("🫤 Server is NOT responding !");
+      } else {
+        console.error(err.response?.data?.message);
+      }
+    }
+  };
+  //==================================================
 
   return (
     <div>
@@ -119,6 +149,7 @@ function Login() {
                 <button
                   type="submit"
                   className="w-full mb-4 py-2 text-[18px] mt-6 rounded-lg bg-red-600 text-black hover:bg-black hover:text-white"
+                  onClick={handleLogin}
                 >
                   Login
                 </button>
