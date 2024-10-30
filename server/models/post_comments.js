@@ -28,5 +28,18 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Association =====================================
+  // ------------------------------------ author: Hai 
+  PostComments.associate = function (models) {
+    PostComments.belongsTo(models["Users"], {
+      foreignKey: 'user_id',
+    });
+    PostComments.belongsTo(models["Posts"], {
+      foreignKey: 'post_id',
+      onDelete: 'CASCADE'
+    })
+  }
+  // =================================================
+
   return PostComments;
 };

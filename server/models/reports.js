@@ -1,4 +1,3 @@
-// models/reports.js
 module.exports = (sequelize, DataTypes) => {
   const Reports = sequelize.define("Reports", {
     id: {
@@ -33,16 +32,14 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Association ============================ author: Hai
   Reports.associate = (models) => {
-    Reports.belongsTo(models.Tasks, {
-      foreignKey: "task_id",
-      as: "task",
+    Reports.belongsTo(models["Tasks"], {
+      foreignKey: 'task_id',
+      onDelete: 'CASCADE'
     });
+    // ====================================================
 
-    Reports.belongsTo(models.Users, {
-      foreignKey: "user_id",
-      as: "user",
-    });
   };
 
   return Reports;

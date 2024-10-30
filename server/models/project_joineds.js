@@ -29,5 +29,20 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+
+
+  // Association =====================================
+  // author: Hai -------------------------------------
+  ProjectJoineds.associate = function (models) {
+    ProjectJoineds.belongsTo(models["Users"], {
+      foreignKey: 'participant_id',
+    });
+    ProjectJoineds.belongsTo(models["Projects"], {
+      foreignKey: 'project_id',
+      onDelete: 'CASCADE'
+    })
+  }
+  // =================================================
+
   return ProjectJoineds;
 };

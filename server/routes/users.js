@@ -1,33 +1,75 @@
 const express = require('express')
 const router = express.Router()
 const { Users } = require('../models')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const axios = require('axios')
 const { validateToken } = require('../middleware/auth')
+require('dotenv').config();
+const {
+    resetPassword_req,
+    resetPassword
+} = require('./reset-password')
 
-// Hai ------------------------------ user routing
-router.get('/', async (req, res) => {
-    res.send("Hello fuck you")
-})
-// create new user -------------------
-router.post('/', async (req, res) => {
+// Hai =============================== user routing
+// helper ========================================
+// hash password ---------------------------------
+const hashPassword = async (password) => {
+    const passwordHashed = await bcrypt.hash(password, Number(process.env.SALT_ROUND))
+    return passwordHashed;
+}
+// routing =======================================
+// Get user infor-----------------------------------
+// GET: http://localhost:3001/api/users/profile
+router.get('/profile', validateToken, async (req, res) => {
     try {
-        const user = req.body
-        const newUser = await Users.create(user)
-        return res.json({ message: "User created successfully!", id: newUser.id });
-    } catch (err) {
-        if (err.name === 'SequelizeValidationError') {
-            const errors = err.errors
+        const userId = req.user['user'].id;
 
-            let errorList = []
+        const user = await Users.findByPk(userId);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+})
+// reset password --------------------------------
+router.post('/reset-password', resetPassword_req)
+router.post('/reset-password/:token', resetPassword)
+
+// create new user ------------------------------
+// POST: http://localhost:3001/api/users/sign-up
+router.post('/sign-up', async (req, res) => {
+    try {
+        const { username, email, name, password } = req.body
+        // hash password -------
+        const hashpw = (password) ? await hashPassword(password) : null;
+
+        const newUser = await Users.create({
+            username,
+            email,
+            name,
+            password: hashpw,
+            bio: "",
+            phone: "",
+            social_link: "",
+            company: "",
+            location: "",
+            avatar: ""
+        })
+        return res.json({ success: true, message: "User created successfully!", id: newUser.id });
+
+    } catch (err) {
+        let errorList = []
+        if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+            const errors = err.errors
             errors.map(e => {
                 errorList.push(e.message)
                 return errorList;
             })
-            return res.status(400).json({
-                success: false,
-                message: errorList
-            })
         } else {
-            next(new ErrorResponse(`Create user ERR:${req.body.name}`, 404))
+            console.log("CREATE USER ERROR !", err)
+            errorList.push(err.message)
         }
         return res.status(400).json({
             success: false,
@@ -94,4 +136,23 @@ router.post("/login", async (req, res) => {
     }
 })
 
+
+// remove user ---------------------------
+// DELETE: http://localhost:3001/api/users/delete/<userID>
+router.delete("/delete/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const user = await Users.findOne({ where: { id } });
+        if (!user) {
+            throw new Error(`User ID:${id} not found !`)
+        }
+        Users.destroy({
+            where: { id }
+        })
+        return res.json({ message: `User Id:${id} deleted !` })
+    } catch (err) {
+        return res.status(404).json({ message: err.message })
+    }
+
+})
 module.exports = router

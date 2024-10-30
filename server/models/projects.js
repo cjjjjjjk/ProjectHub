@@ -40,7 +40,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: "Custom",
     },
+
+    accessibility: {
+      type: DataTypes.ENUM("Public", "Private"),
+      allowNull: false,
+      defaultValue: "Private"
+    }
+
   });
 
+  // Association ===================================
+  // ------------------------------------author: Hai
+  Projects.associate = function (models) {
+    Projects.hasMany(models["ProjectJoineds"], {
+      foreignKey: 'project_id',
+    })
+  }
+  //------------------------------------------------
   return Projects;
 };

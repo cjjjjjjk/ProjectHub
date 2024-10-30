@@ -28,5 +28,17 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Association ============================= author: Hai
+  TaskComments.associate = function (models) {
+    TaskComments.belongsTo(models["Users"], {
+      foreignKey: 'user_id',
+    });
+    TaskComments.belongsTo(models["Tasks"], {
+      foreignKey: "task_id",
+      onDelete: 'CASCADE'
+    })
+  }
+  // ======================================================
+
   return TaskComments;
 };
