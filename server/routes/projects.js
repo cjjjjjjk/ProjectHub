@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { validateToken } = require("../middleware/auth");
 const { Projects } = require("../models");
-const { upload } = require("../middleware/upload");
 const { Op } = require("sequelize");
 
 // Tạo mới project
@@ -102,9 +102,9 @@ const deleteProject = async (req, res) => {
 };
 
 // Route
-router.get("/", getAllProjects);
-router.post("/", upload.single("document"), createProject);
-router.put("/:id", updateProject);
-router.delete("/:id", deleteProject);
+router.get("/", validateToken, getAllProjects);
+router.post("/", validateToken, createProject);
+router.put("/:id", validateToken, updateProject);
+router.delete("/:id", validateToken, deleteProject);
 
 module.exports = router;
