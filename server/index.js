@@ -22,3 +22,6 @@ app.use('/users', userRouter)
 
 const projectRouter = require("./routes/projects");
 app.use("/projects", projectRouter);
+
+const joinProjectRouter = require("./routes/project_joineds")
+app.use("/project-joineds", joinProjectRouter)
