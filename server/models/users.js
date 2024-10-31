@@ -108,6 +108,10 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models["TaskComments"], {
             foreignKey: 'user_id',
         })
+        // post comment association ------------------
+        Users.hasMany(models["PostComments"]), {
+            foreignKey: "user_id"
+        }
     }
     // ===============================================
 
