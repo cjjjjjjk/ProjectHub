@@ -90,9 +90,14 @@ module.exports = (sequelize, DataTypes) => {
         avatar: {
             type: DataTypes.STRING,
             allowNull: true
-        }
-
-    });
+        },
+    },
+    {timestamps: false,
+        createdAt: false,
+        updatedAt: false,
+      }
+    
+);
 
     // Association ===================================
     Users.associate = function (models) {

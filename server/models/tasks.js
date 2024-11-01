@@ -42,7 +42,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-  });
+  }
+  ,
+  {timestamps: false,
+      createdAt: false,
+      updatedAt: false,
+    }
+
+);
 
 
   // Association ===========================author: Hai
