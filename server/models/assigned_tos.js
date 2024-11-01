@@ -22,7 +22,13 @@ module.exports = (sequelize, DataTypes) => {
         key: "id",
       },
     },
-  });
+  }
+  ,
+  {timestamps: false,
+      createdAt: false,
+      updatedAt: false,
+    }
+);
 
   // Association =====================================
   // ------------------------------------ author: Hai 

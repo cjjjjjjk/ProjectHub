@@ -22,7 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-  });
+  }
+  ,
+  {timestamps: false,
+      createdAt: false,
+      updatedAt: false,
+    }
+);
 
   // Association ===================================
   // ------------------------------------author: Hai
