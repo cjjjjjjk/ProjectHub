@@ -57,9 +57,19 @@ const createProject = async (req, res) => {
 // Get all projects joined
 const getUserJoinedProjects = async (req, res) => {
   const userId = req.user["user"].id;
+  const { date, state } = req.query;
+
+  const filterConditions = {};
+    if (date) {
+      filterConditions.start_date = {
+        [Op.eq]: date,
+      };
+    }
+  if (state) filterConditions.state = state;
 
   try {
     const joinedProjects = await Projects.findAll({
+      where: filterConditions,
       include: [
         {
           model: ProjectJoineds,
@@ -89,11 +99,17 @@ const getProjectsByUserId = async (req, res) => {
   const userId = req.user["user"].id;
   const { projectId } = req.params;
 
+  const parsedProjectId = parseInt(projectId, 10);
+  const isValidId = (id) => Number.isInteger(id) && id > 0;
+  if (!isValidId(parsedProjectId)) {
+    return res.status(400).json({ message: "Invalid ID." });
+  }
+
   try {
     const project = await ProjectJoineds.findOne({
       where: {
         participant_id: userId,
-        project_id: projectId,
+        project_id: parsedProjectId,
       },
       include: [
         {
@@ -119,39 +135,67 @@ const getProjectsByUserId = async (req, res) => {
 };
 
 // Update a project by ID
-const updateProject = async (req, res) => {
-  const { id } = req.params;
-  const { name, description, start_date, end_date, code, state, model } =
-    req.body;
-
+const updateProjectById = async (req, res) => {
   try {
-    const project = await Projects.findByPk(id);
-    if (!project) {
-      return res.status(404).json({ error: "Project not found." });
+    const userId = req.user["user"].id;
+
+    const { projectId } = req.params;
+    const { description, attachment } = req.body;
+
+    const parsedProjectId = parseInt(projectId, 10);
+    const isValidId = (id) => Number.isInteger(id) && id > 0;
+    if (!isValidId(parsedProjectId)) {
+      return res.status(400).json({ message: "Invalid ID." });
     }
 
-    if (code && code !== project.code) {
-      const codeExists = await Projects.findOne({
-        where: { code, id: { [Op.ne]: id } },
-      });
-      if (codeExists) {
-        return res
-          .status(400)
-          .json({ error: "Another project with this code already exists." });
-      }
-    }
-
-    await project.update({
-      name: name || project.name,
-      description: description || project.description,
-      start_date: start_date || project.start_date,
-      end_date: end_date || project.end_date,
-      code: code || project.code,
-      state: state || project.state,
-      model: model || project.model,
+    const projectJoined = await ProjectJoineds.findOne({
+      where: {
+        participant_id: userId,
+        project_id: parsedProjectId,
+      },
     });
 
-    res.json({ message: "Project updated successfully.", project });
+    if (!projectJoined) {
+      return res
+        .status(403)
+        .json({ message: "User has not joined this project." });
+    }
+
+    const project = await Projects.findOne({
+      where: { id: parsedProjectId },
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    if (project.state === "Done") {
+      return res
+        .status(403)
+        .json({ message: "Project is closed, cannot be updated." });
+    }
+
+    const updateResult = await Projects.update(
+      { description, attachment },
+      {
+        where: { id: parsedProjectId },
+      }
+    );
+
+    if (updateResult[0] === 0) {
+      return res
+        .status(404)
+        .json({ message: "Project not found or update failed." });
+    }
+
+    const updatedProject = await Projects.findOne({
+      where: { id: parsedProjectId },
+    });
+
+    res.json({
+      message: "Project updated successfully.",
+      project: updatedProject,
+    });
   } catch (error) {
     console.error("Error updating project:", error.message);
     res
@@ -161,16 +205,41 @@ const updateProject = async (req, res) => {
 };
 
 // Delete a project by ID
-const deleteProject = async (req, res) => {
-  const { id } = req.params;
-
+const deleteProjectById = async (req, res) => {
   try {
-    const project = await Projects.findByPk(id);
-    if (!project) {
-      return res.status(404).json({ error: "Project not found." });
+    const userId = req.user["user"].id;
+
+    const { projectId } = req.params;
+
+    const parsedProjectId = parseInt(projectId, 10);
+    const isValidId = (id) => Number.isInteger(id) && id > 0;
+    if (!isValidId(parsedProjectId)) {
+      return res.status(400).json({ message: "Invalid ID." });
     }
 
-    await project.destroy();
+    const projectJoined = await ProjectJoineds.findOne({
+      where: {
+        participant_id: userId,
+        project_id: parsedProjectId,
+      },
+    });
+
+    if (!projectJoined) {
+      return res
+        .status(403)
+        .json({ message: "User has not joined this project." });
+    }
+
+    if (!projectJoined.isManager) {
+      return res
+        .status(403)
+        .json({ message: "Only project managers can delete the project." });
+    }
+
+    await Projects.destroy({
+      where: { id: projectId },
+    });
+
     res.json({ message: "Project deleted successfully." });
   } catch (error) {
     console.error("Error deleting project:", error.message);
@@ -184,7 +253,7 @@ const deleteProject = async (req, res) => {
 router.post("/", validateToken, createProject);
 router.get("/user", validateToken, getUserJoinedProjects);
 router.get("/user/:projectId", validateToken, getProjectsByUserId);
-router.put("/:id", validateToken, updateProject);
-router.delete("/:id", validateToken, deleteProject);
+router.put("/user/:projectId", validateToken, updateProjectById);
+router.delete("/user/:projectId", validateToken, deleteProjectById);
 
 module.exports = router;
