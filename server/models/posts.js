@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }
   ,
-  {timestamps: false,
-      createdAt: false,
+  {timestamps: true,
+      createdAt: true,
       updatedAt: false,
     }
 );
