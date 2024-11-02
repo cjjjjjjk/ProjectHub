@@ -6,8 +6,17 @@ const { Op } = require("sequelize");
 
 // Create a new project
 const createProject = async (req, res) => {
-  const { name, description, start_date, end_date, code, state, model, accessibility } = req.body;
-  const userId = req.user['user'].id;
+  const {
+    name,
+    description,
+    start_date,
+    end_date,
+    code,
+    state,
+    model,
+    accessibility,
+  } = req.body;
+  const userId = req.user["user"].id;
 
   if (!name || !code || !state || !model) {
     return res.status(400).json({
@@ -39,38 +48,73 @@ const createProject = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating project:", error.message);
-    res.status(500).json({ error: "An error occurred while creating the project." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating the project." });
   }
 };
 
-// Get all projects
-const getProjects = async (_req, res) => {
+// Get all projects joined
+const getUserJoinedProjects = async (req, res) => {
+  const userId = req.user["user"].id;
+
   try {
-    const projects = await Projects.findAll();
-    res.json(projects);
+    const joinedProjects = await Projects.findAll({
+      include: [
+        {
+          model: ProjectJoineds,
+          where: { participant_id: userId },
+          required: true,
+        },
+      ],
+    });
+
+    if (joinedProjects.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No projects found for this user." });
+    }
+
+    res.json(joinedProjects);
+  } catch (error) {
+    console.error("Error fetching joined projects:", error.message);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving joined projects." });
+  }
+};
+
+// Get a project of an user by ID
+const getProjectsByUserId = async (req, res) => {
+  const userId = req.user["user"].id;
+  const { projectId } = req.params;
+
+  try {
+    const project = await ProjectJoineds.findOne({
+      where: {
+        participant_id: userId,
+        project_id: projectId,
+      },
+      include: [
+        {
+          model: Projects,
+          required: true,
+        },
+      ],
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found or user not joined this project.",
+      });
+    }
+
+    res.json(project);
   } catch (error) {
     console.error("Error fetching projects:", error.message);
     res
       .status(500)
       .json({ error: "An error occurred while retrieving projects." });
-  }
-};
-
-// Get a project by ID
-const getProjectById = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const project = await Projects.findByPk(id);
-    if (!project) {
-      return res.status(404).json({ error: "Project not found." });
-    }
-    res.json(project);
-  } catch (error) {
-    console.error("Error fetching project by ID:", error.message);
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving the project." });
   }
 };
 
@@ -138,8 +182,8 @@ const deleteProject = async (req, res) => {
 
 // Routes
 router.post("/", validateToken, createProject);
-router.get("/", validateToken, getProjects);
-router.get("/:id", validateToken, getProjectById);
+router.get("/user", validateToken, getUserJoinedProjects);
+router.get("/user/:projectId", validateToken, getProjectsByUserId);
 router.put("/:id", validateToken, updateProject);
 router.delete("/:id", validateToken, deleteProject);
 
