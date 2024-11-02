@@ -1,17 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const { validateToken } = require("../middleware/auth");
-const { Projects } = require("../models");
+const { Projects, ProjectJoineds } = require("../models");
 const { Op } = require("sequelize");
 
-// Tạo mới project
+// Create a new project
 const createProject = async (req, res) => {
-  const { name, description, start_date, end_date, code, state, model } = req.body;
+  const { name, description, start_date, end_date, code, state, model, accessibility } = req.body;
+  const userId = req.user['user'].id;
 
   if (!name || !code || !state || !model) {
-    return res
-      .status(400)
-      .json({ error: "Vui lòng cung cấp đầy đủ name, code, state và model cho dự án." });
+    return res.status(400).json({
+      error: "Please provide name, code, state, and model for the project.",
+    });
   }
 
   try {
@@ -22,88 +23,123 @@ const createProject = async (req, res) => {
       end_date: end_date || null,
       code,
       state,
-      model
+      model,
+      accessibility: accessibility || "Private",
     });
 
-    res.json(newProject);
+    await ProjectJoineds.create({
+      project_id: newProject.id,
+      participant_id: userId,
+      isManager: true,
+    });
+
+    res.status(201).json({
+      message: "Project created successfully and user assigned as manager.",
+      project: newProject,
+    });
   } catch (error) {
-    console.error("Lỗi khi tạo dự án:", error.message);
-    res
-      .status(500)
-      .json({ error: "Đã xảy ra lỗi khi tạo dự án." });
+    console.error("Error creating project:", error.message);
+    res.status(500).json({ error: "An error occurred while creating the project." });
   }
 };
 
+// Get all projects
+const getProjects = async (_req, res) => {
+  try {
+    const projects = await Projects.findAll();
+    res.json(projects);
+  } catch (error) {
+    console.error("Error fetching projects:", error.message);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving projects." });
+  }
+};
 
-// Lấy tất cả projects
-const getAllProjects = async (req, res) => {
-  const { page = 1, limit = 10, search = "" } = req.query;
-  const pageNumber = parseInt(page, 10) || 1;
-  const limitNumber = parseInt(limit, 10) || 10;
+// Get a project by ID
+const getProjectById = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const projects = await Projects.findAndCountAll({
-      where: {
-        name: { [Op.like]: `%${search}%` },
-      },
-      limit: limitNumber,
-      offset: (pageNumber - 1) * limitNumber,
-    });
-
-    res.json({
-      total: projects.count,
-      projects: projects.rows,
-      currentPage: pageNumber,
-      totalPages: Math.ceil(projects.count / limitNumber),
-    });
+    const project = await Projects.findByPk(id);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found." });
+    }
+    res.json(project);
   } catch (error) {
-    console.error("Error retrieving projects:", error);
+    console.error("Error fetching project by ID:", error.message);
     res
       .status(500)
-      .json({ error: "An error occurred while retrieving projects" });
+      .json({ error: "An error occurred while retrieving the project." });
   }
 };
 
-// Cập nhật project
+// Update a project by ID
 const updateProject = async (req, res) => {
-  const { name, description } = req.body;
-  const projectId = req.params.id;
-
-  if (!name && !description) {
-    return res
-      .status(400)
-      .json({ error: "Please provide name or description to update" });
-  }
+  const { id } = req.params;
+  const { name, description, start_date, end_date, code, state, model } =
+    req.body;
 
   try {
-    await Projects.update({ name, description }, { where: { id: projectId } });
-    res.json({ message: "Project updated successfully" });
+    const project = await Projects.findByPk(id);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found." });
+    }
+
+    if (code && code !== project.code) {
+      const codeExists = await Projects.findOne({
+        where: { code, id: { [Op.ne]: id } },
+      });
+      if (codeExists) {
+        return res
+          .status(400)
+          .json({ error: "Another project with this code already exists." });
+      }
+    }
+
+    await project.update({
+      name: name || project.name,
+      description: description || project.description,
+      start_date: start_date || project.start_date,
+      end_date: end_date || project.end_date,
+      code: code || project.code,
+      state: state || project.state,
+      model: model || project.model,
+    });
+
+    res.json({ message: "Project updated successfully.", project });
   } catch (error) {
-    console.error("Error updating project:", error);
+    console.error("Error updating project:", error.message);
     res
       .status(500)
-      .json({ error: "An error occurred while updating the project" });
+      .json({ error: "An error occurred while updating the project." });
   }
 };
 
-// Xóa project
+// Delete a project by ID
 const deleteProject = async (req, res) => {
-  const projectId = req.params.id;
+  const { id } = req.params;
 
   try {
-    await Projects.destroy({ where: { id: projectId } });
-    res.json({ message: "Project deleted successfully" });
+    const project = await Projects.findByPk(id);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found." });
+    }
+
+    await project.destroy();
+    res.json({ message: "Project deleted successfully." });
   } catch (error) {
-    console.error("Error deleting project:", error);
+    console.error("Error deleting project:", error.message);
     res
       .status(500)
-      .json({ error: "An error occurred while deleting the project" });
+      .json({ error: "An error occurred while deleting the project." });
   }
 };
 
-// Route
-router.get("/", validateToken, getAllProjects);
+// Routes
 router.post("/", validateToken, createProject);
+router.get("/", validateToken, getProjects);
+router.get("/:id", validateToken, getProjectById);
 router.put("/:id", validateToken, updateProject);
 router.delete("/:id", validateToken, deleteProject);
 
