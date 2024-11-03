@@ -63,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
     Tasks.hasMany(models["Reports"], {
       foreignKey: "task_id"
     })
+    Tasks.belongsTo(models["Projects"], {
+      foreignKey: "project_id",
+       onDelete: 'CASCADE'
+    })
   }
   //===================================================
   return Tasks;
