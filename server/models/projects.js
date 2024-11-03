@@ -47,7 +47,14 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "Private"
     }
 
-  });
+  }
+  ,
+  {timestamps: false,
+      createdAt: false,
+      updatedAt: false,
+    }
+
+);
 
   // Association ===================================
   // ------------------------------------author: Hai

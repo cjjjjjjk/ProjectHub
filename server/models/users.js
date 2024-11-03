@@ -90,9 +90,14 @@ module.exports = (sequelize, DataTypes) => {
         avatar: {
             type: DataTypes.STRING,
             allowNull: true
-        }
-
-    });
+        },
+    },
+    {timestamps: false,
+        createdAt: false,
+        updatedAt: false,
+      }
+    
+);
 
     // Association ===================================
     Users.associate = function (models) {
@@ -108,6 +113,10 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models["TaskComments"], {
             foreignKey: 'user_id',
         })
+        // post comment association ------------------
+        Users.hasMany(models["PostComments"]), {
+            foreignKey: "user_id"
+        }
     }
     // ===============================================
 

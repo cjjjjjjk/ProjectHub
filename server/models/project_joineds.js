@@ -27,7 +27,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
-  });
+  }
+  ,
+  {timestamps: false,
+      createdAt: false,
+      updatedAt: false,
+    }
+
+);
 
 
 
