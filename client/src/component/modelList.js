@@ -1,0 +1,64 @@
+import Kanban from "../asset/image/kanban.png";
+import Scrum from "../asset/image/scrum.png";
+import Roadmap from "../asset/image/roadmap.png";
+import Kanban1 from "../asset/image/kanban1.png";
+import Kanban2 from "../asset/image/kanban2.png";
+import Scrum1 from "../asset/image/scrum1.svg";
+import Scrum2 from "../asset/image/scrum2.png";
+import Roadmap1 from "../asset/image/roadmap1.svg";
+import Roadmap2 from "../asset/image/roadmap2.svg";
+const modelList = [
+  {
+    id: 1,
+    name: "Kanban",
+    icon: Kanban,
+    description:
+      "Kanban is all about helping teams visualize their work, limit work currently in progress, and maximize efficiency. Use the Kanban template to increase planning flexibility, reduce bottlenecks and promote transparency throughout the development cycle.",
+    inform1: "Track work using a simple board",
+    image1: Kanban1,
+    inform2: "Use the board to limit work in progress",
+    image2: Kanban2,
+    workflow: ["To do", "In progress", " Done"],
+    recommend: [
+      "Teams that control work volume from a backlog",
+      "DevOps teams that want to connect work across their tools",
+    ],
+  },
+  {
+    id: 2,
+    name: "Scrum",
+    icon: Scrum,
+    description:
+      "The Scrum template helps teams work together using sprints to break down large, complex projects into bite-sized pieces of value. Encourage your team to learn through incremental delivery, self-organize while working on a problem, and regularly reflect on their wins and losses to continuously improve.",
+    inform1: "Plan upcoming work in a backlog",
+    inform2: "Organize cycles of work into sprints",
+    image1: Scrum1,
+    image2: Scrum2,
+    workflow: ["To do", "In progress", " Done"],
+    recommend: [
+      "Teams that deliver work on a regular cadence",
+      "DevOps teams that want to connect work across their tools",
+    ],
+  },
+  {
+    id: 3,
+    name: "Roadmap",
+    icon: Roadmap,
+    description:
+      "This template lets you create and share an always-up-to-date roadmap. Save time, have productive discussions, and get aligned in Jira Product Discovery.",
+    inform1: "Easily share info with anyone",
+    inform2: "Keep your team engaged",
+    image1: Roadmap1,
+    image2: Roadmap2,
+    workflow: [
+      "Parking lot",
+      "Discovery",
+      "Ready for delivery",
+      "Delivery",
+      "Impact",
+      "Archived",
+    ],
+    recommend: ["Teams that need to create and share roadmaps"],
+  },
+];
+export default modelList;

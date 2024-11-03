@@ -93,7 +93,7 @@ function Login() {
                 )}
               </div>
 
-              {/* PassWord */}
+              {/* Password */}
               <div className="relative mb-2 p-2 pt-4 border-2 border-black rounded-lg">
                 <input
                   type={showPass ? "text" : "password"}
