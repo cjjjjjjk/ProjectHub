@@ -40,7 +40,7 @@ const CreateProject = () => {
       {showModel && (
         <div className="h-[80vh] w-[70vw] rounded-3xl bg-neutral-50">
           <div className="px-2 h-[5vh] flex justify-end items-center">
-            <Link to="/">
+            <Link to="/page/Project">
               <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
             </Link>
           </div>
@@ -162,7 +162,7 @@ const CreateProject = () => {
             </div>
 
             <div className="p-2">
-              <Link to="/">
+              <Link to="/page/Project">
                 <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
               </Link>
             </div>
