@@ -14,7 +14,7 @@ const ProjectCard = ({
     return (
         <div style={{ width: width, height: height }}>
             <Card
-                className="text-center"
+                className="text-center group"
                 hoverable={true}
                 cover={
                     <div className="bg-[#4db6c3] h-28  pt-5">
@@ -30,11 +30,13 @@ const ProjectCard = ({
 
                     />
                 </div>
-                <div className="text-start text-sm text-gray-700 space-y-1">
-                    <p className="font-bold  overflow-hidden whitespace-nowrap text-ellipsis">{description}</p>
-                    <p>Start Date: {startDate}</p>
-                    <p>End Date: {endDate}</p>
-                    <p>Model: {model}</p>
+                <div className='info'>
+                    <div className="text-start text-sm text-gray-700 space-y-1">
+                        <p className="font-bold  overflow-hidden whitespace-nowrap text-ellipsis group-hover:whitespace-normal">{description}</p>
+                        <p>Start Date: {startDate}</p>
+                        <p>End Date: {endDate}</p>
+                        <p>Model: {model}</p>
+                    </div>
                 </div>
             </Card>
         </div>

@@ -167,7 +167,7 @@ function Project() {
             key: '2',
             children: (
               <div className="w-[85%] lg:w-3/4 mx-auto ">
-                <div className="border-[2px] border-black mb-28 pb-12">
+                <div className="border-[2px] border-black mb-14 pb-12">
                   <h1 className="uppercase font-semibold text-2xl p-6">
 
                     Suggest Project
