@@ -8,7 +8,6 @@ import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 import { Drawer, Popover } from "antd";
 import Register from "./page/Register";
-import CreateProject from "./page/CreateProject";
 
 function App() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -171,7 +170,6 @@ function App() {
           <Route path="/page/Login" element={<Login />} />
           <Route path="/page/Profile" element={<Profile />} />
           <Route path="/page/Register" element={<Register />} />
-          <Route path="/page/CreateProject" element={<CreateProject />} />
         </Routes>
       </BrowserRouter>
     </div>

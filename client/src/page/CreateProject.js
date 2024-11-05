@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { RiRobot2Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
+
 import { GrNext } from "react-icons/gr";
 import { FaSearch } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
@@ -12,7 +12,7 @@ import modelList from "../component/modelList";
 import Introduce from "../component/Introduce";
 import DetailForm from "../component/DetailForm";
 
-const CreateProject = () => {
+const CreateProject = ({ event }) => {
   const projectList = [
     { id: 1, name: "For you", icon: <BsStars /> },
     { id: 2, name: "Software", icon: <IoApps /> },
@@ -24,6 +24,11 @@ const CreateProject = () => {
   const [showIntro, setShowIntro] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
+  const handleShowModel = () => {
+    setShowModel(true);
+    setShowIntro(false);
+    setShowForm(false);
+  };
   const handleShowIntro = (item) => {
     setShowIntro(true);
     setSelectedModel(item);
@@ -39,10 +44,10 @@ const CreateProject = () => {
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       {showModel && (
         <div className="h-[80vh] w-[70vw] pl-4 rounded-3xl bg-neutral-50">
-          <div className="px-2 h-[5vh] flex justify-end items-center">
-            <Link to="/page/Project">
+          <div className="p-4 h-[5vh] flex justify-end items-center">
+            <button onClick={event}>
               <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
-            </Link>
+            </button>
           </div>
 
           <div className="  flex gap-4">
@@ -126,15 +131,7 @@ const CreateProject = () => {
           <div className="h-[10vh] flex justify-between bg-gradient-to-r from-blue-500 to-blue-50 overflow-hidden rounded-t-3xl">
             <div className=" p-4 text-2xl font-bold flex gap-3 items-center">
               <span className="border-b-2 border-transparent hover:border-black">
-                <button
-                  onClick={() => {
-                    setShowModel(true);
-                    setShowIntro(false);
-                    setShowForm(false);
-                  }}
-                >
-                  Create new project
-                </button>
+                <button onClick={handleShowModel}>Create new project</button>
               </span>
               <span>
                 <GrNext className="text-lg" />
@@ -162,9 +159,9 @@ const CreateProject = () => {
             </div>
 
             <div className="p-2">
-              <Link to="/page/Project">
+              <button onClick={event}>
                 <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -181,7 +178,7 @@ const CreateProject = () => {
 
           {showForm && (
             <div className="h-[70vh] overflow-y-auto">
-              <DetailForm item={selectedModel} />
+              <DetailForm item={selectedModel} event={handleShowModel} />
             </div>
           )}
         </div>

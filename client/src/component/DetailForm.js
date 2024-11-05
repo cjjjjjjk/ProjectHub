@@ -5,7 +5,7 @@ import { DatePicker, Form, Input, Select } from "antd";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const DetailForm = ({ item }) => {
+const DetailForm = ({ item, event }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -96,9 +96,7 @@ const DetailForm = ({ item }) => {
             {/* Quay ve trang ban dau */}
             <button
               className="px-4 py-2 rounded-lg hover:bg-gray-300"
-              onClick={() => {
-                window.location.reload();
-              }}
+              onClick={event}
             >
               Change model
             </button>
