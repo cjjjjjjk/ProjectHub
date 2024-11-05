@@ -38,7 +38,7 @@ const CreateProject = () => {
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       {showModel && (
-        <div className="h-[80vh] w-[70vw] rounded-3xl bg-neutral-50">
+        <div className="h-[80vh] w-[70vw] pl-4 rounded-3xl bg-neutral-50">
           <div className="px-2 h-[5vh] flex justify-end items-center">
             <Link to="/">
               <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
