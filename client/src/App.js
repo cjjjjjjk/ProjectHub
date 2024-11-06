@@ -22,9 +22,9 @@ function App() {
     setOpenNotification(newOpen);
   };
   const handleSignout = () => {
-    sessionStorage.removeItem('token')
-    window.location.href = '/page/Login';
-  }
+    sessionStorage.removeItem("token");
+    window.location.href = "/page/Login";
+  };
   return (
     <div>
       <BrowserRouter>
@@ -41,9 +41,10 @@ function App() {
                 <NavLink
                   to="page/Profile"
                   className={({ isActive }) =>
-                    `text-base p-2 ${isActive
-                      ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center "
-                      : "text-black"
+                    `text-base p-2 ${
+                      isActive
+                        ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center "
+                        : "text-black"
                     }`
                   }
                 >
@@ -54,9 +55,10 @@ function App() {
                 <NavLink
                   to="page/Project"
                   className={({ isActive }) =>
-                    `text-base p-2 ${isActive
-                      ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center"
-                      : "text-black"
+                    `text-base p-2 ${
+                      isActive
+                        ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center"
+                        : "text-black"
                     }`
                   }
                 >
@@ -64,7 +66,10 @@ function App() {
                 </NavLink>
               </div>
               <div>
-                <button className="text-base pl-2 hover:opacity-50" onClick={handleSignout}>
+                <button
+                  className="text-base pl-2 hover:opacity-50"
+                  onClick={handleSignout}
+                >
                   Sign out
                 </button>
               </div>
@@ -104,7 +109,8 @@ function App() {
               <NavLink
                 to="/page/Home"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
@@ -114,7 +120,8 @@ function App() {
               <NavLink
                 to="/page/Project"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
@@ -123,7 +130,8 @@ function App() {
               <NavLink
                 to="/page/Login"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${
+                    isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
