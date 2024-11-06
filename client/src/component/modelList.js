@@ -1,12 +1,12 @@
 import Kanban from "../asset/image/kanban.png";
 import Scrum from "../asset/image/scrum.png";
-import Roadmap from "../asset/image/roadmap.png";
+import Extreme from "../asset/image/extreme.png";
 import Kanban1 from "../asset/image/kanban1.png";
 import Kanban2 from "../asset/image/kanban2.png";
 import Scrum1 from "../asset/image/scrum1.svg";
 import Scrum2 from "../asset/image/scrum2.png";
-import Roadmap1 from "../asset/image/roadmap1.svg";
-import Roadmap2 from "../asset/image/roadmap2.svg";
+import Extreme1 from "../asset/image/extreme1.png";
+import Extreme2 from "../asset/image/extreme2.png";
 const modelList = [
   {
     id: 1,
@@ -42,23 +42,19 @@ const modelList = [
   },
   {
     id: 3,
-    name: "Roadmap",
-    icon: Roadmap,
+    name: "Extreme Program",
+    icon: Extreme,
     description:
-      "This template lets you create and share an always-up-to-date roadmap. Save time, have productive discussions, and get aligned in Jira Product Discovery.",
-    inform1: "Easily share info with anyone",
-    inform2: "Keep your team engaged",
-    image1: Roadmap1,
-    image2: Roadmap2,
-    workflow: [
-      "Parking lot",
-      "Discovery",
-      "Ready for delivery",
-      "Delivery",
-      "Impact",
-      "Archived",
+      "Extreme Programming (XP) is an Agile software development methodology that focuses on delivering high-quality software through frequent and continuous feedback, collaboration, and adaptation.",
+    inform1: "Allowing open and frequent communication",
+    inform2: "Keeping things as simple as possible",
+    image1: Extreme1,
+    image2: Extreme2,
+    workflow: ["Planning", "Design", "Coding", "Testing", "Listening"],
+    recommend: [
+      "The Dev team should be small, and share the same headquarters.",
+      "The project uses new technology and carries many risks.",
     ],
-    recommend: ["Teams that need to create and share roadmaps"],
   },
 ];
 export default modelList;

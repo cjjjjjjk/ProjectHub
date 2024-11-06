@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { RiRobot2Line } from "react-icons/ri";
-
+import { FaAdjust } from "react-icons/fa";
 import { GrNext } from "react-icons/gr";
 import { FaSearch } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
@@ -18,6 +18,7 @@ const CreateProject = ({ event }) => {
     { id: 2, name: "Software", icon: <IoApps /> },
     { id: 3, name: "Marketing", icon: <IoBag /> },
     { id: 4, name: "Design", icon: <IoIosColorPalette /> },
+    { id: 5, name: "Custom", icon: <FaAdjust /> },
   ];
 
   const [showModel, setShowModel] = useState(true);

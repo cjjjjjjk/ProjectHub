@@ -18,18 +18,18 @@ const Introduce = ({ item, handleShowForm }) => {
               ))}
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-y-4">
+          <div className="w-full grid grid-cols-2 gap-y-4">
             <div className="flex justify-center">
               <span className="font-bold">{item.inform1}</span>
             </div>
             <div className="flex justify-center">
               <span className="font-bold">{item.inform2}</span>
             </div>
-            <div className="flex justify-center items-center">
-              <img src={item.image1} alt=" " className="h-48 w-48"></img>
+            <div className="flex  justify-center items-center">
+              <img src={item.image1} alt=" " className="h-52 w-52"></img>
             </div>
-            <div className="flex justify-center items-center">
-              <img src={item.image2} alt="" className="h-48 w-48"></img>
+            <div className="flex   justify-center items-center">
+              <img src={item.image2} alt="" className="h-52 w-52"></img>
             </div>
           </div>
         </div>
