@@ -13,18 +13,22 @@ const DetailForm = ({ item, event }) => {
   const [code, setCode] = useState("");
   const [state, setState] = useState("");
   const model = item.name;
+  
+
   return (
     <div className="flex gap-10">
       <div className="p-4 mt-10 w-3/5">
         <Form
           labelCol={{
-            span: 4,
+            span: 6,
           }}
           className=""
         >
-          <Form.Item label="Name project">
+          <Form.Item label="Project name"
+          
+          >
             <Input
-              className="border-black"
+              className="border-black "
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -65,7 +69,6 @@ const DetailForm = ({ item, event }) => {
               }}
             >
               <Select.Option value="Private">Private</Select.Option>
-              <Select.Option value="Limited">Limited</Select.Option>
               <Select.Option value="Public">Public</Select.Option>
             </Select>
           </Form.Item>
@@ -110,7 +113,6 @@ const DetailForm = ({ item, event }) => {
             </div>
             <div className="p-4 w-2/3 flex flex-col items-start">
               <h2>{item.name}</h2>
-              <h3>Description: </h3>
             </div>
           </div>
         </div>

@@ -9,20 +9,18 @@ const ProjectCard = ({
     height,
     startDate,
     endDate,
-    model
+   
 }) => {
     return (
         <div style={{ width: width, height: height }}>
             <Card
-                className="text-center group"
+                className=" "
                 hoverable={true}
                 cover={
-                    <div className="bg-[#4db6c3] h-28  pt-5">
-                        Ant Design Card
-                    </div>
+                   <img src="https://i.imgur.com/49caWH8.jpeg" style={{ height: "170px", objectFit: "cover" }} ></img>
                 }
             >
-                <div className="mt-[-55px] mb-4">
+                <div className="mt-[-55px] mb-4 ">
                     <Card.Meta
                         className="flex flex-col"
                         avatar={<Avatar src={avatarUrl} size={64} />}
@@ -32,10 +30,12 @@ const ProjectCard = ({
                 </div>
                 <div className='info'>
                     <div className="text-start text-sm text-gray-700 space-y-1">
-                        <p className="font-bold  overflow-hidden whitespace-nowrap text-ellipsis group-hover:whitespace-normal">{description}</p>
-                        <p>Start Date: {startDate}</p>
-                        <p>End Date: {endDate}</p>
-                        <p>Model: {model}</p>
+                    <p className=" text-black overflow-hidden text-ellipsis line-clamp-3">
+                        {description}  
+                    </p>
+                        <p className="text-sm font-thin">Start Date: {startDate}</p>
+                        <p className="text-sm font-thin">End Date: {endDate}</p>
+                 
                     </div>
                 </div>
             </Card>

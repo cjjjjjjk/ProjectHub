@@ -36,7 +36,7 @@ const Introduce = ({ item, handleShowForm }) => {
 
         <div className="w-1/5 h-[60vh]">
           <div className="h-1/3 flex justify-center items-start object-cover">
-            <img src={item.icon} alt=""></img>
+            <img src={item.icon} className="h-28" alt=""></img>
           </div>
           <div className="h-3/5">
             <div>

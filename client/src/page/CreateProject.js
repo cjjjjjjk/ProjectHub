@@ -18,7 +18,7 @@ const CreateProject = ({ event }) => {
     { id: 2, name: "Software", icon: <IoApps /> },
     { id: 3, name: "Marketing", icon: <IoBag /> },
     { id: 4, name: "Design", icon: <IoIosColorPalette /> },
-    { id: 5, name: "Custom", icon: <FaAdjust /> },
+  
   ];
 
   const [showModel, setShowModel] = useState(true);
@@ -41,10 +41,12 @@ const CreateProject = ({ event }) => {
     setShowIntro(false);
     setShowModel(false);
   };
+
+  
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       {showModel && (
-        <div className="h-[80vh] w-[70vw] pl-4 rounded-3xl bg-neutral-50">
+        <div className="h-screen w-[70vw] pl-4 rounded-3xl bg-neutral-50">
           <div className="p-4 h-[5vh] flex justify-end items-center">
             <button onClick={event}>
               <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
@@ -79,32 +81,29 @@ const CreateProject = ({ event }) => {
               <div className=" h-[5vh] flex items-start gap-4">
                 {/* Search bar */}
                 <div className=" flex items-center border-2 border-gray-300">
-                  <button className="h-10 w-10 p-2  ">
-                    <FaSearch />
-                  </button>
                   <input
                     type="text"
                     className=" h-10 w-[38vw] px-4 rounded-full bg-transparent text-lg border-0 focus:outline-none"
-                    placeholder="Which project do you want to create? "
+                    placeholder="Type short description about your project ..."
                   ></input>
+                  <div className="flex justify-center ">
+                    <button className="p-1 rounded-md  bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-400 ">
+                      <RiRobot2Line className="text-3xl text-white " />
+                    </button>
+                  </div>
                 </div>
 
                 {/* AI suggest */}
-                <div className="flex justify-center">
-                  <button className="p-1 border-2 border-gray-200 rounded-3xl bg-red-400 flex gap-2 justify-center items-center">
-                    <RiRobot2Line className="text-3xl " />
-                    <span className="text-xs ">AI suggest</span>
-                  </button>
-                </div>
+              
               </div>
 
               {/* Selection path */}
 
               {/* Select model */}
-              <div className="h-[60vh] p-4 my-10 flex flex-col items-start justify-start gap-4 overflow-y-auto">
+              <div className="h-screen p-4 my-10 flex flex-col items-start justify-start gap-4 overflow-y-auto">
                 {modelList.map((item, index) => (
                   <button
-                    key={index}
+                    key={item.id}
                     className="bg-white border-2 w-4/5  rounded-3xl flex items-center hover:shadow-lg active:border-blue-500 peer"
                     onClick={() => handleShowIntro(item)}
                   >
@@ -114,10 +113,10 @@ const CreateProject = ({ event }) => {
                     >
                       <img src={item.icon} alt="" className="w-2/3 h-2/3"></img>
                     </div>
-                    <div className="p-4 w-2/3 flex flex-col items-start">
-                      <h2>{item.name}</h2>
-                      <h3>Description: </h3>
-                    </div>
+                        <div className="p-4 w-2/3 flex flex-col items-start overflow-hidden">
+                          <h2 className="font-bold">{item.name}</h2>
+                          <h3 className="overflow-hidden text-ellipsis  whitespace-nowrap w-full">{item.description1}</h3>
+                        </div>
                     <GrNext className="m-auto" />
                   </button>
                 ))}
@@ -129,15 +128,15 @@ const CreateProject = ({ event }) => {
 
       {!showModel && (
         <div className="h-[80vh] w-[70vw] rounded-3xl bg-neutral-50">
-          <div className="h-[10vh] flex justify-between bg-gradient-to-r from-blue-500 to-blue-50 overflow-hidden rounded-t-3xl">
+          <div className="h-[10vh] flex justify-between bg-gradient-to-r from-purple-800 via-blue-600 to-purple-400 overflow-hidden rounded-t-3xl">
             <div className=" p-4 text-2xl font-bold flex gap-3 items-center">
-              <span className="border-b-2 border-transparent hover:border-black">
+              <span className="border-b-2 border-transparent hover:border-white text-white pl-4">
                 <button onClick={handleShowModel}>Create new project</button>
               </span>
               <span>
                 <GrNext className="text-lg" />
               </span>
-              <span className="border-b-2 border-transparent hover:border-black">
+              <span className="border-b-2 border-transparent hover:border-white text-white">
                 <button
                   onClick={() => {
                     handleShowIntro(selectedModel);
@@ -152,7 +151,7 @@ const CreateProject = ({ event }) => {
                     <GrNext className="text-lg" />
                   </span>
 
-                  <span className="border-b-2 border-transparent hover:border-black">
+                  <span className="border-b-2 border-transparent hover:border-white text-white">
                     <button onClick={handleShowForm}>Add details</button>
                   </span>
                 </div>
