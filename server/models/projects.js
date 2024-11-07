@@ -28,13 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
-
-    state: {
-      type: DataTypes.ENUM("Not Started", "In Progress", "Done"),
-      allowNull: false,
-      defaultValue: "Not Started",
-    },
-
     model: {
       type: DataTypes.ENUM("Kanban", "Scrum", "Extreme Program", "Custom"),
       allowNull: false,
