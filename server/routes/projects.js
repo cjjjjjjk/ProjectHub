@@ -12,26 +12,29 @@ const createProject = async (req, res) => {
     start_date,
     end_date,
     code,
-    state,
     model,
     accessibility,
   } = req.body;
   const userId = req.user["user"].id;
 
-  if (!name || !code || !state || !model) {
+  if (!name || !code || !model) {
     return res.status(400).json({
-      error: "Please provide name, code, state, and model for the project.",
+      error: "Please provide name, code and model for the project.",
     });
   }
 
   try {
+    const existingProject = await Projects.findOne({ where: { code } });
+    if (existingProject) {
+      return res.status(400).json({ error: "Project code already exists." });
+    }
+
     const newProject = await Projects.create({
       name,
       description: description || null,
       start_date: start_date || null,
       end_date: end_date || null,
       code,
-      state,
       model,
       accessibility: accessibility || "Private",
     });
@@ -57,19 +60,9 @@ const createProject = async (req, res) => {
 // Get all projects joined
 const getUserJoinedProjects = async (req, res) => {
   const userId = req.user["user"].id;
-  const { date, state } = req.query;
-
-  const filterConditions = {};
-    if (date) {
-      filterConditions.start_date = {
-        [Op.eq]: date,
-      };
-    }
-  if (state) filterConditions.state = state;
 
   try {
     const joinedProjects = await Projects.findAll({
-      where: filterConditions,
       include: [
         {
           model: ProjectJoineds,
@@ -97,19 +90,17 @@ const getUserJoinedProjects = async (req, res) => {
 // Get a project of an user by ID
 const getProjectsByUserId = async (req, res) => {
   const userId = req.user["user"].id;
-  const { projectId } = req.params;
+  const projectId = parseInt(req.params.projectId, 10);
 
-  const parsedProjectId = parseInt(projectId, 10);
-  const isValidId = (id) => Number.isInteger(id) && id > 0;
-  if (!isValidId(parsedProjectId)) {
-    return res.status(400).json({ message: "Invalid ID." });
+  if (isNaN(projectId) || projectId <= 0) {
+    return res.status(400).json({ error: "Invalid project ID." });
   }
 
   try {
-    const project = await ProjectJoineds.findOne({
+    const projectJoined = await ProjectJoineds.findOne({
       where: {
         participant_id: userId,
-        project_id: parsedProjectId,
+        project_id: projectId,
       },
       include: [
         {
@@ -119,18 +110,26 @@ const getProjectsByUserId = async (req, res) => {
       ],
     });
 
-    if (!project) {
+    if (!projectJoined) {
       return res.status(404).json({
-        message: "Project not found or user not joined this project.",
+        message: "Project not found or user has not joined this project.",
       });
+    }
+
+    const project = await Projects.findOne({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project does not exist." });
     }
 
     res.json(project);
   } catch (error) {
-    console.error("Error fetching projects:", error.message);
+    console.error("Error fetching project:", error.message);
     res
       .status(500)
-      .json({ error: "An error occurred while retrieving projects." });
+      .json({ error: "An error occurred while retrieving the project." });
   }
 };
 
@@ -138,9 +137,8 @@ const getProjectsByUserId = async (req, res) => {
 const updateProjectById = async (req, res) => {
   try {
     const userId = req.user["user"].id;
-
     const { projectId } = req.params;
-    const { description, attachment } = req.body;
+    const { name, description, start_date, end_date, accessibility } = req.body;
 
     const parsedProjectId = parseInt(projectId, 10);
     const isValidId = (id) => Number.isInteger(id) && id > 0;
@@ -169,14 +167,20 @@ const updateProjectById = async (req, res) => {
       return res.status(404).json({ message: "Project not found." });
     }
 
-    if (project.state === "Done") {
-      return res
-        .status(403)
-        .json({ message: "Project is closed, cannot be updated." });
+    const { code, model } = req.body;
+    if (code && code !== project.code) {
+      return res.status(400).json({
+        message: "You cannot change the project code.",
+      });
+    }
+    if (model && model !== project.model) {
+      return res.status(400).json({
+        message: "You cannot change the project model.",
+      });
     }
 
     const updateResult = await Projects.update(
-      { description, attachment },
+      { name, description, start_date, end_date, accessibility },
       {
         where: { id: parsedProjectId },
       }
