@@ -97,16 +97,17 @@ const getProjectsByUserId = async (req, res) => {
   }
 
   try {
-    const projectJoined = await ProjectJoineds.findOne({
+    const projectJoined = await Projects.findOne({
       where: {
-        participant_id: userId,
-        project_id: projectId,
+        id: projectId,
+        '$ProjectJoineds.participant_id$': userId
       },
       include: [
         {
-          model: Projects,
+          model: ProjectJoineds,
+          where: { participant_id: userId },
           required: true,
-        },
+        }
       ],
     });
 
@@ -116,15 +117,7 @@ const getProjectsByUserId = async (req, res) => {
       });
     }
 
-    const project = await Projects.findOne({
-      where: { id: projectId },
-    });
-
-    if (!project) {
-      return res.status(404).json({ message: "Project does not exist." });
-    }
-
-    res.json(project);
+    res.json(projectJoined);
   } catch (error) {
     console.error("Error fetching project:", error.message);
     res
@@ -146,21 +139,15 @@ const updateProjectById = async (req, res) => {
       return res.status(400).json({ message: "Invalid ID." });
     }
 
-    const projectJoined = await ProjectJoineds.findOne({
-      where: {
-        participant_id: userId,
-        project_id: parsedProjectId,
-      },
-    });
-
-    if (!projectJoined) {
-      return res
-        .status(403)
-        .json({ message: "User has not joined this project." });
-    }
-
     const project = await Projects.findOne({
       where: { id: parsedProjectId },
+      include: [
+        {
+          model: ProjectJoineds,
+          where: { participant_id: userId },
+          required: true,
+        },
+      ],
     });
 
     if (!project) {
