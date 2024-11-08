@@ -73,7 +73,7 @@ function Project() {
     setShowCreate(!showCreate);
   };
   return (
-    <div className="">
+    <div >
       <Tabs
         type="card"
         tabBarStyle={{
@@ -88,16 +88,20 @@ function Project() {
             key: "1",
             children: (
               <div className="w-[85%] lg:w-3/4 mx-auto bg-slate-300 mb-28 pb-12 rounded-md">
-                <div className="flex flex-row items-center text-2xl">
-                  <div className="uppercase font-semibold p-6 basis-5/6">
+               <div className="flex flex-row items-center justify-between text-2xl">
+                  <div className="uppercase font-semibold p-6">
                     Your Project
                   </div>
-                  <div className="bg-blue-600 rounded-md ">
+                  <div className="flex flex-row text-sm gap-2 relative right-2">
                     <button
-                      className="block text-sm text-white px-3 py-1"
+                      className="w-24 h-8 text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
                       onClick={handleShowCreate}
                     >
                       Create Project
+                    </button>
+                    <button
+                      className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
+                    > Join Project
                     </button>
                   </div>
                 </div>
