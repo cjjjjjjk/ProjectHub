@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Tabs } from "antd";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -6,8 +6,25 @@ import "slick-carousel/slick/slick-theme.css";
 import "../App.css";
 import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
+import axios from "axios";
+
 
 function Project() {
+  const [projects, setProjects] = useState([]);
+  const token=sessionStorage.getItem('token')
+  const fetchPrjects = async () => {
+     const res = await axios.get(`${process.env.REACT_APP_SERVER}/projects/fetch`,{
+      headers: {
+        token: `${token}`
+      }
+    });
+    setProjects(res.data);
+  }
+
+  useEffect(() => {
+    fetchPrjects();
+  }, []);  
+
   const settings1 = {
     dots: true,
     infinite: false,
@@ -21,52 +38,39 @@ function Project() {
     ...settings1,
     rows: 1,
   };
-  // thay bang data fecth tu server
+  // test data
   const data = [
     {
       name: "Code with Tuan",
       description: "ProjectHub is a collaborative project management platform designed to streamline the workflow of teams and individuals. It combines powerful tools for planning, tracking, and managing tasks and deadlines in one intuitive interface. With ProjectHub, users can join or create projects, share updates, and keep track of goals and milestones.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+ 
     },
     {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
       avatarUrl:
         "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+    
     },
     {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+     
     }, {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
       model: "Kanban",
     },
   ];
+  //--------------------------------------
 
   const [showCreate, setShowCreate] = useState(false);
   const handleShowCreate = () => {
@@ -105,15 +109,12 @@ function Project() {
                     </button>
                   </div>
                 </div>
-
                 <Slider {...settings1}>
-                  {data.map((item) => (
+                  {projects.map((item) => (
                     <ProjectCard
                       name={item.name}
                       description={item.description}
-                      avatarUrl={item.avatarUrl}
-                      width={item.width}
-                      height={item.height}
+                      avatarUrl={item.avatars}
                       startDate={item.startDate}
                       endDate={item.endDate}
                     />
@@ -136,12 +137,9 @@ function Project() {
                       <ProjectCard
                         name={item.name}
                         description={item.description}
-                        avatarUrl={item.avatarUrl}
-                        width={item.width}
-                        height={item.height}
                         startDate={item.startDate}
                         endDate={item.endDate}
-                        model={item.model}
+
                       />
                     ))}
                   </Slider>
@@ -154,17 +152,15 @@ function Project() {
                 </div>
                 <div className="grid grid-cols-3 grid-auto-rows-auto gap-y-10 gap-x-5 pb-4">
                   {data.map((item) => (
-                    <div className="otherCard">
+                    <div className="">
                       <ProjectCard
                         name={item.name}
                         description={item.description}
-                        avatarUrl={item.avatarUrl}
-                        width={item.width}
-                        height={item.height}
+                        avatarUrl={item.avatars}
                         startDate={item.startDate}
                         endDate={item.endDate}
-                        model={item.model}
                       />
+                      
                     </div>
                   ))}
                 </div>

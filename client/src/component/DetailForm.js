@@ -1,20 +1,34 @@
 import React, { useState } from "react";
-
 import { DatePicker, Form, Input, Select } from "antd";
+import { nanoid } from 'nanoid'
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment'
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const DetailForm = ({ item, event }) => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [code, setCode] = useState("");
-  const [state, setState] = useState("");
+  const code=nanoid(11);
+  const [accessibility, setAccessibility] = useState("");
   const model = item.name;
+  const token=sessionStorage.getItem('token')
+  const handleCreate =async () => {
+    const data={name, description, startDate, endDate, accessibility, model,code}
+    const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`,data, {
+      headers: {
+        token: `${token}`
+      }
+    });
+    navigate('page/project/'+res.data.project.id)
+  };
+ 
   
-
   return (
     <div className="flex gap-10">
       <div className="p-4 mt-10 w-3/5">
@@ -51,12 +65,12 @@ const DetailForm = ({ item, event }) => {
               className="border-black"
               format={"DD/MM/YYYY"}
               onChange={(value) => {
-                setStartDate(value[0].$d);
-                setEndDate(value[1].$d);
+                setStartDate(value[0].toDate());
+                setEndDate(value[1].toDate());
               }}
             />
           </Form.Item>
-          <Form.Item label="State">
+          <Form.Item label="Accessibility">
             <Select
               style={{
                 width: "30%",
@@ -65,20 +79,21 @@ const DetailForm = ({ item, event }) => {
                 borderRadius: "5px",
               }}
               onChange={(e) => {
-                setState(e);
+                setAccessibility(e);
               }}
             >
               <Select.Option value="Private">Private</Select.Option>
               <Select.Option value="Public">Public</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Code">
+          <Form.Item label="Invitation Code">
             <Input
-              className="border-black"
-              onChange={(e) => {
-                setCode(e.target.value);
-              }}
-            />
+             className="w-1/3"
+             disabled
+             defaultValue={code}
+            ></Input>
+            
+           
           </Form.Item>
           <Form.Item label="Description">
             <TextArea
@@ -119,7 +134,7 @@ const DetailForm = ({ item, event }) => {
 
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
-          <button className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300">
+          <button onClick={handleCreate} className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300">
             Create
           </button>
         </div>
