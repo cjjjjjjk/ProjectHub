@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useImperativeHandle, useState } from "react";
 import { Tabs } from "antd";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "../App.css";
 import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
+import axios from "axios";
 
 function Project() {
   const settings1 = {
@@ -21,6 +22,41 @@ function Project() {
     ...settings1,
     rows: 1,
   };
+
+  const [showCreate, setShowCreate] = useState(false);
+  const handleShowCreate = () => {
+    setShowCreate(!showCreate);
+  };
+
+  // Fetch data =================================== author:  Hai
+  const [userjoinedData, setUserJoinedData] = useState([])
+
+  const fetchData = async function () {
+    try {
+      const token = sessionStorage.getItem('token')
+      if (!token) throw new Error('Fetch projects data err: Can not get token from sesstion storage !')
+
+      // user joined projects --------------------------------
+      const res_userJoinedProjects = await axios.get(`${process.env.REACT_APP_SERVER}/projects/user`, {
+        headers: {
+          token: `${token}`
+        }
+      })
+      // suggest projects ------------------------------------
+
+      // recruit ---------------------------------------------
+
+
+      setUserJoinedData(res_userJoinedProjects.data)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+  // ===========================================================
   // thay bang data fecth tu server
   const data = [
     {
@@ -68,10 +104,6 @@ function Project() {
     },
   ];
 
-  const [showCreate, setShowCreate] = useState(false);
-  const handleShowCreate = () => {
-    setShowCreate(!showCreate);
-  };
   return (
     <div className="">
       <Tabs
@@ -103,7 +135,7 @@ function Project() {
                 </div>
 
                 <Slider {...settings1}>
-                  {data.map((item) => (
+                  {userjoinedData.map((item) => (
                     <ProjectCard
                       name={item.name}
                       description={item.description}
