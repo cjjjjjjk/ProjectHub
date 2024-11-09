@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { DatePicker, Form, Input, Select } from "antd";
+import axios from "axios";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -13,7 +14,34 @@ const DetailForm = ({ item, event }) => {
   const [code, setCode] = useState("");
   const [state, setState] = useState("");
   const model = item.name;
-  
+
+
+  // Create project ======================================= author: Hai
+  const handleCreateProject = async function () {
+    const newProject = {
+      name,
+      description,
+      start_date: startDate,
+      end_date: endDate,
+      code,
+      model,
+      accessibility: state
+    }
+    try {
+      const token = sessionStorage.getItem('token');
+      if (!token) throw new Error("Create project err: Can not get token from sesstion storage !")
+
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects`, newProject, {
+        headers: {
+          token: `${token}`
+        }
+      })
+      console.log(res.data.message);
+    } catch (err) {
+      console.error(err.response ? err.response.data : err)
+    }
+  }
+  // ===================================================================
 
   return (
     <div className="flex gap-10">
@@ -25,7 +53,7 @@ const DetailForm = ({ item, event }) => {
           className=""
         >
           <Form.Item label="Project name"
-          
+
           >
             <Input
               className="border-black "
@@ -119,7 +147,8 @@ const DetailForm = ({ item, event }) => {
 
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
-          <button className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300">
+          <button className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300"
+            onClick={handleCreateProject}>
             Create
           </button>
         </div>
