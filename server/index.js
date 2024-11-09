@@ -15,6 +15,18 @@ db.sequelize.sync().then(() => {
   });
 });
 
+const postCommentsRouter = require("./routes/post_comments");
+app.use("/post_comments", postCommentsRouter);
+
+const taskCommentsRouter = require("./routes/task_comments");
+app.use("/task_comments", taskCommentsRouter);
+
+const reportsRouter = require("./routes/reports");
+app.use("/reports", reportsRouter);
+
+const postsRouter = require("./routes/posts");
+app.use("/posts", postsRouter);
+
 const userRouter = require('./routes/users')
 app.use('/users', userRouter)
 
