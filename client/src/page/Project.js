@@ -8,6 +8,7 @@ import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
 import axios from "axios";
 
+
 function Project() {
   const [projects, setProjects] = useState([]);
   const token=sessionStorage.getItem('token')
@@ -109,17 +110,21 @@ function Project() {
                   </div>
                 </div>
                 <Slider {...settings1}>
-                  {projects.map((item) => (
-
-                    <ProjectCard
-                      id={item.id}
-                      name={item.name}
-                      description={item.description}
-                      avatarUrl={item.avatars}
-                      startDate={item.startDate}
-                      endDate={item.endDate}
-                    />
-                  ))}
+                {projects && Object.keys(projects).length > 0 ? (
+                    projects.map((item) => (
+                      <ProjectCard
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        description={item.description}
+                        avatarUrl={item.avatars}
+                        startDate={item.start_date}
+                        endDate={item.end_date}
+                      />
+                    ))
+                  ) : (
+                    <p>No projects available.</p>
+                  )}
                 </Slider>
               </div>
             ),

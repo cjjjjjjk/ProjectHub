@@ -3,7 +3,8 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { nanoid } from 'nanoid'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment'
+import dayjs from 'dayjs';
+
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -12,20 +13,21 @@ const DetailForm = ({ item, event }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const code=nanoid(11);
   const [accessibility, setAccessibility] = useState("");
   const model = item.name;
   const token=sessionStorage.getItem('token')
   const handleCreate =async () => {
-    const data={name, description, startDate, endDate, accessibility, model,code}
+    const data={name, description, start_date, end_date, accessibility, model,code}
+    console.log(data)
     const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`,data, {
       headers: {
         token: `${token}`
       }
     });
-    navigate('page/project/'+res.data.project.id)
+    navigate('/page/project/'+res.data.project.id)
   };
  
   
@@ -61,14 +63,14 @@ const DetailForm = ({ item, event }) => {
             ></Select>
           </Form.Item>
           <Form.Item label="Timeline">
-            <RangePicker
-              className="border-black"
-              format={"DD/MM/YYYY"}
-              onChange={(value) => {
-                setStartDate(value[0].toDate());
-                setEndDate(value[1].toDate());
-              }}
-            />
+          <RangePicker
+            className="border-black"
+            format="DD-MM-YYYY"
+            onChange={(value) => {
+              setStartDate(value[0] ? dayjs(value[0]).format("YYYY-MM-DD") : null);
+              setEndDate(value[1] ? dayjs(value[1]).format("YYYY-MM-DD") : null);
+            }}
+          />
           </Form.Item>
           <Form.Item label="Accessibility">
             <Select

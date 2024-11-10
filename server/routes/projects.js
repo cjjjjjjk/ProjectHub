@@ -79,9 +79,8 @@ router.get('/fetch', validateToken, async (req, res) => {
     });
 
     if (joinedProjects.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No projects found for this user." });
+      return res.json({});
+  
     }
     for(let projects of joinedProjects){
 
