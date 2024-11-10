@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -10,19 +10,22 @@ import axios from "axios";
 
 function Project() {
   const [projects, setProjects] = useState([]);
-  const token=sessionStorage.getItem('token')
+  const token = sessionStorage.getItem("token");
   const fetchPrjects = async () => {
-     const res = await axios.get(`${process.env.REACT_APP_SERVER}/projects/fetch`,{
-      headers: {
-        token: `${token}`
+    const res = await axios.get(
+      `${process.env.REACT_APP_SERVER}/projects/fetch`,
+      {
+        headers: {
+          token: `${token}`,
+        },
       }
-    });
+    );
     setProjects(res.data);
-  }
- 
+  };
+
   useEffect(() => {
     fetchPrjects();
-  }, []);  
+  }, []);
 
   const settings1 = {
     dots: true,
@@ -41,10 +44,10 @@ function Project() {
   const data = [
     {
       name: "Code with Tuan",
-      description: "ProjectHub is a collaborative project management platform designed to streamline the workflow of teams and individuals. It combines powerful tools for planning, tracking, and managing tasks and deadlines in one intuitive interface. With ProjectHub, users can join or create projects, share updates, and keep track of goals and milestones.",
+      description:
+        "ProjectHub is a collaborative project management platform designed to streamline the workflow of teams and individuals. It combines powerful tools for planning, tracking, and managing tasks and deadlines in one intuitive interface. With ProjectHub, users can join or create projects, share updates, and keep track of goals and milestones.",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
- 
     },
     {
       name: "Code with Lan",
@@ -53,15 +56,14 @@ function Project() {
         "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-    
     },
     {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-     
-    }, {
+    },
+    {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
       startDate: "2024-01-01",
@@ -76,7 +78,7 @@ function Project() {
     setShowCreate(!showCreate);
   };
   return (
-    <div >
+    <div>
       <Tabs
         type="card"
         tabBarStyle={{
@@ -91,7 +93,7 @@ function Project() {
             key: "1",
             children: (
               <div className="w-[85%] lg:w-3/4 mx-auto bg-slate-300 mb-28 pb-12 rounded-md">
-               <div className="flex flex-row items-center justify-between text-2xl">
+                <div className="flex flex-row items-center justify-between text-2xl">
                   <div className="uppercase font-semibold p-6">
                     Your Project
                   </div>
@@ -102,15 +104,14 @@ function Project() {
                     >
                       Create Project
                     </button>
-                    <button
-                      className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
-                    > Join Project
+                    <button className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md">
+                      {" "}
+                      Join Project
                     </button>
                   </div>
                 </div>
                 <Slider {...settings1}>
                   {projects.map((item) => (
-
                     <ProjectCard
                       id={item.id}
                       name={item.name}
@@ -140,7 +141,6 @@ function Project() {
                         description={item.description}
                         startDate={item.startDate}
                         endDate={item.endDate}
-
                       />
                     ))}
                   </Slider>
@@ -161,7 +161,6 @@ function Project() {
                         startDate={item.startDate}
                         endDate={item.endDate}
                       />
-                      
                     </div>
                   ))}
                 </div>

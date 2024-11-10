@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="w-screen h-screen">
       <BrowserRouter>
-        <nav className="h-[10vh] border-y-2 border-gray-200">
+        <nav className=" border-y-2 border-gray-200">
           <Drawer
             open={openMenu}
             onClose={closeMenu}
