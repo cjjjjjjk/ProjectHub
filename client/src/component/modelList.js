@@ -8,6 +8,7 @@ import Scrum2 from "../asset/image/scrum2.png";
 import Extreme1 from "../asset/image/extreme1.png";
 import Extreme2 from "../asset/image/extreme2.png";
 import Custom from "../asset/image/custom.png";
+import { v4 as uuidv4 } from "uuid";
 const modelList = [
   {
     id: 1,
@@ -16,7 +17,8 @@ const modelList = [
     description:
       "Kanban is all about helping teams visualize their work, limit work currently in progress, and maximize efficiency. Use the Kanban template to increase planning flexibility, reduce bottlenecks and promote transparency throughout the development cycle.",
     inform1: "Track work using a simple board",
-    description1:"The Kanban model is a visual workflow method that organizes tasks into columns to enhance productivity and track progress efficiently.",
+    description1:
+      "The Kanban model is a visual workflow method that organizes tasks into columns to enhance productivity and track progress efficiently.",
     image1: Kanban1,
     inform2: "Use the board to limit work in progress",
     image2: Kanban2,
@@ -33,7 +35,8 @@ const modelList = [
     description:
       "The Scrum template helps teams work together using sprints to break down large, complex projects into bite-sized pieces of value. Encourage your team to learn through incremental delivery, self-organize while working on a problem, and regularly reflect on their wins and losses to continuously improve.",
     inform1: "Plan upcoming work in a backlog",
-    description1:"Scrum is an agile framework for managing complex projects, focusing on iterative progress, collaboration, and continuous improvement.",
+    description1:
+      "Scrum is an agile framework for managing complex projects, focusing on iterative progress, collaboration, and continuous improvement.",
     inform2: "Organize cycles of work into sprints",
     image1: Scrum1,
     image2: Scrum2,
@@ -49,7 +52,8 @@ const modelList = [
     icon: Extreme,
     description:
       "Extreme Programming (XP) is an Agile software development methodology that focuses on delivering high-quality software through frequent and continuous feedback, collaboration, and adaptation.",
-    description1:"Extreme Programming (XP) is an agile software development methodology that focuses on delivering high-quality software through frequent and continuous feedback, collaboration, and adaptation.",
+    description1:
+      "Extreme Programming (XP) is an agile software development methodology that focuses on delivering high-quality software through frequent and continuous feedback, collaboration, and adaptation.",
     inform1: "Allowing open and frequent communication",
     inform2: "Keeping things as simple as possible",
     image1: Extreme1,
@@ -66,15 +70,57 @@ const modelList = [
     icon: Custom,
     description:
       "Create a custom workflow that fits your team's unique process. Use the board to limit work in progress",
-    description1:"Create a custom workflow that fits your team's unique process.",
+    description1:
+      "Create a custom workflow that fits your team's unique process.",
     inform1: "Track work using a simple board",
     image1: Kanban1,
     inform2: "Create custom board to limit work in progress",
     image2: Kanban2,
     workflow: ["You define"],
-    recommend: [
-      "",
-    ],
+    recommend: [""],
   },
 ];
 export default modelList;
+
+export const data = [
+  {
+    id: "1",
+    Task: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent.",
+    Due_Date: "25-May-2020",
+  },
+  {
+    id: "2",
+    Task: "Fix Styling",
+    Due_Date: "26-May-2020",
+  },
+  {
+    id: "3",
+    Task: "Handle Door Specs",
+    Due_Date: "27-May-2020",
+  },
+  {
+    id: "4",
+    Task: "morbi",
+    Due_Date: "23-Aug-2020",
+  },
+  {
+    id: "5",
+    Task: "proin",
+    Due_Date: "05-Jan-2021",
+  },
+];
+
+export const columnsFromBackend = {
+  [uuidv4()]: {
+    title: "To-do",
+    items: data,
+  },
+  [uuidv4()]: {
+    title: "In Progress",
+    items: [],
+  },
+  [uuidv4()]: {
+    title: "Done",
+    items: [],
+  },
+};
