@@ -170,7 +170,7 @@ function App() {
           <Route path="/page/Login" element={<Login />} />
           <Route path="/page/Profile" element={<Profile />} />
           <Route path="/page/Register" element={<Register />} />
-          <Route path="page/project/:id" element={<ProjectDetail />} />
+          <Route path="/page/project/:id" element={<ProjectDetail />} />
         </Routes>
       </BrowserRouter>
     </div>

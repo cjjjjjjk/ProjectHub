@@ -31,12 +31,12 @@ router.post('/create', validateToken,async (req, res) =>{
 
     const newProject = await Projects.create({
       name:name,
-      description: description || null,
-      start_date: start_date || null,
-      end_date: end_date || null,
+      description: description ,
+      start_date: start_date,
+      end_date: end_date ,
       code:code,
       model:model,
-      accessibility: accessibility || "Private",
+      accessibility: accessibility,
     });
 
     await ProjectJoineds.create({
