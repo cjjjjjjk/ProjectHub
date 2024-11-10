@@ -8,7 +8,6 @@ import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
 import axios from "axios";
 
-
 function Project() {
   const [projects, setProjects] = useState([]);
   const token=sessionStorage.getItem('token')
@@ -20,7 +19,7 @@ function Project() {
     });
     setProjects(res.data);
   }
-
+ 
   useEffect(() => {
     fetchPrjects();
   }, []);  
@@ -111,7 +110,9 @@ function Project() {
                 </div>
                 <Slider {...settings1}>
                   {projects.map((item) => (
+
                     <ProjectCard
+                      id={item.id}
                       name={item.name}
                       description={item.description}
                       avatarUrl={item.avatars}

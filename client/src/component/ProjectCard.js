@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, Avatar } from 'antd';
-
+import { useNavigate } from 'react-router-dom';
 const ProjectCard = ({
+    id,
     name,
     description,
     avatarUrl,
@@ -29,9 +30,12 @@ const ProjectCard = ({
     };
 
     const avatarList = getAvatarUrls(); // Safe avatar URL list
-
+    const navigate = useNavigate();
+    const handleClickedProject = () => {
+        navigate(`/page/project/${id}`);
+      }
     return (
-        <div >
+        <div onClick={()=>{handleClickedProject()}}>
             <Card
                 className=""
                 hoverable={true}
