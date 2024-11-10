@@ -8,7 +8,7 @@ import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 import { Drawer, Popover } from "antd";
 import Register from "./page/Register";
-
+import ProjectDetail from "./page/ProjectDetail";
 function App() {
   const [openMenu, setOpenMenu] = useState(false);
   const closeMenu = () => {
@@ -41,10 +41,9 @@ function App() {
                 <NavLink
                   to="page/Profile"
                   className={({ isActive }) =>
-                    `text-base p-2 ${
-                      isActive
-                        ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center "
-                        : "text-black"
+                    `text-base p-2 ${isActive
+                      ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center "
+                      : "text-black"
                     }`
                   }
                 >
@@ -55,10 +54,9 @@ function App() {
                 <NavLink
                   to="page/Project"
                   className={({ isActive }) =>
-                    `text-base p-2 ${
-                      isActive
-                        ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center"
-                        : "text-black"
+                    `text-base p-2 ${isActive
+                      ? "flex text-white bg-blue-400  h-8 w-56 rounded-md font-bold items-center"
+                      : "text-black"
                     }`
                   }
                 >
@@ -109,8 +107,7 @@ function App() {
               <NavLink
                 to="/page/Home"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${
-                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
@@ -120,8 +117,7 @@ function App() {
               <NavLink
                 to="/page/Project"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${
-                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
@@ -130,8 +126,7 @@ function App() {
               <NavLink
                 to="/page/Login"
                 className={({ isActive }) =>
-                  `hover:text-blue-300 ${
-                    isActive ? "text-blue-500 font-bold" : "text-black"
+                  `hover:text-blue-300 ${isActive ? "text-blue-500 font-bold" : "text-black"
                   }`
                 }
               >
@@ -170,6 +165,7 @@ function App() {
           <Route path="/page/Login" element={<Login />} />
           <Route path="/page/Profile" element={<Profile />} />
           <Route path="/page/Register" element={<Register />} />
+          <Route path="/page/project/:id" element={<ProjectDetail />} />
         </Routes>
       </BrowserRouter>
     </div>

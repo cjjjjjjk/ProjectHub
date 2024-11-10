@@ -30,6 +30,7 @@ function Project() {
 
   // Fetch data =================================== author:  Hai
   const [userjoinedData, setUserJoinedData] = useState([])
+  const [suggestProjects, setSuggestProjects] = useState([])
 
   const fetchData = async function () {
     try {
@@ -37,7 +38,7 @@ function Project() {
       if (!token) throw new Error('Fetch projects data err: Can not get token from sesstion storage !')
 
       // user joined projects --------------------------------
-      const res_userJoinedProjects = await axios.get(`${process.env.REACT_APP_SERVER}/projects/user`, {
+      const res_userJoinedProjects = await axios.get(`${process.env.REACT_APP_SERVER}/projects/fetch`, {
         headers: {
           token: `${token}`
         }
@@ -62,50 +63,37 @@ function Project() {
     {
       name: "Code with Tuan",
       description: "ProjectHub is a collaborative project management platform designed to streamline the workflow of teams and individuals. It combines powerful tools for planning, tracking, and managing tasks and deadlines in one intuitive interface. With ProjectHub, users can join or create projects, share updates, and keep track of goals and milestones.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+
     },
     {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
       avatarUrl:
         "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+
     },
     {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
-      model: "Kanban",
+
     }, {
       name: "Code with Lan",
       description: "A project management tool using Kanban.",
-      avatarUrl:
-        "https://th.bing.com/th/id/OIP.ARKjkmC8CHiN18CdgXJ9ngHaHa?rs=1&pid=ImgDetMain",
-      width: "100%",
-      height: "100%",
       startDate: "2024-01-01",
       endDate: "2024-06-01",
       model: "Kanban",
     },
   ];
+  //--------------------------------------
 
   return (
-    <div className="">
+    <div >
       <Tabs
         type="card"
         tabBarStyle={{
@@ -120,28 +108,30 @@ function Project() {
             key: "1",
             children: (
               <div className="w-[85%] lg:w-3/4 mx-auto bg-slate-300 mb-28 pb-12 rounded-md">
-                <div className="flex flex-row items-center text-2xl">
-                  <div className="uppercase font-semibold p-6 basis-5/6">
+                <div className="flex flex-row items-center justify-between text-2xl">
+                  <div className="uppercase font-semibold p-6">
                     Your Project
                   </div>
-                  <div className="bg-blue-600 rounded-md ">
+                  <div className="flex flex-row text-sm gap-2 relative right-2">
                     <button
-                      className="block text-sm text-white px-3 py-1"
+                      className="w-24 h-8 text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
                       onClick={handleShowCreate}
                     >
                       Create Project
                     </button>
+                    <button
+                      className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
+                    > Join Project
+                    </button>
                   </div>
                 </div>
-
                 <Slider {...settings1}>
                   {userjoinedData.map((item) => (
                     <ProjectCard
+                      id={item.id}
                       name={item.name}
                       description={item.description}
-                      avatarUrl={item.avatarUrl}
-                      width={item.width}
-                      height={item.height}
+                      avatarUrl={item.avatars}
                       startDate={item.startDate}
                       endDate={item.endDate}
                     />
@@ -160,16 +150,13 @@ function Project() {
                     Suggest Project
                   </h1>
                   <Slider {...settings2}>
-                    {data.map((item) => (
+                    {suggestProjects.map((item) => (
                       <ProjectCard
                         name={item.name}
                         description={item.description}
-                        avatarUrl={item.avatarUrl}
-                        width={item.width}
-                        height={item.height}
                         startDate={item.startDate}
                         endDate={item.endDate}
-                        model={item.model}
+
                       />
                     ))}
                   </Slider>
@@ -182,17 +169,15 @@ function Project() {
                 </div>
                 <div className="grid grid-cols-3 grid-auto-rows-auto gap-y-10 gap-x-5 pb-4">
                   {data.map((item) => (
-                    <div className="otherCard">
+                    <div className="">
                       <ProjectCard
                         name={item.name}
                         description={item.description}
-                        avatarUrl={item.avatarUrl}
-                        width={item.width}
-                        height={item.height}
+                        avatarUrl={item.avatars}
                         startDate={item.startDate}
                         endDate={item.endDate}
-                        model={item.model}
                       />
+
                     </div>
                   ))}
                 </div>

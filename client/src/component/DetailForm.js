@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-
 import { DatePicker, Form, Input, Select } from "antd";
+import { nanoid } from 'nanoid'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const DetailForm = ({ item, event }) => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [code, setCode] = useState("");
-  const [state, setState] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
+  const [accessibility, setAccessibility] = useState("");
+  const code = nanoid(11);
   const model = item.name;
 
 
@@ -21,22 +23,23 @@ const DetailForm = ({ item, event }) => {
     const newProject = {
       name,
       description,
-      start_date: startDate,
-      end_date: endDate,
+      start_date,
+      end_date,
       code,
       model,
-      accessibility: state
+      accessibility
     }
     try {
       const token = sessionStorage.getItem('token');
       if (!token) throw new Error("Create project err: Can not get token from sesstion storage !")
 
-      const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects`, newProject, {
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`, newProject, {
         headers: {
           token: `${token}`
         }
       })
-      console.log(res.data.message);
+      if (!res.data.project.id) throw new Error("Create project false (No id response)!")
+      navigate('/page/project/' + res.data.project.id)
     } catch (err) {
       console.error(err.response ? err.response.data : err)
     }
@@ -79,12 +82,12 @@ const DetailForm = ({ item, event }) => {
               className="border-black"
               format={"DD/MM/YYYY"}
               onChange={(value) => {
-                setStartDate(value[0].$d);
-                setEndDate(value[1].$d);
+                setStartDate(value[0].toDate());
+                setEndDate(value[1].toDate());
               }}
             />
           </Form.Item>
-          <Form.Item label="State">
+          <Form.Item label="Accessibility">
             <Select
               style={{
                 width: "30%",
@@ -93,20 +96,21 @@ const DetailForm = ({ item, event }) => {
                 borderRadius: "5px",
               }}
               onChange={(e) => {
-                setState(e);
+                setAccessibility(e);
               }}
             >
               <Select.Option value="Private">Private</Select.Option>
               <Select.Option value="Public">Public</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Code">
+          <Form.Item label="Invitation Code">
             <Input
-              className="border-black"
-              onChange={(e) => {
-                setCode(e.target.value);
-              }}
-            />
+              className="w-1/3"
+              disabled
+              defaultValue={code}
+            ></Input>
+
+
           </Form.Item>
           <Form.Item label="Description">
             <TextArea
