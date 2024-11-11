@@ -32,7 +32,7 @@ function ProjectDetail() {
   };
   return (
     <div className="w-full flex">
-      <div className="w-72 h-[90vh] border-r-2 border-gray-300 flex flex-col gap-6">
+      <div className=" min-w-72  h-[90vh] border-r-2 border-gray-300 flex flex-col gap-6 ">
         {/* Ten project */}
         <div className="w-full p-4 flex justify-center items-center ">
           <div className=" w-11/12 flex items-center gap-4 justify-center ">
@@ -84,9 +84,11 @@ function ProjectDetail() {
         </div>
       </div>
 
-      {showTask && <Board />}
-      {showTimeline && <Timeline />}
-      {showSetting && <ProjectSetting />}
+      <div className="w-[80vw] h-[90vh]">
+        {showTask && <Board />}
+        {showTimeline && <Timeline />}
+        {showSetting && <ProjectSetting />}
+      </div>
     </div>
   );
 }

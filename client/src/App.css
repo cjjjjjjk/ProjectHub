@@ -1,19 +1,17 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .slick-next:before {
   position: absolute;
-  font-size: 30px; 
-  color: black; 
+  font-size: 30px;
+  color: black;
   margin-left: 18px;
   bottom: 12px;
- 
 }
 .slick-prev:before {
   position: absolute;
-  font-size: 30px; 
+  font-size: 30px;
   color: black;
   bottom: 12px;
   margin-left: -50px;
@@ -25,7 +23,7 @@
 }
 
 .slick-dots {
-  bottom: -20px; 
+  bottom: -20px;
 }
 
 @keyframes appear {
@@ -39,8 +37,15 @@
   }
 }
 .otherCard {
-  animation: appear  linear ; 
+  animation: appear linear;
   animation-range: entry 0% cover 30%;
   animation-timeline: view();
- 
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

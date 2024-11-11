@@ -10,16 +10,11 @@ const Task = ({ item, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="flex flex-col justify-center items-start min-h-28 max-w-60 bg-blue-600 border-2 border-black">
-            <p>{item.Task}</p>
+          <div className="p-4 flex flex-col justify-center items-start min-h-28 w-64 rounded-lg bg-gray-50 border-2 border-black">
+            <p>{item.Name}</p>
             <div className="flex justify-between items-center w-full">
               <p>
-                <span>
-                  {new Date(item.Due_Date).toLocaleDateString("en-us", {
-                    month: "short",
-                    day: "2-digit",
-                  })}
-                </span>
+                <span></span>
               </p>
             </div>
           </div>

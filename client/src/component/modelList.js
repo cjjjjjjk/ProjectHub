@@ -8,7 +8,7 @@ import Scrum2 from "../asset/image/scrum2.png";
 import Extreme1 from "../asset/image/extreme1.png";
 import Extreme2 from "../asset/image/extreme2.png";
 import Custom from "../asset/image/custom.png";
-import { v4 as uuidv4 } from "uuid";
+
 const modelList = [
   {
     id: 1,
@@ -82,44 +82,69 @@ const modelList = [
 ];
 export default modelList;
 
-export const data = [
+export const taskFromBE = [
   {
     id: "1",
-    Task: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent.",
-    Due_Date: "25-May-2020",
+    Name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent.",
+    Descriptions: " ahihi",
+    Start_date: " ",
+    End_date: " ",
+    Status: " ",
+    Priority: " ",
+    Type: "To-do",
   },
   {
     id: "2",
-    Task: "Fix Styling",
-    Due_Date: "26-May-2020",
+    Name: "Fix Styling",
+    Descriptions: " ahihi",
+    Start_date: " ",
+    End_date: " ",
+    Status: " ",
+    Priority: " ",
+    Type: "To-do",
   },
   {
     id: "3",
-    Task: "Handle Door Specs",
-    Due_Date: "27-May-2020",
+    Name: "Handle Door Specs",
+    Descriptions: " ahihi",
+    Start_date: " ",
+    End_date: " ",
+    Status: " ",
+    Priority: " ",
+    Type: "To-do",
   },
   {
     id: "4",
-    Task: "morbi",
-    Due_Date: "23-Aug-2020",
+    Name: "morbi",
+    Descriptions: " ahihi",
+    Start_date: " ",
+    End_date: " ",
+    Status: " ",
+    Priority: " ",
+    Type: "To-do",
   },
   {
     id: "5",
-    Task: "proin",
-    Due_Date: "05-Jan-2021",
+    Name: "proin",
+    Descriptions: " ahihi",
+    Start_date: " ",
+    End_date: " ",
+    Status: " ",
+    Priority: " ",
+    Type: "To-do",
   },
 ];
 
 export const columnsFromBackend = {
-  [uuidv4()]: {
+  "To-do": {
     title: "To-do",
-    items: data,
+    items: [],
   },
-  [uuidv4()]: {
+  "In Progress": {
     title: "In Progress",
     items: [],
   },
-  [uuidv4()]: {
+  Done: {
     title: "Done",
     items: [],
   },
