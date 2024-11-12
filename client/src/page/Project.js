@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -8,7 +8,23 @@ import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
 import axios from "axios";
 
+
 function Project() {
+  const [projects, setProjects] = useState([]);
+  const token = sessionStorage.getItem('token')
+  const fetchPrjects = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_SERVER}/projects/fetch`, {
+      headers: {
+        token: `${token}`
+      }
+    });
+    setProjects(res.data);
+  }
+
+  useEffect(() => {
+    fetchPrjects();
+  }, []);
+
   const settings1 = {
     dots: true,
     infinite: false,
@@ -22,43 +38,7 @@ function Project() {
     ...settings1,
     rows: 1,
   };
-
-  const [showCreate, setShowCreate] = useState(false);
-  const handleShowCreate = () => {
-    setShowCreate(!showCreate);
-  };
-
-  // Fetch data =================================== author:  Hai
-  const [userjoinedData, setUserJoinedData] = useState([])
-  const [suggestProjects, setSuggestProjects] = useState([])
-
-  const fetchData = async function () {
-    try {
-      const token = sessionStorage.getItem('token')
-      if (!token) throw new Error('Fetch projects data err: Can not get token from sesstion storage !')
-
-      // user joined projects --------------------------------
-      const res_userJoinedProjects = await axios.get(`${process.env.REACT_APP_SERVER}/projects/fetch`, {
-        headers: {
-          token: `${token}`
-        }
-      })
-      // suggest projects ------------------------------------
-
-      // recruit ---------------------------------------------
-
-
-      setUserJoinedData(res_userJoinedProjects.data)
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, [])
-  // ===========================================================
-  // thay bang data fecth tu server
+  // test data
   const data = [
     {
       name: "Code with Tuan",
@@ -92,6 +72,10 @@ function Project() {
   ];
   //--------------------------------------
 
+  const [showCreate, setShowCreate] = useState(false);
+  const handleShowCreate = () => {
+    setShowCreate(!showCreate);
+  };
   return (
     <div >
       <Tabs
@@ -126,16 +110,21 @@ function Project() {
                   </div>
                 </div>
                 <Slider {...settings1}>
-                  {userjoinedData.map((item) => (
-                    <ProjectCard
-                      id={item.id}
-                      name={item.name}
-                      description={item.description}
-                      avatarUrl={item.avatars}
-                      startDate={item.startDate}
-                      endDate={item.endDate}
-                    />
-                  ))}
+                  {projects && Object.keys(projects).length > 0 ? (
+                    projects.map((item) => (
+                      <ProjectCard
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        description={item.description}
+                        avatarUrl={item.avatars}
+                        startDate={item.start_date}
+                        endDate={item.end_date}
+                      />
+                    ))
+                  ) : (
+                    <p>No projects available.</p>
+                  )}
                 </Slider>
               </div>
             ),
@@ -150,7 +139,7 @@ function Project() {
                     Suggest Project
                   </h1>
                   <Slider {...settings2}>
-                    {suggestProjects.map((item) => (
+                    {data.map((item) => (
                       <ProjectCard
                         name={item.name}
                         description={item.description}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 const ProjectCard = ({
     id,
     name,
@@ -11,13 +12,13 @@ const ProjectCard = ({
 }) => {
     const getStartDate = () => {
         if (startDate) {
-            return startDate;
+            return  dayjs(startDate).format("DD-MM-YYYY");
         }
         return "Not specified";
     }
     const getEndDate = () => {
         if (endDate) {
-            return endDate;
+            return  dayjs(endDate).format("DD-MM-YYYY");
         }
         return "Not specified";
     }

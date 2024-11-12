@@ -3,6 +3,8 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { nanoid } from 'nanoid'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -13,38 +15,21 @@ const DetailForm = ({ item, event }) => {
   const [description, setDescription] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const [accessibility, setAccessibility] = useState("");
   const code = nanoid(11);
+  const [accessibility, setAccessibility] = useState("");
   const model = item.name;
+  const token = sessionStorage.getItem('token')
+  const handleCreate = async () => {
+    const data = { name, description, start_date, end_date, accessibility, model, code }
+    console.log(data)
+    const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`, data, {
+      headers: {
+        token: `${token}`
+      }
+    });
+    navigate('/page/project/' + res.data.project.id)
+  };
 
-
-  // Create project ======================================= author: Hai
-  const handleCreateProject = async function () {
-    const newProject = {
-      name,
-      description,
-      start_date,
-      end_date,
-      code,
-      model,
-      accessibility
-    }
-    try {
-      const token = sessionStorage.getItem('token');
-      if (!token) throw new Error("Create project err: Can not get token from sesstion storage !")
-
-      const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`, newProject, {
-        headers: {
-          token: `${token}`
-        }
-      })
-      if (!res.data.project.id) throw new Error("Create project false (No id response)!")
-      navigate('/page/project/' + res.data.project.id)
-    } catch (err) {
-      console.error(err.response ? err.response.data : err)
-    }
-  }
-  // ===================================================================
 
   return (
     <div className="flex gap-10">
@@ -80,10 +65,10 @@ const DetailForm = ({ item, event }) => {
           <Form.Item label="Timeline">
             <RangePicker
               className="border-black"
-              format={"DD/MM/YYYY"}
+              format="DD-MM-YYYY"
               onChange={(value) => {
-                setStartDate(value[0].toDate());
-                setEndDate(value[1].toDate());
+                setStartDate(value[0] ? dayjs(value[0]).format("YYYY-MM-DD") : null);
+                setEndDate(value[1] ? dayjs(value[1]).format("YYYY-MM-DD") : null);
               }}
             />
           </Form.Item>
@@ -151,8 +136,7 @@ const DetailForm = ({ item, event }) => {
 
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
-          <button className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300"
-            onClick={handleCreateProject}>
+          <button onClick={handleCreate} className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300">
             Create
           </button>
         </div>
