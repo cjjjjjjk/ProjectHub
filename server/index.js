@@ -38,3 +38,6 @@ app.use("/project-joineds", joinProjectRouter)
 
 const taskRouter = require("./routes/tasks")
 app.use("/tasks", taskRouter)
+
+const requestRouter = require("./routes/join_requests")
+app.use("/requests", requestRouter)

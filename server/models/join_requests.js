@@ -24,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
 
-        isAccept: {
-            type: DataTypes.BOOLEAN,
+        state: {
+            type: DataTypes.ENUM("Pending", "Accepted", "Rejected"),
             allowNull: false,
-            defaultValue: false
+            defaultValue: "Pending"
         }
 
     }, { timestamps: false, createdAt: false, updatedAt: false })
