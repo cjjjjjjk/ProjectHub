@@ -144,8 +144,21 @@ export const columnsFromBackend = {
     title: "In Progress",
     items: [],
   },
-  Done: {
+  "Done": {
     title: "Done",
     items: [],
   },
+  "Hmmmm": {
+    title: "Hmmmm",
+    items: [],
+  },
+  "Planning": {
+    title: "Planning",
+    items: [],
+  },
+  "h": {
+    title: "Planning",
+    items: [],
+  },
+
 };

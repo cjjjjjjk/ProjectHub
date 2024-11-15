@@ -10,13 +10,11 @@ const Task = ({ item, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="p-4 flex flex-col justify-center items-start min-h-28 w-64 rounded-lg bg-gray-50 border-2 border-black">
-            <p>{item.Name}</p>
-            <div className="flex justify-between items-center w-full">
-              <p>
-                <span></span>
-              </p>
+          <div className="p-4 items-start min-h-20 w-64 rounded-lg bg-gray-50 border-2 border-black">
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap"
+            >{item.Name}
             </div>
+            
           </div>
         </div>
       )}

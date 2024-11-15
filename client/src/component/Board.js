@@ -3,9 +3,10 @@ import { columnsFromBackend, taskFromBE } from "./modelList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Select } from "antd";
 import Task from "./Task";
+
+
 const Board = () => {
   const [tasks, setTasks] = useState(taskFromBE);
-
   const [newTaskType, setNewTaskType] = useState("To-do");
   const [newTaskName, setNewTaskName] = useState("");
   // Danh sach cac cot
@@ -96,29 +97,22 @@ const Board = () => {
     }
   };
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <div>
+      <div className="px-4 pt-2">
+        <h1 className="text-xl font-bold">Kanban Board</h1>
+      </div>
       {/* Tittle */}
-      <div className="min-h-20 h-1/6">
-        <div className="px-4 pt-2">
-          <h1 className="text-xl font-bold">Kanban Board</h1>
-        </div>
-        <div className="flex gap-5 p-4 items-center ml-32">
+      <div className="flex flex-row gap-2 p-4">
           <input
             type="text"
-            className="w-72 p-2 rounded-md text-lg border-2 border-gray-500"
-            placeholder="Add your task"
+            className="rounded-md text-lg border-2 px-2"
+            placeholder="Add your task name ..."
             onChange={(e) => setNewTaskName(e.target.value)}
           ></input>
           <Select
+            placeholder="Select type"
             size="large"
-            style={{
-              width: 160,
-              borderWidth: 2,
-              borderColor: "black",
-              borderRadius: "8px",
-              height: 40,
-              fontSize: "20px",
-            }}
+            
             onChange={(e) => setNewTaskType(e)}
             options={Object.values(columnsFromBackend).map((column) => ({
               value: column.title,
@@ -126,52 +120,51 @@ const Board = () => {
             }))}
           />
           <button
-            className="border-2 border-black font-bold p-2 rounded-lg w-28 bg-gray-200  hover:bg-blue-400 hover:text-white"
+            className=" font-bold p-2 rounded-lg  bg-gray-300  hover:bg-blue-400 hover:text-white"
             onClick={addTask}
           >
             Add
           </button>
-        </div>
       </div>
 
-      <div className="h-5/6 w-full">
+      <div className="pl-4 flex flex-row gap-x-4">
         <DragDropContext
           onDragEnd={(result) => {
             onDragEnd(result, columns, setColumns);
           }}
         >
-          <div className="flex w-full h-full">
-            <div className="flex w-5/6 no-scrollbar overflow-x-auto h-5/6 min-h-[40vh] gap-4 p-4">
-              {Object.entries(columns).map(([columnId, column], index) => {
+             {Object.entries(columns).map(([columnId, column], index) => {
                 return (
-                  <div>
-                    {/* Tittle column */}
-                    <div className="flex justify-center items-center h-10 bg-slate-100 rounded-t-md border-2 border-black border-b-0">
-                      <h2 className="text-xl font-bold"> {column.title}</h2>
+                    <div className="flex flex-col h-96 w-72">
+                      {/* Tittle column */}
+                      <div className="flex justify-center items-center h-10 bg-slate-100 rounded-t-md border-2 border-black border-b-0">
+                        <h2 className="text-xl font-bold"> {column.title}</h2>
+                      </div>
+                      {/* Task */}
+                      <div>
+                      <Droppable key={columnId} droppableId={columnId}>
+                        {(provided, snapshot) => (
+                          
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="h-80 w-72  overflow-auto flex flex-col gap-2 items-center bg-white border-2 border-t-0 border-black rounded-b-md"
+                          >
+                            {column.items.map((item, index) => (
+                              
+                              <div>
+                                <Task key={item.id} item={item} index={index} />
+                              </div>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                     
+                        )}
+                      </Droppable>
+                      </div>
                     </div>
-
-                    {/* Task */}
-                    <Droppable key={columnId} droppableId={columnId}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="p-2 h-5/6 w-72 min-h-96 min-w-60 overflow-y-auto no-scrollbar flex flex-col gap-2 items-center bg-white border-2 border-t-0 border-black rounded-b-md"
-                        >
-                          {column.items.map((item, index) => (
-                            <div>
-                              <Task key={item.id} item={item} index={index} />
-                            </div>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
                 );
               })}
-            </div>
-          </div>
         </DragDropContext>
       </div>
     </div>
