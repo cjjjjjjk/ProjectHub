@@ -12,9 +12,9 @@ const Board = () => {
   const [columns, setColumns] = useState(() => {
     const newColumns = { ...columnsFromBackend };
     tasks.forEach((item) => {
-      const curColumn = newColumns[item.Type];
+      const curColumn = newColumns[item.type];
       const curItems = [...(curColumn?.items || []), item];
-      newColumns[item.Type] = {
+      newColumns[item.type] = {
         ...curColumn,
         items: curItems,
       };
@@ -28,13 +28,13 @@ const Board = () => {
     const newId = (tasks.length + 1).toString();
     const newTask = {
       id: newId,
-      Name: newTaskName,
-      Descriptions: " ",
-      Start_date: " ",
-      End_date: " ",
-      Status: " ",
-      Priority: " ",
-      Type: newTaskType,
+      name: newTaskName,
+      descriptions: null,
+      start_date: null,
+      end_date: null,
+      status: null,
+      priority: null,
+      type: newTaskType,
     };
     setTasks((prevItems) => [...prevItems, newTask]);
     const targetColumn = columns[newTaskType];
@@ -62,7 +62,7 @@ const Board = () => {
       const sourceItems = [...sourceColumn.items]; // cac task trong cot bi keo
       const destItems = [...destColumn.items]; // cac task trong cot dc tha
 
-      task.Type = destColumn.title; // thay doi type cua task
+      task.type = destColumn.title; // thay doi type cua task
       console.log(tasks);
 
       const [removed] = sourceItems.splice(source.index, 1); //xoa task bi keo trong cot nguon
@@ -94,6 +94,7 @@ const Board = () => {
         },
       });
     }
+    console.log(tasks);
   };
   return (
     <div className="h-full w-full overflow-y-auto">
@@ -105,17 +106,18 @@ const Board = () => {
         <div className="flex gap-5 p-4 items-center ml-32">
           <input
             type="text"
-            className="w-72 p-2 rounded-md text-lg border-2 border-gray-500"
+            className="w-72 p-1 rounded-md text-lg border-2 border-gray-500"
             placeholder="Add your task"
             onChange={(e) => setNewTaskName(e.target.value)}
           ></input>
           <Select
             size="large"
+            defaultValue="To-do"
             style={{
               width: 160,
               borderWidth: 2,
               borderColor: "black",
-              borderRadius: "8px",
+              borderRadius: "9px",
               height: 40,
               fontSize: "20px",
             }}
