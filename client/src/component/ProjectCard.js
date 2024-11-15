@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 const ProjectCard = ({
     id,
     name,
@@ -11,13 +12,13 @@ const ProjectCard = ({
 }) => {
     const getStartDate = () => {
         if (startDate) {
-            return startDate;
+            return  dayjs(startDate).format("DD-MM-YYYY");
         }
         return "Not specified";
     }
     const getEndDate = () => {
         if (endDate) {
-            return endDate;
+            return  dayjs(endDate).format("DD-MM-YYYY");
         }
         return "Not specified";
     }
@@ -35,15 +36,15 @@ const ProjectCard = ({
         navigate(`/page/project/${id}`);
       }
     return (
-        <div onClick={()=>{handleClickedProject()}}>
+        <div onClick={()=>{handleClickedProject()}} >
             <Card
-                className=""
+               className="h-80 w-11/12"
                 hoverable={true}
                 cover={
-                   <img src="https://i.imgur.com/49caWH8.jpeg" style={{ height: "170px", objectFit: "cover" }} ></img>
+                   <img src="https://i.imgur.com/49caWH8.jpeg" style={{ height: '140px', objectFit: 'cover' }}  ></img>
                 }
             >
-                <div className="mt-[-55px] mb-4 ">
+                <div className="-mt-12">
                     <Card.Meta
                         className="flex flex-col"
                         avatar={<Avatar.Group  max={{
@@ -56,8 +57,7 @@ const ProjectCard = ({
                         {avatarList.map((url, index) => (
                           <Avatar key={index} src={url} size={40} />
                         ))}
-
-                            
+    
                         </Avatar.Group>}
                         title={name}
                     />
@@ -65,11 +65,10 @@ const ProjectCard = ({
                 <div className='info'>
                     <div className="text-start text-sm text-gray-700 space-y-1">
                     <p className=" text-black overflow-hidden text-ellipsis line-clamp-3">
-                        {description}  
+                        {description} 
                     </p>
                         <p className="text-sm font-thin">Start Date: {getStartDate()}</p>
                         <p className="text-sm font-thin">End Date: {getEndDate()}</p>
-                 
                     </div>
                 </div>
             </Card>

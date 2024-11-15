@@ -84,20 +84,20 @@ function Project() {
         tabBarStyle={{
           marginLeft: "auto", // Đẩy tab sang bên phải
           display: "flex",
-          marginRight: 100,
-          marginTop: 20,
+          marginTop: 5,
+          marginRight: 125,
         }}
         items={[
           {
             label: "Your Project",
             key: "1",
             children: (
-              <div className="w-[85%] lg:w-3/4 mx-auto bg-slate-300 mb-28 pb-12 rounded-md">
+              <div className="w-3/4 bg-slate-300 mx-auto rounded-md border-2 border-slate-500">
                 <div className="flex flex-row items-center justify-between text-2xl">
                   <div className="uppercase font-semibold p-6">
                     Your Project
                   </div>
-                  <div className="flex flex-row text-sm gap-2 relative right-2">
+                  <div className="flex flex-row text-sm gap-2 pr-8">
                     <button
                       className="w-24 h-8 text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
                       onClick={handleShowCreate}
@@ -111,16 +111,21 @@ function Project() {
                   </div>
                 </div>
                 <Slider {...settings1}>
-                  {projects.map((item) => (
-                    <ProjectCard
-                      id={item.id}
-                      name={item.name}
-                      description={item.description}
-                      avatarUrl={item.avatars}
-                      startDate={item.startDate}
-                      endDate={item.endDate}
-                    />
-                  ))}
+                  {projects && Object.keys(projects).length > 0 ? (
+                    projects.map((item) => (
+                      <ProjectCard
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        description={item.description}
+                        avatarUrl={item.avatars}
+                        startDate={item.start_date}
+                        endDate={item.end_date}
+                      />
+                    ))
+                  ) : (
+                    <p>No projects available.</p>
+                  )}
                 </Slider>
               </div>
             ),

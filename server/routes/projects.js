@@ -31,12 +31,12 @@ router.post('/create', validateToken,async (req, res) =>{
 
     const newProject = await Projects.create({
       name:name,
-      description: description || null,
-      start_date: start_date || null,
-      end_date: end_date || null,
+      description: description ,
+      start_date: start_date,
+      end_date: end_date ,
       code:code,
       model:model,
-      accessibility: accessibility || "Private",
+      accessibility: accessibility,
     });
 
     await ProjectJoineds.create({
@@ -79,9 +79,8 @@ router.get('/fetch', validateToken, async (req, res) => {
     });
 
     if (joinedProjects.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No projects found for this user." });
+      return res.json({});
+  
     }
     for(let projects of joinedProjects){
 
