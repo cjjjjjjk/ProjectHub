@@ -3,32 +3,33 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { nanoid } from "nanoid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const DetailForm = ({ item, event }) => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(null);
+  const [description, setDescription] = useState(null);
 
-  const [start_date, setStartDate] = useState("");
-  const [end_date, setEndDate] = useState("");
+  const [start_date, setStartDate] = useState(null);
+  const [end_date, setEndDate] = useState(null);
   const code = nanoid(11);
-  const [accessibility, setAccessibility] = useState("");
+  const [accessibility, setAccessibility] = useState(null);
   const model = item.name;
   const token = sessionStorage.getItem("token");
   const handleCreate = async () => {
     const data = {
       name,
       description,
-      startDate,
-      endDate,
+      start_date,
+      end_date,
       accessibility,
       model,
       code,
     };
+    console.log(data);
     const res = await axios.post(
       `${process.env.REACT_APP_SERVER}/projects/create`,
       data,
@@ -38,9 +39,7 @@ const DetailForm = ({ item, event }) => {
         },
       }
     );
-    navigate("page/project/" + res.data.project.id);
-    });
-    navigate('/page/project/'+res.data.project.id)
+    navigate("/page/project/" + res.data.project.id);
   };
 
   return (
@@ -52,7 +51,12 @@ const DetailForm = ({ item, event }) => {
           }}
           className=""
         >
-          <Form.Item label="Project name">
+          <Form.Item
+            label="Project name"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên người dùng!" },
+            ]}
+          >
             <Input
               className="border-black "
               onChange={(e) => {
@@ -145,6 +149,7 @@ const DetailForm = ({ item, event }) => {
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
           <button
+            type="submit"
             onClick={handleCreate}
             className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300"
           >

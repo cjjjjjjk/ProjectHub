@@ -19,8 +19,8 @@ const TaskDetail = ({ item, event, model }) => {
   if (model === "Kanban") column = columnsFromBackend;
 
   const [showDescription, setShowDescription] = useState(() => {
-    if (description === null || description === "") return true;
-    else return false;
+    if (description === null || description === "") return false;
+    else return true;
   });
   const [showName, setShowName] = useState(() => {
     if (name === null || name === "") return false;

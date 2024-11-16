@@ -7,7 +7,7 @@ const Board = () => {
   const [tasks, setTasks] = useState(taskFromBE);
 
   const [newTaskType, setNewTaskType] = useState("To-do");
-  const [newTaskName, setNewTaskName] = useState("");
+  const [newTaskName, setNewTaskName] = useState(null);
   // Danh sach cac cot
   const [columns, setColumns] = useState(() => {
     const newColumns = { ...columnsFromBackend };
@@ -29,7 +29,7 @@ const Board = () => {
     const newTask = {
       id: newId,
       name: newTaskName,
-      descriptions: null,
+      description: null,
       start_date: null,
       end_date: null,
       status: null,
@@ -48,6 +48,21 @@ const Board = () => {
     });
   };
 
+  // Xoa task
+  const deleteTask = (task) => {
+    const updateTask = tasks.filter((item) => item.id !== task.id);
+    setTasks(updateTask);
+    const targetColumn = columns[task.type];
+    const targetItems = targetColumn.items;
+    const updateItems = targetItems.filter((item) => item.id !== task.id);
+    setColumns({
+      ...columns,
+      [newTaskType]: {
+        ...targetColumn,
+        items: updateItems,
+      },
+    });
+  };
   // Xu ly keo tha
   const onDragEnd = (result, columns, setColumns) => {
     const { draggableId, source, destination } = result;
@@ -162,7 +177,12 @@ const Board = () => {
                         >
                           {column.items.map((item, index) => (
                             <div>
-                              <Task key={item.id} item={item} index={index} />
+                              <Task
+                                key={item.id}
+                                item={item}
+                                index={index}
+                                deleteTask={deleteTask}
+                              />
                             </div>
                           ))}
                           {provided.placeholder}

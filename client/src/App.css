@@ -49,3 +49,6 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.custom-dropdown-menu .ant-dropdown {
+  width: 12px !important; /* Đặt độ rộng của dropdown */
+}
