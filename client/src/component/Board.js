@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { columnsFromBackend, taskFromBE } from "./modelList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Select } from "antd";
+import { IoMdAdd } from "react-icons/io";
 import Task from "./Task";
 const Board = () => {
   const [tasks, setTasks] = useState(taskFromBE);
@@ -57,9 +58,36 @@ const Board = () => {
     const updateItems = targetItems.filter((item) => item.id !== task.id);
     setColumns({
       ...columns,
-      [newTaskType]: {
+      [task.type]: {
         ...targetColumn,
         items: updateItems,
+      },
+    });
+  };
+
+  // Them column
+  const addColumn = () => {
+    const numColum = Object.keys(columns).length + 1;
+    const newColumnName = `New column ${numColum}`;
+    setColumns({
+      ...columns,
+      [newColumnName]: {
+        title: newColumnName,
+        items: [],
+        color: "#CCCCCC",
+      },
+    });
+  };
+
+  // Sua ten cot
+  const renameColumn = (e, columnID) => {
+    const newNameColumn = e.target.value;
+    const updateColumn = columns[columnID];
+    setColumns({
+      ...columns,
+      [columnID]: {
+        ...updateColumn,
+        title: newNameColumn,
       },
     });
   };
@@ -112,9 +140,9 @@ const Board = () => {
     console.log(tasks);
   };
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <div className="h-full w-full ">
       {/* Tittle */}
-      <div className="min-h-20 h-1/6">
+      <div className=" h-22">
         <div className="px-4 pt-2">
           <h1 className="text-xl font-bold">Kanban Board</h1>
         </div>
@@ -163,9 +191,13 @@ const Board = () => {
                 return (
                   <div>
                     {/* Tittle column */}
-                    <div className="flex justify-center items-center h-10 bg-slate-100 rounded-t-md border-2 border-black border-b-0">
-                      <h2 className="text-xl font-bold"> {column.title}</h2>
-                    </div>
+                    <input
+                      key={columnId}
+                      defaultValue={column.title}
+                      className="text-xl text-center font-bold w-72 h-10  rounded-t-md border-2 border-black border-b-0 focus:outline-blue-500 focus:border-blue-500"
+                      onChange={(e) => renameColumn(e, columnId)}
+                      style={{ backgroundColor: column.color }}
+                    ></input>
 
                     {/* Task */}
                     <Droppable key={columnId} droppableId={columnId}>
@@ -192,6 +224,18 @@ const Board = () => {
                   </div>
                 );
               })}
+            </div>
+            <div className="flex flex-col justify-between pt-4 pb-10 items-center">
+              {/* Add column */}
+              <button
+                className="p-1 border-2 border-black hover:bg-gray-200"
+                onClick={addColumn}
+              >
+                <IoMdAdd className="text-2xl" />
+              </button>
+              <button className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  ">
+                Save
+              </button>
             </div>
           </div>
         </DragDropContext>

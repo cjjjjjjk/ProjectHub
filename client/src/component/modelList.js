@@ -144,13 +144,16 @@ export const columnsFromBackend = {
   "To-do": {
     title: "To-do",
     items: [],
+    color: "#F4E789",
   },
   "In Progress": {
     title: "In Progress",
     items: [],
+    color: "#89F48F",
   },
   Done: {
     title: "Done",
     items: [],
+    color: "#89E3F4",
   },
 };
