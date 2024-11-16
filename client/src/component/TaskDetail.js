@@ -140,7 +140,7 @@ const TaskDetail = ({ item, event, model }) => {
                 <h3 className="font-semibold text-black">Start date</h3>
                 <DatePicker
                   defaultValue={
-                    startDate !== null ? dayjs(startDate, "DD/MM/YYYY") : ""
+                    startDate !== null ? dayjs(startDate, "YYYY-MM-YY") : ""
                   }
                   format={"DD/MM/YYYY"}
                   onChange={(value) => {
@@ -153,7 +153,7 @@ const TaskDetail = ({ item, event, model }) => {
                 <h3 className="font-semibold text-black">End date</h3>
                 <DatePicker
                   defaultValue={
-                    endDate !== null ? dayjs(endDate, "DD/MM/YYYY") : ""
+                    endDate !== null ? dayjs(endDate, "YYYY-MM-YY") : ""
                   }
                   format={"DD/MM/YYYY"}
                   onChange={(value) => {
