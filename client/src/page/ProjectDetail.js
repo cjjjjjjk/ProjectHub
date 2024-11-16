@@ -49,9 +49,8 @@ function ProjectDetail() {
           <ul className="flex flex-col">
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
-                  showTask && "bg-blue-200"
-                }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showTask && "bg-blue-200"
+                  }`}
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
@@ -60,9 +59,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
-                  showTimeline && "bg-blue-200"
-                }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showTimeline && "bg-blue-200"
+                  }`}
                 onClick={handleShowTimeline}
               >
                 <RiTimelineView className="text-2xl" />
@@ -71,9 +69,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
-                  showSetting && "bg-blue-200"
-                }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showSetting && "bg-blue-200"
+                  }`}
                 onClick={handleShowSetting}
               >
                 <IoIosSettings className="text-2xl" />
