@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import TaskDetail from "./TaskDetail";
-import { Dropdown, Menu } from "antd";
+import { Dropdown } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 
 const Task = ({ item, index, deleteTask }) => {
@@ -9,7 +9,7 @@ const Task = ({ item, index, deleteTask }) => {
   const handleShowTaskDetail = () => {
     setShowTaskDetail(!showTaskDetail);
   };
-  const items = [
+  const moreOptions = [
     {
       key: "1",
       label: (
@@ -43,7 +43,7 @@ const Task = ({ item, index, deleteTask }) => {
             <div className="w-full flex justify-end">
               <Dropdown
                 menu={{
-                  items,
+                  items: moreOptions,
                 }}
                 className="flex justify-center px-2"
                 trigger={["click"]}

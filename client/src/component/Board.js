@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { columnsFromBackend, taskFromBE } from "./modelList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Select } from "antd";
 import { IoMdAdd } from "react-icons/io";
 import Task from "./Task";
+import { EllipsisOutlined } from "@ant-design/icons";
+import { Dropdown } from "antd";
+
 const Board = () => {
   const [tasks, setTasks] = useState(taskFromBE);
 
   const [newTaskType, setNewTaskType] = useState("To-do");
   const [newTaskName, setNewTaskName] = useState(null);
+
   // Danh sach cac cot
   const [columns, setColumns] = useState(() => {
     const newColumns = { ...columnsFromBackend };
@@ -24,6 +28,7 @@ const Board = () => {
     return newColumns;
   }); // array chua cac cot lay tu backend
 
+  useEffect(() => {}, [columns]);
   // Them task mơi
   const addTask = () => {
     const newId = (tasks.length + 1).toString();
@@ -91,6 +96,28 @@ const Board = () => {
       },
     });
   };
+
+  // Xoa column
+  const moreOptions = [
+    {
+      key: "1",
+      label: (
+        <button
+          className="w-32 text-left"
+          onClick={() => {
+            console.log(newTaskType);
+
+            const updateColumn = { ...columns };
+            delete updateColumn[newTaskType];
+            setColumns(updateColumn);
+          }}
+        >
+          Delete
+        </button>
+      ),
+    },
+  ];
+
   // Xu ly keo tha
   const onDragEnd = (result, columns, setColumns) => {
     const { draggableId, source, destination } = result;
@@ -155,7 +182,7 @@ const Board = () => {
           ></input>
           <Select
             size="large"
-            defaultValue="To-do"
+            defaultValue={Object.entries(columns)[0][1].title}
             style={{
               width: 160,
               borderWidth: 2,
@@ -191,13 +218,33 @@ const Board = () => {
                 return (
                   <div>
                     {/* Tittle column */}
-                    <input
-                      key={columnId}
-                      defaultValue={column.title}
-                      className="text-xl text-center font-bold w-72 h-10  rounded-t-md border-2 border-black border-b-0 focus:outline-blue-500 focus:border-blue-500"
-                      onChange={(e) => renameColumn(e, columnId)}
+                    <div
                       style={{ backgroundColor: column.color }}
-                    ></input>
+                      className="w-72 flex rounded-t-md border-2 border-black border-b-0 focus:outline-blue-500 focus:border-blue-500"
+                    >
+                      <input
+                        key={columnId}
+                        defaultValue={column.title}
+                        className="text-xl pl-6 text-center font-bold w-60 h-10  focus:outline-none bg-transparent"
+                        onChange={(e) => renameColumn(e, columnId)}
+                      ></input>
+                      <Dropdown
+                        menu={{
+                          items: moreOptions,
+                        }}
+                        className="flex justify-center w-12"
+                        trigger={["click"]}
+                      >
+                        <div
+                          className="h-10 flex items-center"
+                          onClick={() => {
+                            setNewTaskType(columnId);
+                          }}
+                        >
+                          <EllipsisOutlined className=" text-2xl h-6 rounded-lg hover:bg-gray-100 cursor-pointer" />
+                        </div>
+                      </Dropdown>
+                    </div>
 
                     {/* Task */}
                     <Droppable key={columnId} droppableId={columnId}>
