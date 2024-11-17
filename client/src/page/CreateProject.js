@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { RiRobot2Line } from "react-icons/ri";
-import { FaAdjust } from "react-icons/fa";
 import { GrNext } from "react-icons/gr";
-import { FaSearch } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
 import { IoApps } from "react-icons/io5";
 import { IoIosColorPalette } from "react-icons/io";
@@ -18,7 +16,6 @@ const CreateProject = ({ event }) => {
     { id: 2, name: "Software", icon: <IoApps /> },
     { id: 3, name: "Marketing", icon: <IoBag /> },
     { id: 4, name: "Design", icon: <IoIosColorPalette /> },
-  
   ];
 
   const [showModel, setShowModel] = useState(true);
@@ -42,7 +39,6 @@ const CreateProject = ({ event }) => {
     setShowModel(false);
   };
 
-  
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       {showModel && (
@@ -94,7 +90,6 @@ const CreateProject = ({ event }) => {
                 </div>
 
                 {/* AI suggest */}
-              
               </div>
 
               {/* Selection path */}
@@ -113,10 +108,12 @@ const CreateProject = ({ event }) => {
                     >
                       <img src={item.icon} alt="" className="w-2/3 h-2/3"></img>
                     </div>
-                        <div className="p-4 w-2/3 flex flex-col items-start overflow-hidden">
-                          <h2 className="font-bold">{item.name}</h2>
-                          <h3 className="overflow-hidden text-ellipsis  whitespace-nowrap w-full">{item.description1}</h3>
-                        </div>
+                    <div className="p-4 w-2/3 flex flex-col items-start overflow-hidden">
+                      <h2 className="font-bold">{item.name}</h2>
+                      <h3 className="overflow-hidden text-ellipsis  whitespace-nowrap w-full">
+                        {item.description1}
+                      </h3>
+                    </div>
                     <GrNext className="m-auto" />
                   </button>
                 ))}

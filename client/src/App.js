@@ -26,9 +26,9 @@ function App() {
     window.location.href = "/page/Login";
   };
   return (
-    <div>
+    <div className="">
       <BrowserRouter>
-        <nav className="border-y-2 border-gray-200">
+        <nav className=" border-y-2 border-gray-200">
           <Drawer
             open={openMenu}
             onClose={closeMenu}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DatePicker, Form, Input, Select } from "antd";
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -30,7 +30,6 @@ const DetailForm = ({ item, event }) => {
     navigate('/page/project/' + res.data.project.id)
   };
 
-
   return (
     <div className="flex gap-10">
       <div className="p-4 mt-10 w-3/5">
@@ -40,9 +39,7 @@ const DetailForm = ({ item, event }) => {
           }}
           className=""
         >
-          <Form.Item label="Project name"
-
-          >
+          <Form.Item label="Project name">
             <Input
               className="border-black "
               onChange={(e) => {
@@ -89,13 +86,7 @@ const DetailForm = ({ item, event }) => {
             </Select>
           </Form.Item>
           <Form.Item label="Invitation Code">
-            <Input
-              className="w-1/3"
-              disabled
-              defaultValue={code}
-            ></Input>
-
-
+            <Input className="w-1/3" disabled defaultValue={code}></Input>
           </Form.Item>
           <Form.Item label="Description">
             <TextArea
@@ -136,7 +127,10 @@ const DetailForm = ({ item, event }) => {
 
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
-          <button onClick={handleCreate} className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300">
+          <button
+            onClick={handleCreate}
+            className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300"
+          >
             Create
           </button>
         </div>
