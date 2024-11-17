@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { columnsFromBackend, taskFromBE } from "./modelList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Select } from "antd";
+import { IoMdAdd } from "react-icons/io";
 import Task from "./Task";
+import { EllipsisOutlined } from "@ant-design/icons";
+import { Dropdown } from "antd";
+
 const Board = () => {
   const [tasks, setTasks] = useState(taskFromBE);
 
   const [newTaskType, setNewTaskType] = useState("To-do");
   const [newTaskName, setNewTaskName] = useState(null);
+
   // Danh sach cac cot
   const [columns, setColumns] = useState(() => {
     const newColumns = { ...columnsFromBackend };
@@ -23,6 +28,7 @@ const Board = () => {
     return newColumns;
   }); // array chua cac cot lay tu backend
 
+  useEffect(() => {}, [columns]);
   // Them task mơi
   const addTask = () => {
     const newId = (tasks.length + 1).toString();
@@ -57,12 +63,61 @@ const Board = () => {
     const updateItems = targetItems.filter((item) => item.id !== task.id);
     setColumns({
       ...columns,
-      [newTaskType]: {
+      [task.type]: {
         ...targetColumn,
         items: updateItems,
       },
     });
   };
+
+  // Them column
+  const addColumn = () => {
+    const numColum = Object.keys(columns).length + 1;
+    const newColumnName = `New column ${numColum}`;
+    setColumns({
+      ...columns,
+      [newColumnName]: {
+        title: newColumnName,
+        items: [],
+        color: "#CCCCCC",
+      },
+    });
+  };
+
+  // Sua ten cot
+  const renameColumn = (e, columnID) => {
+    const newNameColumn = e.target.value;
+    const updateColumn = columns[columnID];
+    setColumns({
+      ...columns,
+      [columnID]: {
+        ...updateColumn,
+        title: newNameColumn,
+      },
+    });
+  };
+
+  // Xoa column
+  const moreOptions = [
+    {
+      key: "1",
+      label: (
+        <button
+          className="w-32 text-left"
+          onClick={() => {
+            console.log(newTaskType);
+
+            const updateColumn = { ...columns };
+            delete updateColumn[newTaskType];
+            setColumns(updateColumn);
+          }}
+        >
+          Delete
+        </button>
+      ),
+    },
+  ];
+
   // Xu ly keo tha
   const onDragEnd = (result, columns, setColumns) => {
     const { draggableId, source, destination } = result;
@@ -112,9 +167,9 @@ const Board = () => {
     console.log(tasks);
   };
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <div className="h-full w-full ">
       {/* Tittle */}
-      <div className="min-h-20 h-1/6">
+      <div className=" h-22">
         <div className="px-4 pt-2">
           <h1 className="text-xl font-bold">Kanban Board</h1>
         </div>
@@ -127,7 +182,7 @@ const Board = () => {
           ></input>
           <Select
             size="large"
-            defaultValue="To-do"
+            defaultValue={Object.entries(columns)[0][1].title}
             style={{
               width: 160,
               borderWidth: 2,
@@ -163,8 +218,32 @@ const Board = () => {
                 return (
                   <div>
                     {/* Tittle column */}
-                    <div className="flex justify-center items-center h-10 bg-slate-100 rounded-t-md border-2 border-black border-b-0">
-                      <h2 className="text-xl font-bold"> {column.title}</h2>
+                    <div
+                      style={{ backgroundColor: column.color }}
+                      className="w-72 flex rounded-t-md border-2 border-black border-b-0 focus:outline-blue-500 focus:border-blue-500"
+                    >
+                      <input
+                        key={columnId}
+                        defaultValue={column.title}
+                        className="text-xl pl-6 text-center font-bold w-60 h-10  focus:outline-none bg-transparent"
+                        onChange={(e) => renameColumn(e, columnId)}
+                      ></input>
+                      <Dropdown
+                        menu={{
+                          items: moreOptions,
+                        }}
+                        className="flex justify-center w-12"
+                        trigger={["click"]}
+                      >
+                        <div
+                          className="h-10 flex items-center"
+                          onClick={() => {
+                            setNewTaskType(columnId);
+                          }}
+                        >
+                          <EllipsisOutlined className=" text-2xl h-6 rounded-lg hover:bg-gray-100 cursor-pointer" />
+                        </div>
+                      </Dropdown>
                     </div>
 
                     {/* Task */}
@@ -192,6 +271,18 @@ const Board = () => {
                   </div>
                 );
               })}
+            </div>
+            <div className="flex flex-col justify-between pt-4 pb-10 items-center">
+              {/* Add column */}
+              <button
+                className="p-1 border-2 border-black hover:bg-gray-200"
+                onClick={addColumn}
+              >
+                <IoMdAdd className="text-2xl" />
+              </button>
+              <button className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  ">
+                Save
+              </button>
             </div>
           </div>
         </DragDropContext>

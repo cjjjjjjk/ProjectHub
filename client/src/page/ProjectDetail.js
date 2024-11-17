@@ -32,7 +32,7 @@ function ProjectDetail() {
   };
   return (
     <div className="w-full flex">
-      <div className=" min-w-72  h-[90vh] border-r-2 border-gray-300 flex flex-col gap-6 ">
+      <div className=" min-w-72  h-[89vh] border-r-2 border-gray-300 flex flex-col gap-6 ">
         {/* Ten project */}
         <div className="w-full p-4 flex justify-center items-center ">
           <div className=" w-11/12 flex items-center gap-4 justify-center ">
@@ -49,8 +49,9 @@ function ProjectDetail() {
           <ul className="flex flex-col">
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showTask && "bg-blue-200"
-                  }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
+                  showTask && "bg-blue-200"
+                }`}
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
@@ -59,8 +60,9 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showTimeline && "bg-blue-200"
-                  }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
+                  showTimeline && "bg-blue-200"
+                }`}
                 onClick={handleShowTimeline}
               >
                 <RiTimelineView className="text-2xl" />
@@ -69,8 +71,9 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${showSetting && "bg-blue-200"
-                  }`}
+                className={`p-2 w-64 h-12 rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  focus:border-blue-500 ${
+                  showSetting && "bg-blue-200"
+                }`}
                 onClick={handleShowSetting}
               >
                 <IoIosSettings className="text-2xl" />
@@ -81,7 +84,7 @@ function ProjectDetail() {
         </div>
       </div>
 
-      <div className="w-[80vw] h-[90vh]">
+      <div className="w-[80vw] h-[89vh]">
         {showTask && <Board />}
         {showTimeline && <Timeline />}
         {showSetting && <ProjectSetting />}
