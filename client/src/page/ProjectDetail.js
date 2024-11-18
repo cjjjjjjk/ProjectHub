@@ -3,17 +3,40 @@ import { RiTimelineView } from "react-icons/ri";
 import { HiOutlineViewBoards } from "react-icons/hi";
 import Kanban from "../asset/image/kanban.png";
 import { IoIosSettings } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "../component/Board";
 import Timeline from "../component/Timeline";
 import ProjectSetting from "../component/ProjectSetting";
+
+import axios from "axios";
 function ProjectDetail() {
   const { id } = useParams(); // Access the id parameter from the URL
 
-  const [showTask, setShowTask] = useState(true);
+  const [showTask, setShowTask] = useState(false);
   const [showTimeline, setShowTimeLine] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
-
+  const [project_data, setProjectData] = useState({})
+  // fetch project ------------------------------ author: Hai
+  const fetchCurentProject = async function () {
+    const token = sessionStorage.getItem('token')
+    try {
+      const project_fetched_res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/projects/getone`,
+        {
+          headers: { token },
+          params: { project_id: id },
+        }
+      );
+      setProjectData(project_fetched_res.data.project)
+      setShowTask(true)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    fetchCurentProject()
+  }, [])
+  // ----------------------------------------------------------  
   const handleShowTask = () => {
     setShowTask(true);
     setShowTimeLine(false);
@@ -48,9 +71,8 @@ function ProjectDetail() {
           <ul className="flex flex-col">
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
-                  showTask && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showTask && "bg-blue-200"
+                  }`}
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
@@ -59,9 +81,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${
-                  showTimeline && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${showTimeline && "bg-blue-200"
+                  }`}
                 onClick={handleShowTimeline}
               >
                 <RiTimelineView className="text-2xl" />
@@ -70,9 +91,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
-                  showSetting && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showSetting && "bg-blue-200"
+                  }`}
                 onClick={handleShowSetting}
               >
                 <IoIosSettings className="text-2xl" />
@@ -82,9 +102,9 @@ function ProjectDetail() {
           </ul>
         </div>
       </div>
-   
-      <div className="overflow-x-auto w-11/12">   
-        {showTask && <Board id={id} />}
+
+      <div className="overflow-x-auto w-11/12">
+        {showTask && <Board id={id} model={project_data.model} />}
         {showTimeline && <Timeline />}
         {showSetting && <ProjectSetting />}
       </div>
