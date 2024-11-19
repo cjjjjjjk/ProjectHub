@@ -3,22 +3,37 @@ import { Select,Modal,Form,Button,DatePicker,Input,Dropdown } from "antd";
 import { useState } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 
-const moreOptions = [
-  {
-    key: "1",
-    label: (
-      <button
-        className="w-32 text-left"
-        onClick={(e) => {
-      
-        }}
-      >
-        Delete
-      </button>
-    ),
-  },
-];
-const Task = ({ item, index }) => {
+
+const Task = ({ item, index,deleteTask }) => {
+  const moreOptions = [
+    {
+      key: "1",
+      label: (
+        <button
+          className="w-32 text-left"
+          onClick={(e) => {
+            deleteTask(item.id);
+          }}
+        >
+          Delete
+        </button>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <button
+          className="w-32 text-left"
+          onClick={(e) => {
+            setOpenTaskDetail(true);
+          }}
+        >
+          Edit
+        </button>
+      ),
+    },
+  ];
+  
   const [openTaskDetail, setOpenTaskDetail] = useState(false);
   const getPriority = (value) => {
     if (value == 1) {

@@ -173,11 +173,24 @@ const Board = ({ id, model }) => {
         },
       });
     }
+   
+  };
+  // Xoa task
+  const deleteTask = (taskId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    const updatedColumns = { ...columns };
+    Object.keys(updatedColumns).forEach((columnKey) => {
+      const column = updatedColumns[columnKey];
+      const updatedItems = column.items.filter((item) => item.id !== taskId.toString());
+      updatedColumns[columnKey] = { ...column, items: updatedItems };
+    });
+  
+    setColumns(updatedColumns);
   };
   return (
     <div className="flex flex-col">
       <div className="px-4 pt-2">
-        <h1 className="text-xl font-bold">Kanban Board</h1>
+        <h1 className="text-xl font-bold">{model} Board</h1>
       </div>
       {/* Tittle */}
       <div className="flex flex-row gap-2 p-4">
@@ -244,7 +257,7 @@ const Board = ({ id, model }) => {
                       >
                         {column.items.map((item, index) =>
                         (
-                          <Task key={item.id} item={item} index={index} />
+                          <Task key={item.id} item={item} index={index} deleteTask={deleteTask}/>
                         )
                         )}
                         {provided.placeholder}

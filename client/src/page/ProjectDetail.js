@@ -60,8 +60,8 @@ function ProjectDetail() {
           <div className=" flex flex-row gap-2 pl-2">
             <img src={Kanban} alt="model" className="h-1/6 w-1/6 pt-1" />
             <div className="w-1/2">
-              <div className="overflow-hidden text-ellipsis whitespace-nowrap">Name project</div>
-              <div>Model</div>
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap font-bold">{project_data.name}</div>
+              <div>{project_data.model}</div>
             </div>
           </div>
         </div>
