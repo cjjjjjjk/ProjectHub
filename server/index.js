@@ -19,11 +19,14 @@ db.sequelize.sync().then(() => {
 const userRouter = require('./routes/users')
 app.use('/users', userRouter)
 
-const projectRouter = require('./routes/projects');
-app.use('/projects', projectRouter);
+const projectRouter = require("./routes/projects");
+app.use("/projects", projectRouter);
 
 const joinProjectRouter = require("./routes/project_joineds")
 app.use("/project-joineds", joinProjectRouter)
 
 const taskRouter = require("./routes/tasks")
 app.use("/tasks", taskRouter)
+
+const requestRouter = require("./routes/join_requests")
+app.use("/requests", requestRouter)

@@ -94,7 +94,7 @@ function Project() {
             key: "1",
             children: (
               <div className="w-3/4 bg-slate-300 mx-auto rounded-md border-2 border-slate-500">
-               <div className="flex flex-row items-center justify-between text-2xl">
+                <div className="flex flex-row items-center justify-between text-2xl">
                   <div className="uppercase font-semibold p-6">
                     Your Project
                   </div>
@@ -112,7 +112,7 @@ function Project() {
                   </div>
                 </div>
                 <Slider {...settings1}>
-                {projects && Object.keys(projects).length > 0 ? (
+                  {projects && Object.keys(projects).length > 0 ? (
                     projects.map((item) => (
                       <ProjectCard
                         key={item.id}

@@ -15,19 +15,19 @@ const DetailForm = ({ item, event }) => {
   const [description, setDescription] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const code=nanoid(11);
+  const code = nanoid(11);
   const [accessibility, setAccessibility] = useState("");
   const model = item.name;
-  const token=sessionStorage.getItem('token')
-  const handleCreate =async () => {
-    const data={name, description, start_date, end_date, accessibility, model,code}
+  const token = sessionStorage.getItem('token')
+  const handleCreate = async () => {
+    const data = { name, description, start_date, end_date, accessibility, model, code }
     console.log(data)
-    const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`,data, {
+    const res = await axios.post(`${process.env.REACT_APP_SERVER}/projects/create`, data, {
       headers: {
         token: `${token}`
       }
     });
-    navigate('/page/project/'+res.data.project.id)
+    navigate('/page/project/' + res.data.project.id)
   };
 
   return (
@@ -60,14 +60,14 @@ const DetailForm = ({ item, event }) => {
             ></Select>
           </Form.Item>
           <Form.Item label="Timeline">
-          <RangePicker
-            className="border-black"
-            format="DD-MM-YYYY"
-            onChange={(value) => {
-              setStartDate(value[0] ? dayjs(value[0]).format("YYYY-MM-DD") : null);
-              setEndDate(value[1] ? dayjs(value[1]).format("YYYY-MM-DD") : null);
-            }}
-          />
+            <RangePicker
+              className="border-black"
+              format="DD-MM-YYYY"
+              onChange={(value) => {
+                setStartDate(value[0] ? dayjs(value[0]).format("YYYY-MM-DD") : null);
+                setEndDate(value[1] ? dayjs(value[1]).format("YYYY-MM-DD") : null);
+              }}
+            />
           </Form.Item>
           <Form.Item label="Accessibility">
             <Select

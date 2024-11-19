@@ -15,7 +15,7 @@ const { where } = require('sequelize')
 */
 router.get('/', validateToken, async (req, res) => {
     const user_id = req.user['user'].id
-    const { project_id } = req.body
+    const { project_id } = req.query;
     try {
         // check isParticipant-------
         const joiner_Joined = await ProjectJoineds.findOne({
@@ -42,7 +42,6 @@ router.get('/', validateToken, async (req, res) => {
             throw err;
         }
 
-        console.log(tasks)
         return res.json({ success: true, message: "Response all tasks in this projects ", tasks })
 
     } catch (err) {

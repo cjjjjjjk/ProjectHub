@@ -19,29 +19,29 @@ const moreOptions = [
   },
 ];
 const Task = ({ item, index }) => {
-  const [openTaskDetail, setOpenTaskDetail] = useState(false); 
+  const [openTaskDetail, setOpenTaskDetail] = useState(false);
   const getPriority = (value) => {
-    if(value === 1){
+    if (value == 1) {
       return "bg-red-500"
     }
-    else if(value === 2){
+    else if (value == 2) {
       return "bg-yellow-400"
     }
-    else if(value === 3){
+    else if (value == 3) {
       return "bg-green-500"
     }
   }
-  const getPriorityName=(value)=>{
-    if(value === 1){
+  const getPriorityName = (value) => {
+    if (value == 1) {
       return "Critical"
     }
-    else if(value === 2){
+    else if (value == 2) {
       return "Important"
     }
-    else if(value === 3){
+    else if (value == 3) {
       return "Normal"
     }
-  }   
+  }
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided) => (
@@ -73,7 +73,7 @@ const Task = ({ item, index }) => {
           <div className="flex flex-row items-center justify-between gap-x-4">
             {/* Text */}
             <div className="overflow-hidden text-ellipsis whitespace-nowrap flex-1 text-sm">
-              <div className="pl-1">{item.Name} </div>
+              <div className="pl-1">{item.name} </div>
             </div>
             {/* Button */}
             
@@ -81,7 +81,7 @@ const Task = ({ item, index }) => {
           <div className="text-xs text-gray-500 pl-1">{item.Start_date} - {item.End_date}</div>
         </div>
         <Modal open={openTaskDetail} 
-          title={item.Name}
+          title={item.name}
           footer={null}
           onCancel={() => setOpenTaskDetail(false)}
           width={800} // Set width of the modal
@@ -90,8 +90,8 @@ const Task = ({ item, index }) => {
         </div>
       )}
     </Draggable>
-    
+
   );
-};
+} 
 
 export default Task;
