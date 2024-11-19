@@ -5,7 +5,7 @@ import Task from "./Task";
 import { RandomCol } from "./RandomCol";
 import axios from "axios";
 
-const Board = ({ id }) => {
+const Board = ({ id, model }) => {
   const project_id = id;
   const [tasks, setTasks] = useState([]);
   const [newTaskType, setNewTaskType] = useState("To do");
@@ -38,16 +38,15 @@ const Board = ({ id }) => {
         Scrum: ['To do', 'In Progress', 'Done'],
         "Extreme Program": ['Planning', 'Design', 'Coding', 'Testing', 'Listening'],
       };
+      // const project_fetch = await axios.get(
+      //   `${process.env.REACT_APP_SERVER}/projects/getone`,
+      //   {
+      //     headers: { token },
+      //     params: { project_id },
+      //   }
+      // );
 
-      const project_fetch = await axios.get(
-        `${process.env.REACT_APP_SERVER}/projects/getone`,
-        {
-          headers: { token },
-          params: { project_id },
-        }
-      );
-
-      const model = project_fetch.data.project.model;
+      // const model = project_fetch.data.project.model;
       const colums_be = {};
 
       (columnConfigs[model] || []).forEach((type) => {
@@ -135,8 +134,6 @@ const Board = ({ id }) => {
     const { draggableId, source, destination } = result;
 
     if (!result.destination) return; // Neu ko trong vung tha thi thoat
-    console.log("dragID: ", draggableId)
-    console.log("columns: ", columns)
     //neu khac cot
     if (source.droppableId !== destination.droppableId) {
       const task = tasks.find((item) => item.id == draggableId); // task dang dc keo
