@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tabs } from "antd";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -12,16 +13,24 @@ import axios from "axios";
 function Project() {
   const [projects, setProjects] = useState([]);
   const token = sessionStorage.getItem("token");
+  const navigate = useNavigate();
   const fetchPrjects = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_SERVER}/projects/fetch`,
-      {
-        headers: {
-          token: `${token}`,
-        },
-      }
-    );
-    setProjects(res.data);
+    try {
+
+      const res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/projects/fetch`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      setProjects(res.data);
+    } catch (err) {
+      if (err.response.status == 403)
+        navigate("/page/Login");
+      else console.log(err)
+    }
   };
 
   useEffect(() => {
