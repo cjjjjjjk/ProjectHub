@@ -13,12 +13,13 @@ const Board = ({ id, model }) => {
   const [newColumnName, setNewColumnName] = useState("");
   const [columns, setColumns] = useState({})
   const [columnsFromBackend, setColumnsFromBackend] = useState({})
+  const token = sessionStorage.getItem('token')
+
 
   // Fetch task handle ====================================================author: Hai
   // fetch tasks and create columns -------------------------------------------------
   const fetchTaskHandle = async () => {
     try {
-      const token = sessionStorage.getItem('token')
       const res = await axios.get(`${process.env.REACT_APP_SERVER}/tasks/`,
         {
           headers: {
@@ -118,7 +119,6 @@ const Board = ({ id, model }) => {
     };
     // call api create new task --------------------------------------------------author: Hai
     try {
-      const token = sessionStorage.getItem('token')
       await axios.post(`${process.env.REACT_APP_SERVER}/tasks/create-task`, newTask, {
         headers: { token }
       })
@@ -140,50 +140,58 @@ const Board = ({ id, model }) => {
   };
 
   // Xu ly keo tha
-  const onDragEnd = (result, columns, setColumns) => {
+  const onDragEnd = async (result, columns, setColumns) => {
     const { draggableId, source, destination } = result;
+    try {
 
-    if (!result.destination) return; // Neu ko trong vung tha thi thoat
-    //neu khac cot
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId]; // cot bi keo
-      const destColumn = columns[destination.droppableId]; // cot dc tha
-      const sourceItems = [...sourceColumn.items]; // cac task trong cot bi keo
-      const destItems = [...destColumn.items]; // cac task trong cot dc tha
-      const item = sourceColumn.items.find((item) => item.id == draggableId)// item đang được kéo ------author: Hai <lấy task_id từ item> 
-      const task = tasks.find((task) => task.id == item.task_id); // task dang dc keo
+      if (!result.destination) return; // Neu ko trong vung tha thi thoat
+      //neu khac cot
+      if (source.droppableId !== destination.droppableId) {
+        const sourceColumn = columns[source.droppableId]; // cot bi keo
+        const destColumn = columns[destination.droppableId]; // cot dc tha
+        const sourceItems = [...sourceColumn.items]; // cac task trong cot bi keo
+        const destItems = [...destColumn.items]; // cac task trong cot dc tha
+        const item = sourceColumn.items.find((item) => item.id == draggableId)// item đang được kéo ------author: Hai <lấy task_id từ item> 
+        const task = tasks.find((task) => task.id == item.task_id); // task dang dc keo
 
-      task.type = destColumn.title; // thay doi type cua task
+        task.type = destColumn.title; // thay doi type cua task
 
-      const [removed] = sourceItems.splice(source.index, 1); //xoa task bi keo trong cot nguon
-      destItems.splice(destination.index, 0, removed); // them task bi keo vao cot dich
+        const [removed] = sourceItems.splice(source.index, 1); //xoa task bi keo trong cot nguon
+        destItems.splice(destination.index, 0, removed); // them task bi keo vao cot dich
 
-      // Update lai danh sach cac cot
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
-      });
-    } else {
-      // Neu cung cot:
-      const column = columns[source.droppableId];
-      const copiedItems = [...column.items];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      });
-    }
+        // Update lai danh sach cac cot
+        setColumns({
+          ...columns,
+          [source.droppableId]: {
+            ...sourceColumn,
+            items: sourceItems,
+          },
+          [destination.droppableId]: {
+            ...destColumn,
+            items: destItems,
+          },
+        });
+        await axios.put(`${process.env.REACT_APP_SERVER}/tasks/update`, task,
+          {
+            headers: { token },
+            params: { project_id, task_id: task.id }
+          })
+
+      } else {
+        // Neu cung cot:
+        const column = columns[source.droppableId];
+        const copiedItems = [...column.items];
+        const [removed] = copiedItems.splice(source.index, 1);
+        copiedItems.splice(destination.index, 0, removed);
+        setColumns({
+          ...columns,
+          [source.droppableId]: {
+            ...column,
+            items: copiedItems,
+          },
+        });
+      }
+    } catch (err) { console.log(err) }
 
   };
   // Xoa task
