@@ -114,7 +114,7 @@ const Board = ({ id, model }) => {
       start_date: "",
       end_date: "",
       status: "",
-      priority: "",
+      priority: "3",
       type: newTaskType,
     };
     setTasks((prevItems) => [...prevItems, newTask]);
@@ -240,16 +240,15 @@ const Board = ({ id, model }) => {
         >
           {Object.entries(columns).map(([columnId, column], index) => {
             return (
-              <div className="flex flex-col w-72 ">
+              <div className="flex flex-col w-72">
                 {/* Tittle column */}
                 <div className={`flex justify-center text-white items-center h-10 rounded-t-md border-2 border-b-0 ${column.bg}`}>
                   <h2 className="text-xl font-bold"> {column.title}</h2>
                 </div>
                 {/* Task */}
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col gap-y-2 min-h-[130px]">
                   <Droppable key={columnId} droppableId={columnId}>
                     {(provided, snapshot) => (
-
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}

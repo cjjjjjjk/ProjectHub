@@ -65,9 +65,9 @@ const Task = ({ item, index, deleteTask }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="p-4 items-start min-h-20 w-64 rounded-lg bg-slate-200">
+          <div className="w-64 pl-4 pt-3 rounded-lg bg-slate-200 shadow-sm cursor-pointer text-left">
             <div className="flex flex-row">
-              <div className={`text-xs rounded-md pl-1 w-1/3 text-white ${getPriority(item.priority)}`}>{getPriorityName(item.priority)}</div>
+              <div className={`text-xs rounded-r-md border-l-4 border-gray-600 pl-1 w-1/3 text-white ${getPriority(item.priority)}`}>{getPriorityName(item.priority)}</div>
               <div className="ml-auto">
                 <Dropdown
                   menu={{
@@ -87,13 +87,26 @@ const Task = ({ item, index, deleteTask }) => {
             </div>
             <div className="flex flex-row items-center justify-between gap-x-4">
               {/* Text */}
-              <div className="overflow-hidden text-ellipsis whitespace-nowrap flex-1 text-sm">
-                <div className="pl-1">{item.name} </div>
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap flex-1 text-sm pt-1">
+                <div className="font-bold">{item.name} </div>
               </div>
               {/* Button */}
 
             </div>
-            <div className="text-xs text-gray-500 pl-1">{item.start_date} - {item.end_date}</div>
+            <div className="py-2 pr-1 flex justify-between items-center w-full">
+              <p>
+                <span className="text-gray-600">{item.start_date}</span>
+              </p>
+              <button
+                className="rounded-full bg-blue-200 object-cover h-7 w-7"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Clicked 2");
+                }}
+              >
+                <img></img>
+              </button>
+            </div>
           </div>
           <Modal open={openTaskDetail}
             title={item.name}
@@ -102,14 +115,7 @@ const Task = ({ item, index, deleteTask }) => {
             width={800} // Set width of the modal
           >
           </Modal>
-          <button
-            className="rounded-full bg-blue-500 object-cover h-8 w-8"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <img></img>
-          </button>
+
         </div>
       )}
     </Draggable>
