@@ -5,6 +5,8 @@ import { EllipsisOutlined } from "@ant-design/icons";
 
 
 const Task = ({ item, index, deleteTask }) => {
+  const [openTaskDetail, setOpenTaskDetail] = useState(false);
+
   const moreOptions = [
     {
       key: "1",
@@ -12,7 +14,7 @@ const Task = ({ item, index, deleteTask }) => {
         <button
           className="w-32 text-left"
           onClick={(e) => {
-            deleteTask(item.id);
+            deleteTask(item.task_id);
           }}
         >
           Delete
@@ -34,7 +36,6 @@ const Task = ({ item, index, deleteTask }) => {
     },
   ];
 
-  const [openTaskDetail, setOpenTaskDetail] = useState(false);
   const getPriority = (value) => {
     if (value == 1) {
       return "bg-red-500"
@@ -93,12 +94,21 @@ const Task = ({ item, index, deleteTask }) => {
               {/* Button */}
 
             </div>
-            <div className="py-2 pr-1 flex justify-between items-center w-full">
-              <p>
-                <span className="text-gray-600">{item.start_date}</span>
-              </p>
+            <div className="pb-2 pr-1 flex justify-between items-center w-full">
+              <div className="flex flex-col text-xs">
+                <p>
+                  <span className="">
+                    {new Date(item.start_date).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, }).replace(',', '')}
+                  </span>
+                </p>
+                <p>
+                  <span className="">
+                    {item.end_date ? (new Date(item.end_date).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, })).replace(',', '') : ""}
+                  </span>
+                </p>
+              </div>
               <button
-                className="rounded-full bg-blue-200 object-cover h-7 w-7"
+                className="rounded-full bg-blue-200 object-cover h-7 w-7 mr-4"
                 onClick={(e) => {
                   e.stopPropagation();
                   console.log("Clicked 2");

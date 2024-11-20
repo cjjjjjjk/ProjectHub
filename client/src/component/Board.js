@@ -58,7 +58,7 @@ const Board = ({ id, model }) => {
             bg: RandomCol()
           };
         }
-        colums_be[type].items.push({ ...task, id: task.id.toString() });
+        colums_be[type].items.push({ ...task, id: task.id.toString(), task_id: task.id });
       });
       setColumnsFromBackend(colums_be);
       // ----------------------------------------------------------------
@@ -94,30 +94,49 @@ const Board = ({ id, model }) => {
   };
 
   // Them task mơi
-  const addTask = () => {
+  const addTask = async () => {
     const newId = tasks.reduce((maxId, item) => Math.max(maxId, item.id), 0) + 1;
     if (newTaskName.trim() === "") return;
+
+    // get current time: start_date for new task (default value) -------------- author : Hai
+    const now = new Date()
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Tháng (cộng 1 và thêm '0' nếu cần)
+    const day = String(now.getDate()).padStart(2, '0');        // Ngày (thêm '0' nếu cần)
+    const hours = String(now.getHours()).padStart(2, '0');     // Giờ
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // Phút
+    // -------------------------------------------------------------------------------------
     const newTask = {
-      id: newId,
       project_id,
       name: newTaskName,
       descriptions: "",
-      start_date: "",
-      end_date: "",
+      start_date: `${year}-${month}-${day} ${hours}:${minutes}`,
+      end_date: undefined,
       status: "",
       priority: "3",
       type: newTaskType,
     };
-    setTasks((prevItems) => [...prevItems, newTask]);
-    const targetColumn = columns[newTaskType];
-    const targetItems = targetColumn.items;
-    setColumns({
-      ...columns,
-      [newTaskType]: {
-        ...targetColumn,
-        items: [...targetItems, { ...newTask, id: newTask.id.toString() }],
-      },
-    });
+    // call api create new task --------------------------------------------------author: Hai
+    try {
+      const token = sessionStorage.getItem('token')
+      await axios.post(`${process.env.REACT_APP_SERVER}/tasks/create-task`, newTask, {
+        headers: { token }
+      })
+
+      //-------------------------------------------------------------------------------------
+      setTasks((prevItems) => [...prevItems, newTask]);
+      const targetColumn = columns[newTaskType];
+      const targetItems = targetColumn.items;
+      setColumns({
+        ...columns,
+        [newTaskType]: {
+          ...targetColumn,
+          items: [...targetItems, { ...newTask, id: newId.toString() }],
+        },
+      });
+    } catch (err) {
+      console.error(err)
+    }
   };
 
   // Xu ly keo tha
@@ -127,11 +146,12 @@ const Board = ({ id, model }) => {
     if (!result.destination) return; // Neu ko trong vung tha thi thoat
     //neu khac cot
     if (source.droppableId !== destination.droppableId) {
-      const task = tasks.find((item) => item.id == draggableId); // task dang dc keo
       const sourceColumn = columns[source.droppableId]; // cot bi keo
       const destColumn = columns[destination.droppableId]; // cot dc tha
       const sourceItems = [...sourceColumn.items]; // cac task trong cot bi keo
       const destItems = [...destColumn.items]; // cac task trong cot dc tha
+      const item = sourceColumn.items.find((item) => item.id == draggableId)// item đang được kéo ------author: Hai <lấy task_id từ item> 
+      const task = tasks.find((task) => task.id == item.task_id); // task dang dc keo
 
       task.type = destColumn.title; // thay doi type cua task
 
