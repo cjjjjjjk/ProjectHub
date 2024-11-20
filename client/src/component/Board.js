@@ -38,15 +38,6 @@ const Board = ({ id, model }) => {
         Scrum: ['To do', 'In Progress', 'Done'],
         "Extreme Program": ['Planning', 'Design', 'Coding', 'Testing', 'Listening'],
       };
-      // const project_fetch = await axios.get(
-      //   `${process.env.REACT_APP_SERVER}/projects/getone`,
-      //   {
-      //     headers: { token },
-      //     params: { project_id },
-      //   }
-      // );
-
-      // const model = project_fetch.data.project.model;
       const colums_be = {};
 
       (columnConfigs[model] || []).forEach((type) => {
@@ -176,7 +167,7 @@ const Board = ({ id, model }) => {
 
   };
   // Xoa task
-  const deleteTask = (taskId) => {
+  const deleteTask = async (taskId) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     const updatedColumns = { ...columns };
     Object.keys(updatedColumns).forEach((columnKey) => {
@@ -185,7 +176,24 @@ const Board = ({ id, model }) => {
       updatedColumns[columnKey] = { ...column, items: updatedItems };
     });
 
-    setColumns(updatedColumns);
+    // call api --------------------------- author: Hai
+    const token = sessionStorage.getItem('token')
+    try {
+      await axios.delete(`${process.env.REACT_APP_SERVER}/tasks/delete-task`,
+        {
+          headers: { token: `${token}` },
+          data: {
+            project_id, task_id: taskId
+          }
+        })
+      setColumns(updatedColumns);
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data)
+      }
+      else console.error(err)
+    }
+    //-------------------------------------------------
   };
   return (
     <div className="flex flex-col">

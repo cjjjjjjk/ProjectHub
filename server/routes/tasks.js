@@ -105,7 +105,6 @@ router.post('/create-task', validateToken, async (req, res) => {
 }
 */
 router.delete('/delete-task', validateToken, async (req, res) => {
-    // manager -
     const manager_id = req.user['user'].id;
     const { task_id, project_id } = req.body
 
@@ -119,12 +118,12 @@ router.delete('/delete-task', validateToken, async (req, res) => {
             }
         })
         if (!Joined_record) {
-            const err = new Error(`Server: Logined user does not as MANAGER in project with ID: ${project_id}, maybe project with this id isnot exist`);
+            const err = new Error(`Server: Logined user does not as MANAGER in project with ID: ${project_id}`);
             err.status = 400;
             throw err;
         }
         //----------------------------------------------
-        const deleteTask = Tasks.destroy({
+        await Tasks.destroy({
             where: {
                 id: task_id
             }
