@@ -102,6 +102,14 @@ const Task = ({ item, index, deleteTask }) => {
             width={800} // Set width of the modal
           >
           </Modal>
+          <button
+            className="rounded-full bg-blue-500 object-cover h-8 w-8"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <img></img>
+          </button>
         </div>
       )}
     </Draggable>

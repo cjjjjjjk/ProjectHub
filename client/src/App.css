@@ -44,3 +44,34 @@
   animation-timeline: view();
  
 }
+.filter-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.filter-controls button {
+  background-color: #f1f1f1;
+  border: none;
+  color: #333;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.875rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.filter-controls button:hover {
+  background-color: #e1e1e1;
+}
+
+.filter-controls button.active {
+  background-color: #0077b6;
+  color: white;
+}
+.custom-dropdown-menu .ant-dropdown {
+  width: 12px !important; /* Đặt độ rộng của dropdown */
+}

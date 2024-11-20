@@ -173,7 +173,7 @@ const Board = ({ id, model }) => {
         },
       });
     }
-   
+
   };
   // Xoa task
   const deleteTask = (taskId) => {
@@ -184,7 +184,7 @@ const Board = ({ id, model }) => {
       const updatedItems = column.items.filter((item) => item.id !== taskId.toString());
       updatedColumns[columnKey] = { ...column, items: updatedItems };
     });
-  
+
     setColumns(updatedColumns);
   };
   return (
@@ -257,7 +257,7 @@ const Board = ({ id, model }) => {
                       >
                         {column.items.map((item, index) =>
                         (
-                          <Task key={item.id} item={item} index={index} deleteTask={deleteTask}/>
+                          <Task key={item.id} item={item} index={index} deleteTask={deleteTask} />
                         )
                         )}
                         {provided.placeholder}

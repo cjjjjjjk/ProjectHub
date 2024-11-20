@@ -6,8 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import "../App.css";
 import ProjectCard from "../component/ProjectCard";
 import CreateProject from "./CreateProject";
+import JoinTeam from "../component/JoinTeam";
 import axios from "axios";
-
 
 function Project() {
   const [projects, setProjects] = useState([]);
@@ -75,8 +75,12 @@ function Project() {
   //--------------------------------------
 
   const [showCreate, setShowCreate] = useState(false);
+  const [showJoin, setShowJoin] = useState(false);
   const handleShowCreate = () => {
     setShowCreate(!showCreate);
+  };
+  const handleShowJoin = () => {
+    setShowJoin(!showJoin);
   };
   return (
     <div>
@@ -105,7 +109,9 @@ function Project() {
                     >
                       Create Project
                     </button>
-                    <button className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md">
+                    <button className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
+                      onClick={handleShowJoin}
+                    >
                       {" "}
                       Join Project
                     </button>
@@ -183,6 +189,11 @@ function Project() {
       {showCreate && (
         <div>
           <CreateProject event={handleShowCreate} />
+        </div>
+      )}
+      {showJoin && (
+        <div>
+          <JoinTeam event={handleShowJoin} />
         </div>
       )}
     </div>

@@ -16,7 +16,7 @@ const DetailForm = ({ item, event }) => {
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
   const code = nanoid(11);
-  const [accessibility, setAccessibility] = useState("");
+  const [accessibility, setAccessibility] = useState(null);
   const model = item.name;
   const token = sessionStorage.getItem('token')
   const handleCreate = async () => {
@@ -39,7 +39,12 @@ const DetailForm = ({ item, event }) => {
           }}
           className=""
         >
-          <Form.Item label="Project name">
+          <Form.Item
+            label="Project name"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên người dùng!" },
+            ]}
+          >
             <Input
               className="border-black "
               onChange={(e) => {
@@ -128,6 +133,7 @@ const DetailForm = ({ item, event }) => {
         {/* Nut chuyen sang buoc ke tiep */}
         <div className="flex justify-end items-end">
           <button
+            type="submit"
             onClick={handleCreate}
             className="py-2 px-4 bg-blue-600 rounded-md text-white shadow-transparent shadow-lg hover:shadow-blue-300"
           >

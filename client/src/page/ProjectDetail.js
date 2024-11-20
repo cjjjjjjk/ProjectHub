@@ -103,7 +103,7 @@ function ProjectDetail() {
         </div>
       </div>
 
-      <div className="overflow-x-auto w-11/12">
+      <div className="w-[80vw] h-[89vh]">
         {showTask && <Board id={id} model={project_data.model} />}
         {showTimeline && <Timeline />}
         {showSetting && <ProjectSetting />}
