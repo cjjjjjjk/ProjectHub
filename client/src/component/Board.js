@@ -119,19 +119,19 @@ const Board = ({ id, model }) => {
     };
     // call api create new task --------------------------------------------------author: Hai
     try {
-      await axios.post(`${process.env.REACT_APP_SERVER}/tasks/create-task`, newTask, {
+      const createTask_res = await axios.post(`${process.env.REACT_APP_SERVER}/tasks/create-task`, newTask, {
         headers: { token }
       })
-
+      const newTask_id = createTask_res.data.id
       //-------------------------------------------------------------------------------------
-      setTasks((prevItems) => [...prevItems, newTask]);
+      setTasks((prevItems) => [...prevItems, { ...newTask, id: newTask_id }]);
       const targetColumn = columns[newTaskType];
       const targetItems = targetColumn.items;
       setColumns({
         ...columns,
         [newTaskType]: {
           ...targetColumn,
-          items: [...targetItems, { ...newTask, id: newId.toString() }],
+          items: [...targetItems, { ...newTask, id: newId.toString(), task_id: newTask_id }],
         },
       });
     } catch (err) {
@@ -200,7 +200,7 @@ const Board = ({ id, model }) => {
     const updatedColumns = { ...columns };
     Object.keys(updatedColumns).forEach((columnKey) => {
       const column = updatedColumns[columnKey];
-      const updatedItems = column.items.filter((item) => item.id !== taskId.toString());
+      const updatedItems = column.items.filter((item) => item.task_id !== taskId);
       updatedColumns[columnKey] = { ...column, items: updatedItems };
     });
 
