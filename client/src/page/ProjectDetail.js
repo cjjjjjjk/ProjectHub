@@ -105,7 +105,7 @@ function ProjectDetail() {
 
       <div className="w-[80vw] h-[89vh]">
         {showTask && <Board id={id} model={project_data.model} />}
-        {showTimeline && <Timeline />}
+        {showTimeline && <Timeline project_id={id} />}
         {showSetting && <ProjectSetting />}
       </div>
     </div>

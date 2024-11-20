@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Scheduler } from "@bitnoi.se/react-scheduler";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import axios from 'axios';
 
 dayjs.extend(isBetween);
 
@@ -56,22 +57,50 @@ const datatask = [
     priority: "high",
   },
 ];
-function Timeline({ task = datatask }) {
+function Timeline({ project_id }) {
+  const [tasks, setTasks] = useState([])
   const [filterButtonState, setFilterButtonState] = useState(0);
+  const [data, setData] = useState([]);
+
   const [range, setRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
   });
 
+  // fetch tasks ================================================ author: Hai
+  const FetTasksHandle = async function () {
+    const token = sessionStorage.getItem('token')
+    try {
+      const fetchTasks_res = await axios.get(`${process.env.REACT_APP_SERVER}/tasks`,
+        {
+          headers: { token },
+          params: { project_id }
+        }
+      )
+      const task_fetched = fetchTasks_res.data.tasks
+      console.log("tasks", task_fetched)
+      setTasks(task_fetched)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => {
+    FetTasksHandle()
+  }, [])
+  useEffect(() => {
+    setData(handleScheduleData());
+  }, [tasks])
+  // ========================================================================
+
   const handleScheduleData = () => {
-    if (!task) return [];
+    if (!tasks) return [];
     const priorityOrder = {
       'high': 1,
       'medium': 2,
       'low': 3
     };
 
-    const sortedTasks = [...task].sort((a, b) =>
+    const sortedTasks = [...tasks].sort((a, b) =>
       priorityOrder[a.priority] - priorityOrder[b.priority]
     );
 
@@ -81,14 +110,14 @@ function Timeline({ task = datatask }) {
         label: {
           icon: "",
           title: `Task ${index + 1}`,
-          subtitle: `${item.task}\nPriority: ${item.priority}`,
+          subtitle: `${item.name}\nPriority: ${item.priority}`,
         },
         data: [
           {
             id: 1,
             startDate: new Date(item.start_date),
             endDate: new Date(item.end_date),
-            title: item.task,
+            title: item.name,
             subtitle: item.description,
             bgColor: item.priority === "high" ? "#f84c3b" : item.priority === "medium" ? "#ffcc00" : "#02e585",
             priority: item.priority,
@@ -103,7 +132,7 @@ function Timeline({ task = datatask }) {
     setRange(range);
   }, []);
 
-  const SchedulerData = handleScheduleData();
+  handleScheduleData();
   /*
     const filteredData = SchedulerData.map((person) => ({
       ...person,
@@ -119,13 +148,12 @@ function Timeline({ task = datatask }) {
 
   // Thêm state cho data  
   //const [data, setData] = useState(filteredData);
-  const [data, setData] = useState(SchedulerData);
 
   // Tạo hàm xử lý filter data  
   const handleFilterData = () => {
     setFilterButtonState(1);
     setData(
-      SchedulerData.map((person) => ({
+      data.map((person) => ({
         ...person,
         data: person.data.filter(
           (project) =>
@@ -139,7 +167,7 @@ function Timeline({ task = datatask }) {
   const handleClearFilterData = () => {
     setFilterButtonState(0);
     //setData(filteredData);
-    setData(SchedulerData);
+    setData(data);
   };
 
   return (
