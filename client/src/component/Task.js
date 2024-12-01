@@ -68,7 +68,7 @@ const Task = ({ item, index, deleteTask }) => {
         >
           <div className="w-64 pl-4 pt-3 rounded-lg bg-slate-200 shadow-sm cursor-pointer text-left">
             <div className="flex flex-row">
-              <div className={`text-xs rounded-r-md border-l-4 border-gray-600 pl-1 w-1/3 text-white ${getPriority(item.priority)}`}>{getPriorityName(item.priority)}</div>
+              <div className={`text-xs rounded-r-md  pl-1 w-1/3 text-white ${getPriority(item.priority)}`}>{getPriorityName(item.priority)}</div>
               <div className="ml-auto">
                 <Dropdown
                   menu={{

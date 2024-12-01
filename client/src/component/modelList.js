@@ -40,7 +40,7 @@ const modelList = [
     inform2: "Organize cycles of work into sprints",
     image1: Scrum1,
     image2: Scrum2,
-    workflow: ["To do", "In progress", " Done"],
+    workflow: ['Backlog','To do', 'In Progress','Review' ,'Done'],
     recommend: [
       "Teams that deliver work on a regular cadence",
       "DevOps teams that want to connect work across their tools",
