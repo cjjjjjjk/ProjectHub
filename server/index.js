@@ -40,3 +40,6 @@ app.use("/tasks", taskRouter);
 
 const requestRouter = require("./routes/join_requests")
 app.use("/requests", requestRouter)
+
+const AI_suggestRouter = require("./routes/AI_suggest")
+app.use("/AI_suggest", AI_suggestRouter)
