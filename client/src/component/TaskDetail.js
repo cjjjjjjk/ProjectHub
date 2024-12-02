@@ -2,21 +2,55 @@ import React, { useState, useRef } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
-import { columnsFromBackend } from "./modelList";
 import { FaCheck } from "react-icons/fa6";
-const TaskDetail = ({ item, event, model }) => {
+import { RxAvatar } from "react-icons/rx";
+const TaskDetail = ({ item, event }) => {
+  // Danh sach comment cua task tu backend
+  const commentFromBackend = [
+    {
+      id: 1,
+      task_id: 1,
+      user_id: 1,
+      comment:
+        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+    },
+    {
+      id: 2,
+      task_id: 1,
+      user_id: 3,
+      comment: "vlluon",
+    },
+    {
+      id: 3,
+      task_id: 1,
+      user_id: 2,
+      comment: "abcxyz",
+    },
+    {
+      id: 1,
+      task_id: 1,
+      user_id: 1,
+      comment:
+        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+    },
+    {
+      id: 1,
+      task_id: 1,
+      user_id: 1,
+      comment:
+        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+    },
+  ];
+
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [startDate, setStartDate] = useState(item.start_date);
   const [endDate, setEndDate] = useState(item.end_date);
   const [status, setStatus] = useState(item.status);
   const [priority, setPriority] = useState(item.priority);
-  const [type, setType] = useState(item.type);
 
   const [inputName, setInputName] = useState(name);
   const [inputDescription, setInputDescription] = useState(description);
-  let column = [];
-  if (model === "Kanban") column = columnsFromBackend;
 
   const [showDescription, setShowDescription] = useState(() => {
     if (description === null || description === "") return false;
@@ -27,6 +61,27 @@ const TaskDetail = ({ item, event, model }) => {
     else return true;
   });
   const inputRef = useRef(null);
+
+  // Nhap comment
+  const [commentList, setCommentList] = useState(commentFromBackend);
+  const [text, setText] = useState("");
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      // Kiểm tra nếu nhấn Enter (không Shift)
+      e.preventDefault(); // Ngăn xuống dòng trong textarea
+      if (text.trim()) {
+        const newComment = {
+          id: 1,
+          task_id: item.id,
+          user_id: 1,
+          comment: text.trim(),
+        };
+
+        setCommentList([...commentList, newComment]); // Thêm nội dung vào mảng
+        setText(""); // Xóa nội dung trong textarea
+      }
+    }
+  };
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       <div className="h-[80vh] w-[70vw] min-h-96 rounded-3xl bg-neutral-50">
@@ -42,7 +97,7 @@ const TaskDetail = ({ item, event, model }) => {
           </div>
         </div>
 
-        <div className="flex h-5/6 ">
+        <div className="flex h-5/6 relative">
           <div className="w-2/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 ">
             {/* Name task*/}
             {showName && (
@@ -164,52 +219,54 @@ const TaskDetail = ({ item, event, model }) => {
             </div>
 
             {/* State */}
-            <div className="mt-5">
-              <h3 className="font-semibold text-black">Status</h3>
-              <Select
-                defaultValue={status !== null ? status : ""}
-                style={{
-                  width: "30%",
+            <div className="flex gap-12 mt-5">
+              <div className=" w-36">
+                <h3 className="font-semibold text-black">Status</h3>
+                <Select
+                  defaultValue={status !== null ? status : ""}
+                  style={{
+                    width: "100%",
 
-                  borderWidth: 1,
-                  borderRadius: "7px",
-                }}
-                dropdownStyle={{ maxHeight: 100 }}
-                onChange={(value) => {
-                  setStatus(value);
-                }}
-              >
-                <Select.Option value="opt1">Opt1</Select.Option>
-                <Select.Option value="opt2">opt2</Select.Option>
-              </Select>
-            </div>
+                    borderWidth: 1,
+                    borderRadius: "7px",
+                  }}
+                  dropdownStyle={{ maxHeight: 100 }}
+                  onChange={(value) => {
+                    setStatus(value);
+                  }}
+                >
+                  <Select.Option value="opt1">Opt1</Select.Option>
+                  <Select.Option value="opt2">opt2</Select.Option>
+                </Select>
+              </div>
 
-            {/* Priority */}
-            <div className="mt-5">
-              <h3 className="font-semibold text-black">Priority</h3>
-              <Select
-                defaultValue={priority !== null ? status : ""}
-                style={{
-                  width: "30%",
+              {/* Priority */}
+              <div className="w-36">
+                <h3 className="font-semibold text-black">Priority</h3>
+                <Select
+                  defaultValue={priority !== null ? status : ""}
+                  style={{
+                    width: "100%",
 
-                  borderWidth: 1,
-                  borderRadius: "7px",
-                }}
-                dropdownStyle={{ maxHeight: 100 }}
-                onChange={(value) => {
-                  setPriority(value);
-                }}
-              >
-                <Select.Option value="1">1</Select.Option>
-                <Select.Option value="2">2</Select.Option>
-                <Select.Option value="3">3</Select.Option>
-              </Select>
+                    borderWidth: 1,
+                    borderRadius: "7px",
+                  }}
+                  dropdownStyle={{ maxHeight: 100 }}
+                  onChange={(value) => {
+                    setPriority(value);
+                  }}
+                >
+                  <Select.Option value="1">1</Select.Option>
+                  <Select.Option value="2">2</Select.Option>
+                  <Select.Option value="3">3</Select.Option>
+                </Select>
+              </div>
             </div>
           </div>
 
           <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 relative mt-4">
             {/* type */}
-            <div className="">
+            {/* <div className="">
               <Select
                 size="large"
                 defaultValue={type}
@@ -230,10 +287,10 @@ const TaskDetail = ({ item, event, model }) => {
                   setType(value);
                 }}
               />
-            </div>
+            </div> */}
 
             {/* Assignee */}
-            <div className="mt-6 grid grid-cols-3">
+            <div className=" grid grid-cols-3">
               <div className="flex justify-start items-center">
                 <h3>Assignee</h3>
               </div>
@@ -252,11 +309,44 @@ const TaskDetail = ({ item, event, model }) => {
               </div>
             </div>
 
-            {/* Save */}
-            <button className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-6">
-              Complete
-            </button>
+            {/* Comment */}
+            <div className="mt-10 border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-scroll flex flex-col gap-4">
+              {commentList.map((obj) => {
+                return (
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10">
+                      <RxAvatar className="w-10 h-10" />
+                    </div>
+                    <div className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all">
+                      {obj.comment}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* add comment */}
+            <div className="absolute bottom-4 left-6">
+              <div className="flex gap-4 items-start">
+                <div className="w-10 h-10">
+                  <RxAvatar className="w-10 h-10" />
+                </div>
+                <textarea
+                  value={text}
+                  className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all"
+                  placeholder="Comment"
+                  onChange={(e) => {
+                    setText(e.target.value);
+                  }}
+                  onKeyDown={handleKeyDown}
+                ></textarea>
+              </div>
+            </div>
           </div>
+          {/* Save */}
+          <button className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10">
+            Complete
+          </button>
         </div>
       </div>
     </div>
