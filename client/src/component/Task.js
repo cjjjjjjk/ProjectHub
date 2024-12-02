@@ -6,6 +6,7 @@ import TaskDetail from "./TaskDetail";
 
 const Task = ({ item, index, deleteTask }) => {
   const [openTaskDetail, setOpenTaskDetail] = useState(false);
+  const [checkManager, setCheckManager] = useState(false);
 
   const moreOptions = [
     {

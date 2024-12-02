@@ -42,6 +42,58 @@ const TaskDetail = ({ item, event }) => {
     },
   ];
 
+  //danh sach nguoi da tham gia
+  const joinedFromBackend = [
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "Truong",
+    },
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "nguyen cuan Truong",
+    },
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "Who am I",
+    },
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "Wheo am I",
+    },
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "Whqo am I",
+    },
+    {
+      id: 1,
+      project_id: 1,
+      participant_id: 1,
+      isManager: 1,
+      name: "Wrho am I",
+    },
+  ];
+  const peopleList = joinedFromBackend.map((obj) => {
+    return { value: obj.name, label: obj.name };
+  });
+
+  // bien kiem tra xem có phai manager ko
+  const [checkManager, setCheckManager] = useState(true);
+
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [startDate, setStartDate] = useState(item.start_date);
@@ -100,7 +152,13 @@ const TaskDetail = ({ item, event }) => {
         <div className="flex h-5/6 relative">
           <div className="w-2/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 ">
             {/* Name task*/}
-            {showName && (
+            {!checkManager && (
+              <div className=" w-full min-h-10 max-h-[20vh] overflow-y-auto no-scrollbar text-left ">
+                <h2 className="text-2xl font-semibold">{name}</h2>
+              </div>
+            )}
+
+            {showName && checkManager && (
               <button
                 className=" w-full min-h-10 max-h-[20vh] overflow-y-auto no-scrollbar text-left hover:bg-gray-200"
                 onClick={() => {
@@ -115,7 +173,7 @@ const TaskDetail = ({ item, event }) => {
                 <h2 className="text-2xl font-semibold">{name}</h2>
               </button>
             )}
-            {!showName && (
+            {!showName && checkManager && (
               <div className="flex items-center gap-1">
                 <input
                   placeholder="Add name"
@@ -148,15 +206,22 @@ const TaskDetail = ({ item, event }) => {
             {/* Description */}
             <div className="mt-8">
               <h3 className="font-semibold text-black">Description</h3>
-              {showDescription && (
+
+              {!checkManager && (
+                <div className="w-5/6 mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar border-2 rounded-lg">
+                  <p className="w-full text-left">{description}</p>
+                </div>
+              )}
+
+              {showDescription && checkManager && (
                 <button
-                  className="w-5/6 mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar hover:bg-gray-200"
+                  className="w-5/6 mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar hover:bg-gray-200 border-2 rounded-lg"
                   onClick={() => setShowDescription(!showDescription)}
                 >
                   <p className="w-full text-left">{description}</p>
                 </button>
               )}
-              {!showDescription && (
+              {!showDescription && checkManager && (
                 <div>
                   <textarea
                     className="w-5/6 min-h-20 p-2 resize-y border-2 border-gray-400 "
@@ -201,6 +266,7 @@ const TaskDetail = ({ item, event }) => {
                   onChange={(value) => {
                     setStartDate(value.toDate());
                   }}
+                  disabled={!checkManager}
                 />
               </div>
 
@@ -214,6 +280,7 @@ const TaskDetail = ({ item, event }) => {
                   onChange={(value) => {
                     setEndDate(value.toDate());
                   }}
+                  disabled={!checkManager}
                 />
               </div>
             </div>
@@ -234,6 +301,7 @@ const TaskDetail = ({ item, event }) => {
                   onChange={(value) => {
                     setStatus(value);
                   }}
+                  disabled={!checkManager}
                 >
                   <Select.Option value="opt1">Opt1</Select.Option>
                   <Select.Option value="opt2">opt2</Select.Option>
@@ -255,6 +323,7 @@ const TaskDetail = ({ item, event }) => {
                   onChange={(value) => {
                     setPriority(value);
                   }}
+                  disabled={!checkManager}
                 >
                   <Select.Option value="1">1</Select.Option>
                   <Select.Option value="2">2</Select.Option>
@@ -264,7 +333,7 @@ const TaskDetail = ({ item, event }) => {
             </div>
           </div>
 
-          <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 relative mt-4">
+          <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 relative mt-4 bg-gray-100 rounded-b-md">
             {/* type */}
             {/* <div className="">
               <Select
@@ -303,8 +372,9 @@ const TaskDetail = ({ item, event }) => {
                     height: 36,
                     fontSize: "18px",
                   }}
-                  dropdownStyle={{ maxHeight: 100 }}
-                  options={[{ value: "people1", label: "people1" }]}
+                  listHeight={100}
+                  options={peopleList}
+                  disabled={!checkManager}
                 />
               </div>
             </div>
