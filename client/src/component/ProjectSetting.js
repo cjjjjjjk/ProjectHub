@@ -12,50 +12,50 @@ const { TextArea } = Input;
 
 const ProjectSetting = ({ checkManager, id, project_data }) => {
   //danh sach nguoi da tham gia
-  const joinedFromBackend = [
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Truong",
-    },
-    {
-      id: 2,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "nguyen cuan Truong",
-    },
-    {
-      id: 3,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Who am I",
-    },
-    {
-      id: 4,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Wheo am I",
-    },
-    {
-      id: 5,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Whqo am I",
-    },
-    {
-      id: 6,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Wrho am I",
-    },
-  ];
+  // const joinedFromBackend = [
+  //   {
+  //     id: 1,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "Truong",
+  //   },
+  //   {
+  //     id: 2,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "nguyen cuan Truong",
+  //   },
+  //   {
+  //     id: 3,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "Who am I",
+  //   },
+  //   {
+  //     id: 4,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "Wheo am I",
+  //   },
+  //   {
+  //     id: 5,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "Whqo am I",
+  //   },
+  //   {
+  //     id: 6,
+  //     project_id: 1,
+  //     participant_id: 1,
+  //     isManager: 1,
+  //     name: "Wrho am I",
+  //   },
+  // ];
 
   //danh sach nguoi yeu cau tham gia
   const requestList = [
@@ -74,7 +74,45 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
   const [accessibility, setAccessibility] = useState(project_data.accessibility);
   const model = project_data.model;
   // participants ,request list, update request as manager ======================================================= author: Hai
+  // participants ---------------
+  const [joinedFromBackend, setJoinedFromBackend] = useState([])
+  const [request_List, setRequest_List] = useState([])
+  const token = sessionStorage.getItem('token')
+  const FetchParticipants = async () => {
+    try {
+      const fetchParticipants_res = await axios.get(`${process.env.REACT_APP_SERVER}/project-joineds/participants`, {
+        headers: {
+          token
+        },
+        params: {
+          project_id: id
+        }
+      })
+      if (!fetchParticipants_res) throw new Error("fetch Prticipants false")
+      setJoinedFromBackend(fetchParticipants_res.data.participants)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  // request list --------------------------
+  const FetchRequest_list = async function () {
+    try {
+      const fetchRequest_res = await axios.get(`${process.env.REACT_APP_SERVER}/requests/project`, {
+        headers: {
+          token
+        },
+        params: {
+          project_id: id
+        }
+      })
+      setRequest_List(fetchRequest_res.data.users)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   useEffect(() => {
+    FetchParticipants()
+    FetchRequest_list()
   }, [])
   // =========================================================================================================================
 
@@ -228,7 +266,7 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
         <div className="h-2/5  flex flex-col gap-2 ">
           <h3 className="font-semibold text-xl">Request</h3>
           <div className="h-4/5 overflow-y-auto flex flex-col gap-2 ">
-            {joinedFromBackend.map((obj) => {
+            {request_List.map((obj) => {
               return (
                 <div className="flex  items-center hover:bg-slate-100 justify-between">
                   <div className="flex gap-4">

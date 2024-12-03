@@ -1,9 +1,36 @@
 const express = require('express')
 const router = express.Router()
 const { Users, ProjectJoineds, Projects } = require('../models')
-const { validateToken } = require('../middleware/auth')
+const { validateToken } = require('../middleware/auth');
+const { where } = require('sequelize');
 require('dotenv').config();
 
+
+// Get participants ==============================================================
+router.get("/participants", validateToken, async (req, res) => {
+    const { project_id } = req.query
+    try {
+        const joineds_Projecs = await ProjectJoineds.findAll({
+            where:
+            {
+                project_id: project_id
+            }
+        })
+        const participant_ids = joineds_Projecs.map((join) => join.participant_id)
+        const participants = []
+        for (let participant_id of participant_ids) {
+            const user = await Users.findByPk(participant_id)
+            participants.push(user)
+        }
+        res.json({ message: true, participants })
+
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
+})
 
 // Joined a project with project_id  ================================== author: Hai
 // logined user -<join>--> project ------------------------------------------------
