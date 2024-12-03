@@ -132,7 +132,7 @@ router.get('/getone', validateToken, async (req, res) => {
     //---------------------------
 
     const project = await Projects.findByPk(project_id)
-    res.json({ success: true, project })
+    res.json({ success: true, isManager: joiner_Joined.isManager, project })
 
   } catch (err) {
     return res.status(err.status || 500).json({

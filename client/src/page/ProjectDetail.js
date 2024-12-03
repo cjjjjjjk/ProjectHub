@@ -11,10 +11,9 @@ import ProjectSetting from "../component/ProjectSetting";
 import axios from "axios";
 function ProjectDetail() {
   // CHeck manager
-  const checkManager = true;
 
   const { id } = useParams(); // Access the id parameter from the URL
-
+  const [checkManager, setCheckManager] = useState(false)
   const [showTask, setShowTask] = useState(false);
   const [showTimeline, setShowTimeLine] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
@@ -30,6 +29,7 @@ function ProjectDetail() {
           params: { project_id: id },
         }
       );
+      setCheckManager(project_fetched_res.data.isManager);
       setProjectData(project_fetched_res.data.project);
       setShowTask(true);
     } catch (err) {
@@ -76,9 +76,8 @@ function ProjectDetail() {
           <ul className="flex flex-col">
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
-                  showTask && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showTask && "bg-blue-200"
+                  }`}
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
@@ -87,9 +86,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${
-                  showTimeline && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${showTimeline && "bg-blue-200"
+                  }`}
                 onClick={handleShowTimeline}
               >
                 <RiTimelineView className="text-2xl" />
@@ -98,9 +96,8 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
-                  showSetting && "bg-blue-200"
-                }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showSetting && "bg-blue-200"
+                  }`}
                 onClick={handleShowSetting}
               >
                 <IoIosSettings className="text-2xl" />
