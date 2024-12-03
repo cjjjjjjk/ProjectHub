@@ -10,15 +10,18 @@ import ProjectSetting from "../component/ProjectSetting";
 
 import axios from "axios";
 function ProjectDetail() {
+  // CHeck manager
+  const checkManager = true;
+
   const { id } = useParams(); // Access the id parameter from the URL
 
   const [showTask, setShowTask] = useState(false);
   const [showTimeline, setShowTimeLine] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
-  const [project_data, setProjectData] = useState({})
+  const [project_data, setProjectData] = useState({});
   // fetch project ------------------------------ author: Hai
   const fetchCurentProject = async function () {
-    const token = sessionStorage.getItem('token')
+    const token = sessionStorage.getItem("token");
     try {
       const project_fetched_res = await axios.get(
         `${process.env.REACT_APP_SERVER}/projects/getone`,
@@ -27,16 +30,16 @@ function ProjectDetail() {
           params: { project_id: id },
         }
       );
-      setProjectData(project_fetched_res.data.project)
-      setShowTask(true)
+      setProjectData(project_fetched_res.data.project);
+      setShowTask(true);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
   useEffect(() => {
-    fetchCurentProject()
-  }, [])
-  // ----------------------------------------------------------  
+    fetchCurentProject();
+  }, []);
+  // ----------------------------------------------------------
   const handleShowTask = () => {
     setShowTask(true);
     setShowTimeLine(false);
@@ -60,7 +63,9 @@ function ProjectDetail() {
           <div className=" flex flex-row gap-2 pl-2">
             <img src={Kanban} alt="model" className="h-1/6 w-1/6 pt-1" />
             <div className="w-1/2">
-              <div className="overflow-hidden text-ellipsis whitespace-nowrap font-bold">{project_data.name}</div>
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+                {project_data.name}
+              </div>
               <div>{project_data.model}</div>
             </div>
           </div>
@@ -71,8 +76,9 @@ function ProjectDetail() {
           <ul className="flex flex-col">
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showTask && "bg-blue-200"
-                  }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
+                  showTask && "bg-blue-200"
+                }`}
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
@@ -81,8 +87,9 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${showTimeline && "bg-blue-200"
-                  }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300  ${
+                  showTimeline && "bg-blue-200"
+                }`}
                 onClick={handleShowTimeline}
               >
                 <RiTimelineView className="text-2xl" />
@@ -91,8 +98,9 @@ function ProjectDetail() {
             </li>
             <li>
               <button
-                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showSetting && "bg-blue-200"
-                  }`}
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${
+                  showSetting && "bg-blue-200"
+                }`}
                 onClick={handleShowSetting}
               >
                 <IoIosSettings className="text-2xl" />
@@ -104,9 +112,15 @@ function ProjectDetail() {
       </div>
 
       <div className="w-[80vw] h-[89vh]">
-        {showTask && <Board id={id} model={project_data.model} />}
+        {showTask && (
+          <Board
+            id={id}
+            model={project_data.model}
+            checkManager={checkManager}
+          />
+        )}
         {showTimeline && <Timeline project_id={id} />}
-        {showSetting && <ProjectSetting />}
+        {showSetting && <ProjectSetting checkManager={checkManager} />}
       </div>
     </div>
   );

@@ -5,9 +5,8 @@ import Task from "./Task";
 import { RandomCol } from "./RandomCol";
 import axios from "axios";
 
-const Board = ({ id, model }) => {
+const Board = ({ id, model, checkManager }) => {
   // bien kiem tra xem có phai manager ko
-  const [checkManager, setCheckManager] = useState(false);
 
   const project_id = id;
   const [tasks, setTasks] = useState([]);
@@ -321,6 +320,7 @@ const Board = ({ id, model }) => {
                             item={item}
                             index={index}
                             deleteTask={deleteTask}
+                            checkManager={checkManager}
                           />
                         ))}
                         {provided.placeholder}

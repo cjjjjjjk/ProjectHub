@@ -4,9 +4,8 @@ import { useState } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import TaskDetail from "./TaskDetail";
 
-const Task = ({ item, index, deleteTask }) => {
+const Task = ({ item, index, deleteTask, checkManager }) => {
   const [openTaskDetail, setOpenTaskDetail] = useState(false);
-  const [checkManager, setCheckManager] = useState(false);
 
   const moreOptions = [
     {
@@ -147,6 +146,7 @@ const Task = ({ item, index, deleteTask }) => {
           event={(e) => {
             setOpenTaskDetail(false);
           }}
+          checkManager={checkManager}
         />
       )}
     </div>

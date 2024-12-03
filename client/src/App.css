@@ -69,9 +69,10 @@
   background-color: #0077b6;
   color: white;
 }
-.custom-dropdown-menu .ant-dropdown {
-  width: 12px !important; /* Đặt độ rộng của dropdown */
-}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.custom-dropdown .ant-dropdown-menu {
+  width: 200px;
 }

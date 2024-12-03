@@ -4,7 +4,8 @@ import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
-const TaskDetail = ({ item, event }) => {
+
+const TaskDetail = ({ item, event, checkManager }) => {
   // Danh sach comment cua task tu backend
   const commentFromBackend = [
     {
@@ -13,18 +14,21 @@ const TaskDetail = ({ item, event }) => {
       user_id: 1,
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+      name: "Nguyen Xuan Truong",
     },
     {
       id: 2,
       task_id: 1,
       user_id: 3,
       comment: "vlluon",
+      name: "Nguyen Xuan Truong",
     },
     {
       id: 3,
       task_id: 1,
       user_id: 2,
       comment: "abcxyz",
+      name: "Nguyen Xuan Truong",
     },
     {
       id: 1,
@@ -32,6 +36,7 @@ const TaskDetail = ({ item, event }) => {
       user_id: 1,
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+      name: "Nguyen Xuan Truong",
     },
     {
       id: 1,
@@ -39,6 +44,7 @@ const TaskDetail = ({ item, event }) => {
       user_id: 1,
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
+      name: "Nguyen Xuan Truong",
     },
   ];
 
@@ -91,9 +97,6 @@ const TaskDetail = ({ item, event }) => {
     return { value: obj.name, label: obj.name };
   });
 
-  // bien kiem tra xem có phai manager ko
-  const [checkManager, setCheckManager] = useState(true);
-
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [startDate, setStartDate] = useState(item.start_date);
@@ -127,6 +130,7 @@ const TaskDetail = ({ item, event }) => {
           task_id: item.id,
           user_id: 1,
           comment: text.trim(),
+          name: "Nguyen Xuan Truong",
         };
 
         setCommentList([...commentList, newComment]); // Thêm nội dung vào mảng
@@ -361,7 +365,7 @@ const TaskDetail = ({ item, event }) => {
             {/* Assignee */}
             <div className=" grid grid-cols-3">
               <div className="flex justify-start items-center">
-                <h3>Assignee</h3>
+                <h3 className="font-semibold">Assignee</h3>
               </div>
               <div className="col-span-2">
                 <Select
@@ -387,8 +391,11 @@ const TaskDetail = ({ item, event }) => {
                     <div className="w-10 h-10">
                       <RxAvatar className="w-10 h-10" />
                     </div>
-                    <div className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all">
-                      {obj.comment}
+                    <div>
+                      <h3 className="font-semibold my-1">{obj.name}</h3>
+                      <div className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all">
+                        {obj.comment}
+                      </div>
                     </div>
                   </div>
                 );
