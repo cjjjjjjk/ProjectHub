@@ -9,11 +9,9 @@ const JoinTeam = ({ event }) => {
     const CallAPI_joinProject = async function () {
         const token = sessionStorage.getItem('token')
         try {
-            const response = await axios.post(`${process.env.REACT_APP_SERVER}/requests/create`, { code: joinCode },
+            await axios.post(`${process.env.REACT_APP_SERVER}/requests/create`, { code: joinCode.trim() },
                 { headers: { token } }
             )
-            console.log(response)
-
         } catch (err) {
             console.log(err)
         }

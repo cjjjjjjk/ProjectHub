@@ -27,7 +27,8 @@ router.get("/project", validateToken, async (req, res) => {
         const join_requests = await JoinRequests.findAll({
             where:
             {
-                project_id
+                project_id,
+                state: "Pending"
             }
         })
         const userSent_ids = join_requests.map((request) => request.user_id)
