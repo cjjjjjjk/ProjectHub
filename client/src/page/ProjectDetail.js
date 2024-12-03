@@ -117,7 +117,7 @@ function ProjectDetail() {
           />
         )}
         {showTimeline && <Timeline project_id={id} />}
-        {showSetting && <ProjectSetting checkManager={checkManager} />}
+        {showSetting && <ProjectSetting checkManager={checkManager} id={id} project_data={project_data} />}
       </div>
     </div>
   );

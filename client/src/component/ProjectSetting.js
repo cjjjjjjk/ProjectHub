@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import dayjs from "dayjs";
@@ -6,10 +6,11 @@ import { RxAvatar } from "react-icons/rx";
 import { Dropdown } from "antd";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
+import axios from "axios";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const ProjectSetting = ({ checkManager }) => {
+const ProjectSetting = ({ checkManager, id, project_data }) => {
   //danh sach nguoi da tham gia
   const joinedFromBackend = [
     {
@@ -65,27 +66,19 @@ const ProjectSetting = ({ checkManager }) => {
     { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
   ];
 
-  //thong tin cua project
-  const projectFromBE = {
-    name: "I don't know",
-    description: "I am Truong",
-    start_date: "2024-11-04",
-    end_date: "2024-12-05",
-    code: "B0qHluBGIeK",
-    accessibility: "Private",
-    model: "Kanban",
-  };
+  const [name, setName] = useState(project_data.name);
+  const [description, setDescription] = useState(project_data.description);
+  const [start_date, setStartDate] = useState(project_data.start_date);
+  const [end_date, setEndDate] = useState(project_data.end_date);
+  const code = project_data.code
+  const [accessibility, setAccessibility] = useState(project_data.accessibility);
+  const model = project_data.model;
+  // participants ,request list, update request as manager ======================================================= author: Hai
+  useEffect(() => {
+  }, [])
+  // =========================================================================================================================
 
-  const [name, setName] = useState(projectFromBE.name);
-  const [description, setDescription] = useState(projectFromBE.description);
 
-  const [start_date, setStartDate] = useState(projectFromBE.start_date);
-  const [end_date, setEndDate] = useState(projectFromBE.end_date);
-  const code = projectFromBE.code;
-  const [accessibility, setAccessibility] = useState(
-    projectFromBE.accessibility
-  );
-  const model = projectFromBE.model;
   return (
     <div className="h-full w-full overflow-y-auto flex gap-10">
       <div className="h-full w-3/5">
@@ -186,7 +179,7 @@ const ProjectSetting = ({ checkManager }) => {
           <div className="flex justify-center p-4 px-10">
             <button
               className="p-2 w-20 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
-              onClick={() => {}}
+              onClick={() => { }}
             >
               Save
             </button>

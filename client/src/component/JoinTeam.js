@@ -3,7 +3,23 @@ import { IoCloseOutline } from "react-icons/io5";
 
 import { HiOutlineUsers } from "react-icons/hi2";
 
+import axios from 'axios';
 const JoinTeam = ({ event }) => {
+    // CALL API join project ============================================ author: Hai
+    const CallAPI_joinProject = async function () {
+        const token = sessionStorage.getItem('token')
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER}/requests/create`, { code: joinCode },
+                { headers: { token } }
+            )
+            console.log(response)
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    //===============================================================================
+
     const [joinCode, setJoinCode] = useState('');
 
     const handleInputChange = (e) => {
@@ -11,6 +27,7 @@ const JoinTeam = ({ event }) => {
     };
 
     const handleSubmit = () => {
+        CallAPI_joinProject()
         console.log(`Join code submitted: ${joinCode}`);
     };
 
