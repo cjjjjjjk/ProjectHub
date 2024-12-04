@@ -386,14 +386,17 @@ const TaskDetail = ({ item, event, checkManager }) => {
                 <h3 className="font-semibold">{checkManager ? "Assignee" : "Task members"}</h3>
               </div>
               <div className="flex flex-col items-start">
-                {peopleList.map((person) => (
-                  <div key={person.id} className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center">
-                    {checkManager && <input id={`${person.id}`} type="checkbox"
-                      onChange={(e) => { handleAssignmap(person.id, e.target.checked) }}
-                      defaultChecked={taskmemberList.includes(person.id)} />}
-                    <label htmlFor={`${person.id}`} className="font-semibold ml-[0.5rem] whitespace-nowrap">{person.value}</label>
-                  </div>
-                ))}
+                {peopleList.map((person) => {
+                  if (!(checkManager || taskmemberList.includes(person.id))) return (<></>)
+                  else
+                    return (<div key={person.id} className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center">
+                      {checkManager && <input id={`${person.id}`} type="checkbox"
+                        onChange={(e) => { handleAssignmap(person.id, e.target.checked) }}
+                        defaultChecked={taskmemberList.includes(person.id)} />}
+                      <label htmlFor={`${person.id}`} className="font-semibold ml-[0.5rem] whitespace-nowrap">{person.value}</label>
+                    </div>
+                    )
+                })}
                 {checkManager && <button
                   onClick={SaveAssign_handle}
                   className="mt-[1rem] h-[2rem] text-center bg-green-300 hover:bg-green-500 rounded-full w-auto px-[1rem] font-semibold ">Save</button>}
