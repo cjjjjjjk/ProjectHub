@@ -35,8 +35,8 @@ const Board = ({ id, model }) => {
       // Xử lý columns:-------------------------------------------------
       // Base columns ---------------------------
       const columnConfigs = {
-        Kanban: ['To do', 'In Progress', 'Done'],
-        Scrum: ['Backlog','To do', 'In Progress','Review' ,'Done'],
+        Scrum: ['To do', 'In Progress', 'Done'],
+        Kanban: ['Backlog','To do', 'In Progress','Review' ,'Done'],
         "Extreme Program": ['Planning', 'Design', 'Coding', 'Testing', 'Listening'],
       };
       const colums_be = {};
