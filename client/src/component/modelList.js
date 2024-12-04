@@ -58,7 +58,7 @@ const modelList = [
     inform2: "Keeping things as simple as possible",
     image1: Extreme1,
     image2: Extreme2,
-    workflow: ["Planning", "Design", "Coding", "Testing", "Listening"],
+    workflow: ["Backlog", "To do", "In Progress", "Review", "Done"],
     recommend: [
       "The Dev team should be small, and share the same headquarters.",
       "The project uses new technology and carries many risks.",

@@ -9,6 +9,8 @@ import { IoBag } from "react-icons/io5";
 import modelList from "../component/modelList";
 import Introduce from "../component/Introduce";
 import DetailForm from "../component/DetailForm";
+import axios from "axios";
+import {  Modal } from 'antd';
 
 const CreateProject = ({ event }) => {
   const projectList = [
@@ -17,7 +19,7 @@ const CreateProject = ({ event }) => {
     { id: 3, name: "Marketing", icon: <IoBag /> },
     { id: 4, name: "Design", icon: <IoIosColorPalette /> },
   ];
-
+  const [description,setDescription]=useState("");
   const [showModel, setShowModel] = useState(true);
   const [showIntro, setShowIntro] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -38,9 +40,77 @@ const CreateProject = ({ event }) => {
     setShowIntro(false);
     setShowModel(false);
   };
+  const [suggest,setSuggest]=useState({});
+  const handleSuggest = async () => {
+    openSuggestModal(true);
+    setLoading(true);
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/AI_suggest/suggest`, {
+        prompt: description,
+      });
+      setSuggest(res.data);
+    } catch (error) {
+      console.error("Error fetching suggestion:", error.response?.data || error.message);
+    }
+    finally{
+      setLoading(false)
+    }
 
+  };
+  const [suggestModal,openSuggestModal]=useState(false)
+  const [loading, setLoading] = useState(true);
+
+ 
+  
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
+       <Modal
+        width={"700px"}
+        title={<div className="flex flex-row ">
+         <img src="https://i.imgur.com/H2BELoF.png" alt="Nothing" className="h-10 w-10"></img>
+         <div className="text-xl font-bold py-1">Suggestion for the project: {description}</div> 
+         
+         </div>}
+        loading={loading}
+        open={suggestModal}
+        onCancel={() => openSuggestModal(false)}
+        onOk={()=>openSuggestModal(false)}
+        style={{ top: "20px"}} // Custom style to place modal at the top
+      >
+        <div className="p-2">
+          <div>
+            <div className="flex flex-row gap-x-2">
+              <img src="https://i.imgur.com/aQDA6B7.png" alt="some pic" className="h-10 w-10"></img>
+              <div className="font-bold text-lg py-2">Scrum</div> 
+            </div>
+            <div className="px-2 py-2">{suggest.Scrum}</div>
+          </div>
+          <div>
+            <div className="flex flex-row gap-x-2">
+              <img src="https://i.imgur.com/oKLtPCX.png" alt="some pic" className="h-10 w-10"></img>
+              <div className="font-bold text-lg py-2">Kanban</div> 
+            </div>
+            <div className="px-2 py-2">{suggest.Kanban}</div>
+          </div>
+          <div>
+            <div className="flex flex-row gap-x-2">
+              <img src="https://i.imgur.com/yrqWUGk.png" alt="some pic" className="h-10 w-10"></img>
+              <div className="font-bold text-lg py-2">Extreme Programming</div> 
+            </div>
+            <div className="px-2 py-2">{suggest.Extreme_Programming}</div>
+          </div>
+          <div>
+            <div className="flex flex-row gap-x-2">
+              <img src="https://i.imgur.com/hlaH1hY.png" alt="some pic" className="h-10 w-10"></img>
+              <div className="font-bold text-lg py-2">Summary</div> 
+            </div>
+            <div className="px-2 py-2">{suggest.Summary}</div>
+          </div>
+      
+      
+        </div>
+      </Modal>
+    
       {showModel && (
         <div className="h-screen w-[70vw] pl-4 rounded-3xl bg-neutral-50">
           <div className="p-4 h-[5vh] flex justify-end items-center">
@@ -81,9 +151,10 @@ const CreateProject = ({ event }) => {
                     type="text"
                     className=" h-10 w-[38vw] px-4 rounded-full bg-transparent text-lg border-0 focus:outline-none"
                     placeholder="Type short description about your project ..."
+                    onChange={(e) => setDescription(e.target.value)}
                   ></input>
                   <div className="flex justify-center ">
-                    <button className="p-1 rounded-md  bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-400 ">
+                    <button className="p-1 rounded-md  bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-400 " onClick={handleSuggest}>
                       <RiRobot2Line className="text-3xl text-white " />
                     </button>
                   </div>

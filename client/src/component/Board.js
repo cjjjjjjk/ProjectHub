@@ -35,15 +35,9 @@ const Board = ({ id, model, checkManager }) => {
       // Xử lý columns:-------------------------------------------------
       // Base columns ---------------------------
       const columnConfigs = {
-        Kanban: ["To do", "In Progress", "Done"],
-        Scrum: ["Backlog", "To do", "In Progress", "Review", "Done"],
-        "Extreme Program": [
-          "Planning",
-          "Design",
-          "Coding",
-          "Testing",
-          "Listening",
-        ],
+        Scrum: ['To do', 'In Progress', 'Done'],
+        Kanban: ['Backlog', 'To do', 'In Progress', 'Review', 'Done'],
+        "Extreme Program": ['Planning', 'Design', 'Coding', 'Testing', 'Listening'],
       };
       const colums_be = {};
 
@@ -287,9 +281,8 @@ const Board = ({ id, model, checkManager }) => {
       )}
 
       <div
-        className={`pl-4 flex flex-row gap-x-4 overflow-x-auto ${
-          !checkManager && "mt-10"
-        }`}
+        className={`pl-4 flex flex-row gap-x-4 overflow-x-auto ${!checkManager && "mt-10"
+          }`}
       >
         <DragDropContext
           onDragEnd={(result) => {
