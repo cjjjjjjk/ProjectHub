@@ -31,13 +31,17 @@ router.get("/project", validateToken, async (req, res) => {
                 state: "Pending"
             }
         })
-        const userSent_ids = join_requests.map((request) => request.user_id)
+        const request_map = new Map([])
+        const userSent_ids = join_requests.map((request) => {
+            request_map.set(request.user_id, request.id)
+            return request.user_id
+        })
+
         const user_request = []
         for (let useID of userSent_ids) {
             const user = await Users.findByPk(useID)
-            user_request.push(user)
+            user_request.push({ ...user.dataValues, request_id: request_map.get(useID) });
         }
-
         return res.json({
             success: true,
             users: user_request
@@ -125,9 +129,9 @@ router.post("/create", validateToken, async (req, res) => {
 
 // Update request ==============================================
 // <manager only> ---------------------------------------------
-// http://localhost:3001/requests/request_id   : {state}
-router.put('/:id', validateToken, async (req, res) => {
-    const request_id = req.params.id;
+// http://localhost:3001/requests/update   : {state}
+router.put('/update', validateToken, async (req, res) => {
+    const { request_id } = req.query;
     const manager_id = req.user['user'].id
     const { state } = req.body
 
@@ -141,6 +145,10 @@ router.put('/:id', validateToken, async (req, res) => {
         if (!isManager) throw new Error(`User is not manager of project id:${project_id}`);
 
         await JoinRequests.update({ state }, { where: { id: request_id } })
+        // create new participants after accepted a request
+        if (state === "Accepted") {
+            await ProjectJoineds.create({ participant_id: request.user_id, isManager: false, project_id })
+        }
 
         return res.json({ success: true, message: `${state} request id:${request_id} successful !` })
     } catch (err) {

@@ -11,60 +11,7 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const ProjectSetting = ({ checkManager, id, project_data }) => {
-  //danh sach nguoi da tham gia
-  // const joinedFromBackend = [
-  //   {
-  //     id: 1,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "Truong",
-  //   },
-  //   {
-  //     id: 2,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "nguyen cuan Truong",
-  //   },
-  //   {
-  //     id: 3,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "Who am I",
-  //   },
-  //   {
-  //     id: 4,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "Wheo am I",
-  //   },
-  //   {
-  //     id: 5,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "Whqo am I",
-  //   },
-  //   {
-  //     id: 6,
-  //     project_id: 1,
-  //     participant_id: 1,
-  //     isManager: 1,
-  //     name: "Wrho am I",
-  //   },
-  // ];
-
-  //danh sach nguoi yeu cau tham gia
-  const requestList = [
-    { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
-    { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
-    { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
-    { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
-    { id: 1, user_id: 1, project_id: 1, name: "Nguyen Xuan truong" },
-  ];
+  const [update, setUpdate] = useState(false)
 
   const [name, setName] = useState(project_data.name);
   const [description, setDescription] = useState(project_data.description);
@@ -74,6 +21,10 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
   const [accessibility, setAccessibility] = useState(project_data.accessibility);
   const model = project_data.model;
   // participants ,request list, update request as manager ======================================================= author: Hai
+  // update handling --------
+  const handleUpdate = function () {
+    setUpdate(!update)
+  }
   // participants ---------------
   const [joinedFromBackend, setJoinedFromBackend] = useState([])
   const [request_List, setRequest_List] = useState([])
@@ -113,8 +64,23 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
   useEffect(() => {
     FetchParticipants()
     FetchRequest_list()
-  }, [])
+  }, [update])
   // =========================================================================================================================
+  // Acept /  refuse  ----------------------------------------------------
+  const HandleUpdateRequest = async function (value, request_id) {
+    try {
+      const updateRequest_res = await axios.put(`${process.env.REACT_APP_SERVER}/requests/update`, {
+        state: value
+      }, {
+        headers: {
+          token
+        },
+        params: {
+          request_id
+        }
+      })
+    } catch (err) { console.log(err) }
+  }
 
 
   return (
@@ -278,11 +244,13 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="p-2  border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 ">
+                    <button className="p-2  border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
+                      onClick={() => { HandleUpdateRequest("Accepted", obj.request_id); handleUpdate() }}>
                       <FaCheck />
                     </button>
 
-                    <button className="p-2   border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 ">
+                    <button className="p-2   border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
+                      onClick={() => { HandleUpdateRequest("Rejected", obj.request_id); handleUpdate() }}>
                       <IoCloseOutline />
                     </button>
                   </div>
