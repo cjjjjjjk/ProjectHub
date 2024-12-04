@@ -2,8 +2,10 @@ import React, { useState, useRef } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaLessThanEqual, FaSquareFontAwesomeStroke } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
+import axios from 'axios'
+import { useEffect } from "react";
 
 const TaskDetail = ({ item, event, checkManager }) => {
   // Danh sach comment cua task tu backend
@@ -48,60 +50,10 @@ const TaskDetail = ({ item, event, checkManager }) => {
     },
   ];
 
-  //danh sach nguoi da tham gia
-  const joinedFromBackend = [
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Truong",
-    },
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "nguyen cuan Truong",
-    },
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Who am I",
-    },
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Wheo am I",
-    },
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Whqo am I",
-    },
-    {
-      id: 1,
-      project_id: 1,
-      participant_id: 1,
-      isManager: 1,
-      name: "Wrho am I",
-    },
-  ];
-  const peopleList = joinedFromBackend.map((obj) => {
-    return { value: obj.name, label: obj.name };
-  });
-
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [startDate, setStartDate] = useState(item.start_date);
   const [endDate, setEndDate] = useState(item.end_date);
-  const [status, setStatus] = useState(item.status);
   const [priority, setPriority] = useState(item.priority);
 
   const [inputName, setInputName] = useState(name);
@@ -138,6 +90,118 @@ const TaskDetail = ({ item, event, checkManager }) => {
       }
     }
   };
+  // Cal api : Update task==================================== author : Hai
+  const token = sessionStorage.getItem('token');
+  const UPdateTaskHandle = async () => {
+    const updated_task = {
+      name, description,
+      start_date: startDate,
+      end_date: endDate,
+      priority
+    }
+    try {
+      const updateTask_rs = await axios.put(`${process.env.REACT_APP_SERVER}/tasks/update`, updated_task, {
+        headers: {
+          token
+        },
+        params:
+        {
+          project_id: item.project_id,
+          task_id: item.task_id
+        }
+      })
+      console.log(updateTask_rs)
+    } catch (ere) { console.log(ere) }
+  }
+  // ========================================================================
+  // fetch participants -----------------------------------------------------
+  const [joinedFromBackend, setJoinedFromBackend] = useState([])
+  const FetchParticipants = async () => {
+    try {
+      const fetchParticipants_res = await axios.get(`${process.env.REACT_APP_SERVER}/project-joineds/participants`, {
+        headers: {
+          token
+        },
+        params: {
+          project_id: item.project_id
+        }
+      })
+      if (!fetchParticipants_res) throw new Error("fetch Prticipants false")
+      setJoinedFromBackend(fetchParticipants_res.data.participants)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    FetchParticipants()
+  }, [])
+  // =========================================================================
+  // assign task <manager only > ---------------------------------------------
+  const [assignMap, setAsignMap] = useState([])
+  const handleAssignmap = function (member_id, value) {
+    setAsignMap((pre) => ({ ...pre, [member_id]: value }))
+  }
+
+  const AssignTask = async function (user_id) {
+    try {
+      await axios.post(`${process.env.REACT_APP_SERVER}/tasks/assign-task`,
+        {
+          task_id: item.task_id,
+          user_id
+        }, {
+        headers: {
+          token
+        }
+      })
+    } catch (err) { console.log(err) }
+  }
+  const RemoveAssign = async function (user_id) {
+    try {
+      await axios.delete(`${process.env.REACT_APP_SERVER}/tasks/delete-assign`, {
+        headers: {
+          token
+        },
+        params: {
+          task_id: item.task_id,
+          user_id
+        }
+      })
+    } catch (err) { console.log(err) }
+  }
+  const SaveAssign_handle = function () {
+    console.log(assignMap)
+    for (const user_id in assignMap) {
+      if (assignMap[user_id] === true) {
+        AssignTask(user_id)
+      } else RemoveAssign(user_id)
+    }
+    fetMemberTask()
+  }
+  // =========================================================================
+  const [taskmemberList, setTaskmemberList] = useState([])
+  const peopleList = joinedFromBackend.map((obj) => {
+    return { value: obj.name, label: obj.name, id: obj.id };
+  })
+  // fetch task assigned -----------------------------------------------------
+  const fetMemberTask = async function () {
+    try {
+      const getMember_ids_res = await axios.get(`${process.env.REACT_APP_SERVER}/tasks/task-member`, {
+        headers: {
+          token
+        },
+        params: {
+          task_id: item.task_id
+        }
+      })
+      const member_id_List = getMember_ids_res.data.member_ids.map((assign) => assign.user_id)
+      setTaskmemberList(member_id_List)
+    } catch (err) { console.log(err) }
+  }
+  useEffect(() => {
+    fetMemberTask()
+  }, [])
+  // -------------------------------------------------------------------------
+
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
       <div className="h-[80vh] w-[70vw] min-h-96 rounded-3xl bg-neutral-50">
@@ -291,32 +355,11 @@ const TaskDetail = ({ item, event, checkManager }) => {
 
             {/* State */}
             <div className="flex gap-12 mt-5">
-              <div className=" w-36">
-                <h3 className="font-semibold text-black">Status</h3>
-                <Select
-                  defaultValue={status !== null ? status : ""}
-                  style={{
-                    width: "100%",
-
-                    borderWidth: 1,
-                    borderRadius: "7px",
-                  }}
-                  dropdownStyle={{ maxHeight: 100 }}
-                  onChange={(value) => {
-                    setStatus(value);
-                  }}
-                  disabled={!checkManager}
-                >
-                  <Select.Option value="opt1">Opt1</Select.Option>
-                  <Select.Option value="opt2">opt2</Select.Option>
-                </Select>
-              </div>
-
               {/* Priority */}
               <div className="w-36">
                 <h3 className="font-semibold text-black">Priority</h3>
                 <Select
-                  defaultValue={priority !== null ? status : ""}
+                  defaultValue={priority !== null ? priority : ""}
                   style={{
                     width: "100%",
 
@@ -336,55 +379,28 @@ const TaskDetail = ({ item, event, checkManager }) => {
               </div>
             </div>
           </div>
-
+          {/*Assignee */}
           <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 relative mt-4 bg-gray-100 rounded-b-md">
-            {/* type */}
-            {/* <div className="">
-              <Select
-                size="large"
-                defaultValue={type}
-                style={{
-                  width: 160,
-                  borderWidth: 2,
-                  borderColor: "black",
-                  borderRadius: "9px",
-                  height: 36,
-                  fontSize: "18px",
-                }}
-                dropdownStyle={{ maxHeight: 100 }}
-                options={Object.values(column).map((column) => ({
-                  value: column.title,
-                  label: column.title,
-                }))}
-                onChange={(value) => {
-                  setType(value);
-                }}
-              />
-            </div> */}
-
-            {/* Assignee */}
-            <div className=" grid grid-cols-3">
-              <div className="flex justify-start items-center">
-                <h3 className="font-semibold">Assignee</h3>
+            <div className="flex flex-col h-auto w-full">
+              <div className="flex justify-start">
+                <h3 className="font-semibold">{checkManager ? "Assignee" : "Task members"}</h3>
               </div>
-              <div className="col-span-2">
-                <Select
-                  size="large"
-                  style={{
-                    width: 200,
-
-                    height: 36,
-                    fontSize: "18px",
-                  }}
-                  listHeight={100}
-                  options={peopleList}
-                  disabled={!checkManager}
-                />
+              <div className="flex flex-col items-start">
+                {peopleList.map((person) => (
+                  <div key={person.id} className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center">
+                    {checkManager && <input id={`${person.id}`} type="checkbox"
+                      onChange={(e) => { handleAssignmap(person.id, e.target.checked) }}
+                      defaultChecked={taskmemberList.includes(person.id)} />}
+                    <label htmlFor={`${person.id}`} className="font-semibold ml-[0.5rem] whitespace-nowrap">{person.value}</label>
+                  </div>
+                ))}
+                {checkManager && <button
+                  onClick={SaveAssign_handle}
+                  className="mt-[1rem] h-[2rem] text-center bg-green-300 hover:bg-green-500 rounded-full w-auto px-[1rem] font-semibold ">Save</button>}
               </div>
             </div>
-
             {/* Comment */}
-            <div className="mt-10 border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-scroll flex flex-col gap-4">
+            <div className="mt-[1rem] border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-scroll flex flex-col gap-4">
               {commentList.map((obj) => {
                 return (
                   <div className="flex gap-4 items-start">
@@ -421,7 +437,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
             </div>
           </div>
           {/* Save */}
-          <button className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10">
+          <button onClick={UPdateTaskHandle}
+            className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10">
             Complete
           </button>
         </div>

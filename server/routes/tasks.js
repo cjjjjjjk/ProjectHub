@@ -96,6 +96,7 @@ router.post('/create-task', validateToken, async (req, res) => {
 })
 
 
+
 // delete task   <manager only> ------------------------------------------------
 // DELETE: http://localhost:3001/tasks/delete-task
 /*
@@ -219,6 +220,40 @@ router.post('/assign-task', validateToken, async (req, res) => {
         });
     }
 
+})
+// get task memeber 
+router.get('/task-member', validateToken, async (req, res) => {
+    const { task_id } = req.query
+
+    try {
+        const taskMember_id = await AssignedTos.findAll({
+            task_id
+        })
+        return res.json({ success: true, member_ids: taskMember_id })
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
+})
+// remove assign task ------------------------------------------
+router.delete('/delete-assign', validateToken, async (req, res) => {
+    const { task_id, user_id } = req.query
+    try {
+        await AssignedTos.destroy({
+            where: {
+                task_id,
+                user_id
+            }
+        })
+        return res.json({ success: true, message: `assign Task ID:${task_id} deleted !` });
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
 })
 
 
