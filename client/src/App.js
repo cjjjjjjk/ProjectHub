@@ -16,6 +16,7 @@ import { useState } from "react";
 import { Drawer, Popover } from "antd";
 import Register from "./page/Register";
 import ProjectDetail from "./page/ProjectDetail";
+import { RxAvatar } from "react-icons/rx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
     </div>
   );
 }
+
 const MainLayout = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const closeMenu = () => {
@@ -44,8 +46,12 @@ const MainLayout = () => {
   };
   const location = useLocation();
 
-  // Kiểm tra đường dẫn có phải là "/"
+  // Kiểm tra đường dẫn có phải là "/Home"
   const isHomePage = location.pathname === "/page/Home";
+
+  //Kiểm tra xem đã đăng nhập chưa
+  const [checkLogin, setCheckLogin] = useState(true);
+
   return (
     <div
       className={`${
@@ -171,20 +177,26 @@ const MainLayout = () => {
             >
               Project
             </NavLink>
-            <NavLink
-              to="/page/Login"
-              className={({ isActive }) =>
-                `hover:text-blue-300 ${
-                  isActive
-                    ? "text-blue-500 font-bold"
-                    : isHomePage
-                    ? "font-raleway text-white text-xl"
-                    : ""
-                }`
-              }
-            >
-              Login
-            </NavLink>
+            {checkLogin ? (
+              <NavLink to="/page/Profile">
+                <RxAvatar className="h-10 w-10"></RxAvatar>
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/page/Login"
+                className={({ isActive }) =>
+                  `hover:text-blue-300 ${
+                    isActive
+                      ? "text-blue-500 font-bold"
+                      : isHomePage
+                      ? "font-raleway text-white text-xl"
+                      : ""
+                  }`
+                }
+              >
+                Login
+              </NavLink>
+            )}
             <Popover
               content={
                 <div>
