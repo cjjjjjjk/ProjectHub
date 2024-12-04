@@ -105,7 +105,7 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
           project_id: id
         }
       })
-      setRequest_List(fetchRequest_res.data.users)
+      if (fetchRequest_res.data.success) setRequest_List(fetchRequest_res.data.users)
     } catch (err) {
       console.log(err)
     }
