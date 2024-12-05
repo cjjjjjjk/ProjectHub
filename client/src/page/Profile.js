@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 function Profile() {
   const [userData, setUserData] = useState({
     id: null,
-    name: "tuanzz",
-    email: "tuan@gmail.com",
+    name: "",
+    email: "",
     bio: "",
-    phone: "0123456789",
-    company: "ABC Corp",
-    location: "Hanoi",
+    phone: "",
+    company: "",
+    location: "",
     dob: null,
     social_link: "",
     createAt: "",
@@ -17,9 +17,8 @@ function Profile() {
     avatar: ""
   })
 
-  const [tempUserData, setTempUserData] = useState({ ...userData });
+  const [tempUserData, setTempUserData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const [isOwner, setIsOwner] = useState(true);
 
   // Lấy dữ liệu từ server
   const getUserfromServer = async () => {
@@ -55,9 +54,27 @@ function Profile() {
       ...tempUserData,
       updateAt: new Date().toISOString()
     };
+    // hai: call api
+    UpdateProfile(updatedData);
+
     setUserData(updatedData);
     setIsEditing(false);
   };
+
+  // call api update profile ======================= author : Hai
+  const UpdateProfile = async function (updatedData) {
+    const token = sessionStorage.getItem("token")
+    try {
+      await axios.put(`${process.env.REACT_APP_SERVER}/users/update-profile`, updatedData, {
+        headers: {
+          token
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  // ============================================================
 
   return (
     <div className="flex h-screen">
@@ -199,7 +216,7 @@ function Profile() {
                 </div>
                 <div className="flex  border-b pb-2">
                   <span className="w-40 font-bold">Date of Birth</span>
-                  <span>{userData.dob}</span>
+                  <span>{new Date(userData.dob).toLocaleDateString()}</span>
                 </div>
                 <div className="flex  border-b pb-2">
                   <span className="w-40 font-bold">Company</span>
@@ -214,21 +231,12 @@ function Profile() {
                   <span className="text-blue-600">{userData.social_link}</span>
                 </div>
 
-
-                <div className="flex  border-b pb-2">
-                  <span className="w-40 font-bold">Created At</span>
-                  <span>{new Date(userData.createAt).toLocaleDateString()}</span>
-                </div>
-                <div className="flex  border-b pb-2">
-                  <span className="w-40 font-bold">Updated At</span>
-                  <span>{new Date(userData.updateAt).toLocaleDateString()}</span>
-                </div>
               </div>
             </div>
           </div>
         )}
 
-        {isOwner && !isEditing && (
+        {!isEditing && (
           <button
             onClick={toggleEdit}
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md "

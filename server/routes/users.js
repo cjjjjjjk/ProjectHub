@@ -96,7 +96,8 @@ router.put('/update-profile', validateToken,
                 location: update.location !== null ? update.location : user.location,
                 avatar: update.avatar !== null ? update.avatar : user.avatar,
                 email: update.email !== null ? update.email : user.email,
-                username: update.username !== null ? update.username : user.username
+                username: update.username !== null ? update.username : user.username,
+                dob: update.dob !== null ? update.dob : user.dob,
             }, { where: { id: userId } });
 
             return res.json({ message: `User ${userId} updated !`, update: update })
