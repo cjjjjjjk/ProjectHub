@@ -227,7 +227,9 @@ router.get('/task-member', validateToken, async (req, res) => {
 
     try {
         const taskMember_id = await AssignedTos.findAll({
-            task_id
+            where: {
+                task_id
+            }
         })
         return res.json({ success: true, member_ids: taskMember_id })
     } catch (err) {
