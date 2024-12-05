@@ -2,13 +2,18 @@ import React, { useState, useRef } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
-import { FaCheck, FaLessThanEqual, FaSquareFontAwesomeStroke } from "react-icons/fa6";
+import { IoMdAttach } from "react-icons/io";
+import {
+  FaCheck,
+  FaLessThanEqual,
+  FaSquareFontAwesomeStroke,
+} from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
-import axios from 'axios'
+import axios from "axios";
 import { useEffect } from "react";
 
 const TaskDetail = ({ item, event, checkManager }) => {
-  // Danh sach comment cua task tu backend
+  // Danh sach comment, dung luon cho ca report cua task tu backend
   const commentFromBackend = [
     {
       id: 1,
@@ -17,6 +22,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
+      description: "None",
+      attachment: "NOne",
     },
     {
       id: 2,
@@ -24,6 +31,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
       user_id: 3,
       comment: "vlluon",
       name: "Nguyen Xuan Truong",
+      description: "None",
+      attachment: "NOne",
     },
     {
       id: 3,
@@ -31,6 +40,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
       user_id: 2,
       comment: "abcxyz",
       name: "Nguyen Xuan Truong",
+      description: "None",
+      attachment: "NOne",
     },
     {
       id: 1,
@@ -39,6 +50,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
+      description: "None",
+      attachment: "NOne",
     },
     {
       id: 1,
@@ -47,6 +60,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
+      description: "None",
+      attachment: "NOne",
     },
   ];
 
@@ -68,6 +83,35 @@ const TaskDetail = ({ item, event, checkManager }) => {
     else return true;
   });
   const inputRef = useRef(null);
+
+  //File dc chon
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+  const [reportList, setReportList] = useState(commentFromBackend);
+  const [reportText, setReportText] = useState("");
+  const handleReport = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      // Kiểm tra nếu nhấn Enter (không Shift)
+      e.preventDefault(); // Ngăn xuống dòng trong textarea
+      if (reportText.trim()) {
+        const newReport = {
+          id: 1,
+          task_id: item.id,
+          user_id: 1,
+          attachment: file ? file.name : null,
+          description: reportText.trim(),
+          name: "Nguyen Xuan Truong",
+        };
+
+        setReportList([...reportList, newReport]); // Thêm nội dung vào mảng
+        setReportText(""); // Xóa nội dung trong textarea
+        setFile(null);
+      }
+    }
+  };
 
   // Nhap comment
   const [commentList, setCommentList] = useState(commentFromBackend);
@@ -91,120 +135,146 @@ const TaskDetail = ({ item, event, checkManager }) => {
     }
   };
   // Cal api : Update task==================================== author : Hai
-  const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem("token");
   const UPdateTaskHandle = async () => {
     const updated_task = {
-      name, description,
+      name,
+      description,
       start_date: startDate,
       end_date: endDate,
-      priority
-    }
+      priority,
+    };
     try {
-      const updateTask_rs = await axios.put(`${process.env.REACT_APP_SERVER}/tasks/update`, updated_task, {
-        headers: {
-          token
-        },
-        params:
+      const updateTask_rs = await axios.put(
+        `${process.env.REACT_APP_SERVER}/tasks/update`,
+        updated_task,
         {
-          project_id: item.project_id,
-          task_id: item.task_id
+          headers: {
+            token,
+          },
+          params: {
+            project_id: item.project_id,
+            task_id: item.task_id,
+          },
         }
-      })
-      console.log(updateTask_rs)
-    } catch (ere) { console.log(ere) }
-  }
+      );
+      console.log(updateTask_rs);
+    } catch (ere) {
+      console.log(ere);
+    }
+  };
   // ========================================================================
   // fetch participants -----------------------------------------------------
-  const [joinedFromBackend, setJoinedFromBackend] = useState([])
+  const [joinedFromBackend, setJoinedFromBackend] = useState([]);
   const FetchParticipants = async () => {
     try {
-      const fetchParticipants_res = await axios.get(`${process.env.REACT_APP_SERVER}/project-joineds/participants`, {
-        headers: {
-          token
-        },
-        params: {
-          project_id: item.project_id
+      const fetchParticipants_res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/project-joineds/participants`,
+        {
+          headers: {
+            token,
+          },
+          params: {
+            project_id: item.project_id,
+          },
         }
-      })
-      if (!fetchParticipants_res) throw new Error("fetch Prticipants false")
-      setJoinedFromBackend(fetchParticipants_res.data.participants)
+      );
+      if (!fetchParticipants_res) throw new Error("fetch Prticipants false");
+      setJoinedFromBackend(fetchParticipants_res.data.participants);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
   useEffect(() => {
-    FetchParticipants()
-  }, [])
+    FetchParticipants();
+  }, []);
   // =========================================================================
   // assign task <manager only > ---------------------------------------------
-  const [assignMap, setAsignMap] = useState([])
+  const [assignMap, setAsignMap] = useState([]);
   const handleAssignmap = function (member_id, value) {
-    setAsignMap((pre) => ({ ...pre, [member_id]: value }))
-  }
+    setAsignMap((pre) => ({ ...pre, [member_id]: value }));
+  };
 
   const AssignTask = async function (user_id) {
     try {
-      await axios.post(`${process.env.REACT_APP_SERVER}/tasks/assign-task`,
+      await axios.post(
+        `${process.env.REACT_APP_SERVER}/tasks/assign-task`,
         {
           task_id: item.task_id,
-          user_id
-        }, {
-        headers: {
-          token
+          user_id,
+        },
+        {
+          headers: {
+            token,
+          },
         }
-      })
-    } catch (err) { console.log(err) }
-  }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const RemoveAssign = async function (user_id) {
     try {
-      await axios.delete(`${process.env.REACT_APP_SERVER}/tasks/delete-assign`, {
-        headers: {
-          token
-        },
-        params: {
-          task_id: item.task_id,
-          user_id
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER}/tasks/delete-assign`,
+        {
+          headers: {
+            token,
+          },
+          params: {
+            task_id: item.task_id,
+            user_id,
+          },
         }
-      })
-    } catch (err) { console.log(err) }
-  }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const SaveAssign_handle = function () {
-    console.log(assignMap)
+    console.log(assignMap);
     for (const user_id in assignMap) {
       if (assignMap[user_id] === true) {
-        AssignTask(user_id)
-      } else RemoveAssign(user_id)
+        AssignTask(user_id);
+      } else RemoveAssign(user_id);
     }
-    fetMemberTask()
-  }
+    fetMemberTask();
+  };
   // =========================================================================
-  const [taskmemberList, setTaskmemberList] = useState([])
+  const [taskmemberList, setTaskmemberList] = useState([]);
   const peopleList = joinedFromBackend.map((obj) => {
     return { value: obj.name, label: obj.name, id: obj.id };
-  })
+  });
   // fetch task assigned -----------------------------------------------------
   const fetMemberTask = async function () {
     try {
-      const getMember_ids_res = await axios.get(`${process.env.REACT_APP_SERVER}/tasks/task-member`, {
-        headers: {
-          token
-        },
-        params: {
-          task_id: item.task_id
+      const getMember_ids_res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/tasks/task-member`,
+        {
+          headers: {
+            token,
+          },
+          params: {
+            task_id: item.task_id,
+          },
         }
-      })
-      const member_id_List = getMember_ids_res.data.member_ids.map((assign) => assign.user_id)
-      setTaskmemberList(member_id_List)
-    } catch (err) { console.log(err) }
-  }
+      );
+      const member_id_List = getMember_ids_res.data.member_ids.map(
+        (assign) => assign.user_id
+      );
+      setTaskmemberList(member_id_List);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    fetMemberTask()
-  }, [])
+    fetMemberTask();
+  }, []);
   // -------------------------------------------------------------------------
 
   return (
     <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
-      <div className="h-[80vh] w-[70vw] min-h-96 rounded-3xl bg-neutral-50">
+      <div className="h-[90vh] w-[75vw] min-h-96 rounded-3xl bg-neutral-50">
         {/* Title */}
         <div className="p-2 flex justify-between bg-gradient-to-r from-purple-800 via-blue-600 to-purple-400 overflow-hidden rounded-t-3xl">
           <div className="p-2 flex items-center justify-center">
@@ -218,7 +288,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
         </div>
 
         <div className="flex h-5/6 relative">
-          <div className="w-2/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 ">
+          <div className="w-2/3 h-5/6  overflow-y-auto no-scrollbar px-6 py-4 ">
             {/* Name task*/}
             {!checkManager && (
               <div className=" w-full min-h-10 max-h-[20vh] overflow-y-auto no-scrollbar text-left ">
@@ -353,9 +423,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
               </div>
             </div>
 
-            {/* State */}
+            {/* Priority */}
             <div className="flex gap-12 mt-5">
-              {/* Priority */}
               <div className="w-36">
                 <h3 className="font-semibold text-black">Priority</h3>
                 <Select
@@ -378,32 +447,85 @@ const TaskDetail = ({ item, event, checkManager }) => {
                 </Select>
               </div>
             </div>
+            {/* Report */}
+            <div className="mt-10  border-gray-300">
+              <h3 className="font-semibold text-black">Report</h3>
+              <div className="  pt-4  w-full  overflow-y-auto flex flex-col gap-4">
+                {reportList.map((obj) => {
+                  return (
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10">
+                        <RxAvatar className="w-10 h-10" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold my-1">{obj.name}</h3>
+                        <div className="bg-gray-200 p-2 rounded-lg min-w-full max-w-full break-words break-all">
+                          <p>
+                            {obj.attachment && (
+                              <p>
+                                File: <strong>{obj.attachment}</strong>
+                              </p>
+                            )}
+                          </p>
+                          <p>{obj.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-          {/*Assignee */}
-          <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 relative mt-4 bg-gray-100 rounded-b-md">
-            <div className="flex flex-col h-auto w-full">
+
+          <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 mt-4 bg-gray-100 rounded-b-md">
+            {/*Assignee */}
+            <div className="flex flex-col max-h-1/2 overflow-y-auto w-full">
               <div className="flex justify-start">
-                <h3 className="font-semibold">{checkManager ? "Assignee" : "Task members"}</h3>
+                <h3 className="font-semibold">
+                  {checkManager ? "Assignee" : "Task members"}
+                </h3>
               </div>
               <div className="flex flex-col items-start">
                 {peopleList.map((person) => {
-                  if (!(checkManager || taskmemberList.includes(person.id))) return (<></>)
+                  if (!(checkManager || taskmemberList.includes(person.id)))
+                    return <></>;
                   else
-                    return (<div key={person.id} className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center">
-                      {checkManager && <input id={`${person.id}`} type="checkbox"
-                        onChange={(e) => { handleAssignmap(person.id, e.target.checked) }}
-                        defaultChecked={taskmemberList.includes(person.id)} />}
-                      <label htmlFor={`${person.id}`} className="font-semibold ml-[0.5rem] whitespace-nowrap">{person.value}</label>
-                    </div>
-                    )
+                    return (
+                      <div
+                        key={person.id}
+                        className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center"
+                      >
+                        {checkManager && (
+                          <input
+                            id={`${person.id}`}
+                            type="checkbox"
+                            onChange={(e) => {
+                              handleAssignmap(person.id, e.target.checked);
+                            }}
+                            defaultChecked={taskmemberList.includes(person.id)}
+                          />
+                        )}
+                        <label
+                          htmlFor={`${person.id}`}
+                          className="font-semibold ml-[0.5rem] whitespace-nowrap"
+                        >
+                          {person.value}
+                        </label>
+                      </div>
+                    );
                 })}
-                {checkManager && <button
-                  onClick={SaveAssign_handle}
-                  className="mt-[1rem] h-[2rem] text-center bg-green-300 hover:bg-green-500 rounded-full w-auto px-[1rem] font-semibold ">Save</button>}
+                {checkManager && (
+                  <button
+                    onClick={SaveAssign_handle}
+                    className="mt-[1rem] h-[2rem] text-center bg-green-300 hover:bg-green-500 rounded-full w-auto px-[1rem] font-semibold "
+                  >
+                    Save
+                  </button>
+                )}
               </div>
             </div>
             {/* Comment */}
-            <div className="mt-[1rem] border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-scroll flex flex-col gap-4">
+            <div className="my-[1rem] border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-auto flex flex-col gap-4">
               {commentList.map((obj) => {
                 return (
                   <div className="flex gap-4 items-start">
@@ -422,7 +544,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
             </div>
 
             {/* add comment */}
-            <div className="absolute bottom-4 left-6">
+            <div className="">
               <div className="flex gap-4 items-start">
                 <div className="w-10 h-10">
                   <RxAvatar className="w-10 h-10" />
@@ -440,10 +562,46 @@ const TaskDetail = ({ item, event, checkManager }) => {
             </div>
           </div>
           {/* Save */}
-          <button onClick={UPdateTaskHandle}
-            className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10">
+          <button
+            onClick={UPdateTaskHandle}
+            className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10"
+          >
             Complete
           </button>
+
+          {/* add report */}
+
+          <div className="flex gap-4 items-end w-1/2 absolute bottom-0 left-4 ">
+            <div className="w-10 h-10">
+              <RxAvatar className="w-10 h-10" />
+            </div>
+            <div className="w-full">
+              {file && (
+                <p className=" text-gray-600 px-4">
+                  File: <strong>{file.name}</strong>
+                </p>
+              )}
+              <div className="w-full  rounded-lg flex bg-gray-200">
+                <label className="flex items-center justify-center w-10 h-10  bg-transparent rounded-md cursor-pointer hover:bg-gray-400">
+                  <IoMdAttach className="text-2xl" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+                <textarea
+                  value={reportText}
+                  className=" p-2  h-10 w-full max-h-36 break-words break-all bg-transparent focus:outline-none"
+                  placeholder="Report"
+                  onChange={(e) => {
+                    setReportText(e.target.value);
+                  }}
+                  onKeyDown={handleReport}
+                ></textarea>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

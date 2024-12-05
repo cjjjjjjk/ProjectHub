@@ -38,8 +38,8 @@ app.use("/project-joineds", joinProjectRouter);
 const taskRouter = require("./routes/tasks");
 app.use("/tasks", taskRouter);
 
-const requestRouter = require("./routes/join_requests")
-app.use("/requests", requestRouter)
+const requestRouter = require("./routes/join_requests");
+app.use("/requests", requestRouter);
 
-const AI_suggestRouter = require("./routes/AI_suggest")
-app.use("/AI_suggest", AI_suggestRouter)
+// const AI_suggestRouter = require("./routes/AI_suggest")
+// app.use("/AI_suggest", AI_suggestRouter)
