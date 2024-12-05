@@ -172,9 +172,9 @@ function Project() {
                     Other Project
                   </h1>
                 </div>
-                <div className="grid grid-cols-3 grid-auto-rows-auto gap-y-10 gap-x-5 pb-4">
+                <div className="grid grid-cols-3 grid-auto-rows-auto gap-y-10 gap-x-5 pb-4 ">
                   {data.map((item) => (
-                    <div className="">
+                    <div className="otherCard">
                       <ProjectCard
                         name={item.name}
                         description={item.description}
