@@ -1,8 +1,7 @@
 import React, { useState, useRef } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { DatePicker, Select } from "antd";
+import { DatePicker, Select, Modal } from "antd";
 import dayjs from "dayjs";
-import { IoMdAttach } from "react-icons/io";
 import {
   FaCheck,
   FaLessThanEqual,
@@ -11,9 +10,9 @@ import {
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { useEffect } from "react";
-
-const TaskDetail = ({ item, event, checkManager }) => {
-  // Danh sach comment, dung luon cho ca report cua task tu backend
+import ReportCard from "./Report";
+const TaskDetail = ({ item, checkManager, close, isOpen }) => {
+  // Danh sach comment cua task tu backend
   const commentFromBackend = [
     {
       id: 1,
@@ -22,8 +21,6 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
-      description: "None",
-      attachment: "NOne",
     },
     {
       id: 2,
@@ -31,8 +28,6 @@ const TaskDetail = ({ item, event, checkManager }) => {
       user_id: 3,
       comment: "vlluon",
       name: "Nguyen Xuan Truong",
-      description: "None",
-      attachment: "NOne",
     },
     {
       id: 3,
@@ -40,8 +35,6 @@ const TaskDetail = ({ item, event, checkManager }) => {
       user_id: 2,
       comment: "abcxyz",
       name: "Nguyen Xuan Truong",
-      description: "None",
-      attachment: "NOne",
     },
     {
       id: 1,
@@ -50,8 +43,6 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
-      description: "None",
-      attachment: "NOne",
     },
     {
       id: 1,
@@ -60,58 +51,91 @@ const TaskDetail = ({ item, event, checkManager }) => {
       comment:
         "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
       name: "Nguyen Xuan Truong",
-      description: "None",
-      attachment: "NOne",
+    },
+  ];
+  const dummyData = [
+    {
+      username: "Achootrain",
+      avatar: "https://i.imgur.com/VAhQIqV.png",
+      description:
+        "Project manager overseeing multiple teams for successful project execution.",
+      label: "Project Manager",
+    },
+    {
+      username: "Hai",
+      avatar: "https://i.imgur.com/btiIFHP.png",
+      description:
+        "Senior software developer with expertise in backend systems and cloud computing.",
+      label: "Senior Developer",
+    },
+    {
+      username: "Truong",
+      avatar: "https://i.imgur.com/aJKfWLf.png",
+      description:
+        "Data analyst focusing on extracting insights from complex datasets to guide business decisions.",
+      label: "Data Analyst",
+    },
+    {
+      username: "Viet",
+      avatar: "https://i.imgur.com/padyuTG.png",
+      description:
+        "Quality assurance specialist dedicated to ensuring product excellence and reliability.",
+      label: "QA Specialist",
+    },
+    {
+      username: "Tuan",
+      avatar: "https://i.imgur.com/Sb3bqmw.png",
+      description:
+        "UI/UX designer crafting intuitive user experiences and engaging interfaces.",
+      label: "UI/UX Designer",
+    },
+    {
+      username: "Hieu",
+      avatar: "https://i.imgur.com/Aoja6dx.png",
+      description:
+        "IT support specialist ensuring smooth operations and resolving technical issues efficiently.",
+      label: "IT Support Specialist",
     },
   ];
 
-  const [name, setName] = useState(item.name);
-  const [description, setDescription] = useState(item.description);
-  const [startDate, setStartDate] = useState(item.start_date);
-  const [endDate, setEndDate] = useState(item.end_date);
-  const [priority, setPriority] = useState(item.priority);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [priority, setPriority] = useState("");
+  const [inputName, setInputName] = useState("");
+  const token = sessionStorage.getItem("token");
 
-  const [inputName, setInputName] = useState(name);
-  const [inputDescription, setInputDescription] = useState(description);
+  const fetchTaskDetail = async function () {
+    try {
+      const fetchTaskDetail_res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/tasks/find`,
+        {
+          headers: {
+            token,
+          },
+          params: {
+            task_id: item.task_id,
+          },
+        }
+      );
+      setName(fetchTaskDetail_res.data.name);
+      setDescription(fetchTaskDetail_res.data.description);
+      setStartDate(fetchTaskDetail_res.data.start_date);
+      setEndDate(fetchTaskDetail_res.data.end_date);
+      setPriority(fetchTaskDetail_res.data.priority);
+      setInputName(fetchTaskDetail_res.data.name);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const [showDescription, setShowDescription] = useState(() => {
     if (description === null || description === "") return false;
     else return true;
   });
-  const [showName, setShowName] = useState(() => {
-    if (name === null || name === "") return false;
-    else return true;
-  });
+  const [showName, setShowName] = useState(false);
   const inputRef = useRef(null);
-
-  //File dc chon
-  const [file, setFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-  const [reportList, setReportList] = useState(commentFromBackend);
-  const [reportText, setReportText] = useState("");
-  const handleReport = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      // Kiểm tra nếu nhấn Enter (không Shift)
-      e.preventDefault(); // Ngăn xuống dòng trong textarea
-      if (reportText.trim()) {
-        const newReport = {
-          id: 1,
-          task_id: item.id,
-          user_id: 1,
-          attachment: file ? file.name : null,
-          description: reportText.trim(),
-          name: "Nguyen Xuan Truong",
-        };
-
-        setReportList([...reportList, newReport]); // Thêm nội dung vào mảng
-        setReportText(""); // Xóa nội dung trong textarea
-        setFile(null);
-      }
-    }
-  };
 
   // Nhap comment
   const [commentList, setCommentList] = useState(commentFromBackend);
@@ -135,11 +159,11 @@ const TaskDetail = ({ item, event, checkManager }) => {
     }
   };
   // Cal api : Update task==================================== author : Hai
-  const token = sessionStorage.getItem("token");
+
   const UPdateTaskHandle = async () => {
     const updated_task = {
       name,
-      description,
+      description: description,
       start_date: startDate,
       end_date: endDate,
       priority,
@@ -158,7 +182,8 @@ const TaskDetail = ({ item, event, checkManager }) => {
           },
         }
       );
-      console.log(updateTask_rs);
+
+      close();
     } catch (ere) {
       console.log(ere);
     }
@@ -185,9 +210,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
       console.log(err);
     }
   };
-  useEffect(() => {
-    FetchParticipants();
-  }, []);
+
   // =========================================================================
   // assign task <manager only > ---------------------------------------------
   const [assignMap, setAsignMap] = useState([]);
@@ -242,6 +265,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
   };
   // =========================================================================
   const [taskmemberList, setTaskmemberList] = useState([]);
+  const [isFetched, setIsFetched] = useState(false);
   const peopleList = joinedFromBackend.map((obj) => {
     return { value: obj.name, label: obj.name, id: obj.id };
   });
@@ -263,32 +287,38 @@ const TaskDetail = ({ item, event, checkManager }) => {
         (assign) => assign.user_id
       );
       setTaskmemberList(member_id_List);
+      setIsFetched(true);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
+    fetchTaskDetail();
+    FetchParticipants();
     fetMemberTask();
   }, []);
   // -------------------------------------------------------------------------
 
   return (
-    <div className="h-screen w-screen fixed top-0 left-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center">
-      <div className="h-[90vh] w-[75vw] min-h-96 rounded-3xl bg-neutral-50">
-        {/* Title */}
-        <div className="p-2 flex justify-between bg-gradient-to-r from-purple-800 via-blue-600 to-purple-400 overflow-hidden rounded-t-3xl">
-          <div className="p-2 flex items-center justify-center">
-            <h2 className="font-bold text-2xl text-white">Task Detail</h2>
-          </div>
-          <div className="p-2">
-            <button onClick={event}>
-              <IoCloseOutline className="text-3xl font-bold text-gray-950 cursor-pointer" />
-            </button>
-          </div>
+    <Modal
+      open={isOpen && isFetched}
+      onCancel={close}
+      title={
+        <div className="flex flex-row gap-x-2">
+          <img
+            className="h-10 w-10"
+            src="https://i.imgur.com/SKi1VSu.png"
+          ></img>
+          <div className="text-xl pt-2">Task detail</div>
         </div>
-
-        <div className="flex h-5/6 relative">
-          <div className="w-2/3 h-5/6  overflow-y-auto no-scrollbar px-6 py-4 ">
+      }
+      width={1000}
+      footer={null}
+      style={{ top: "30px" }} // Aligns the modal to the top of the viewport
+    >
+      <div className="flex flex-row pl-6">
+        <div className="flex h-5/6 flex-col w-2/3">
+          <div className=" h-full  overflow-y-auto no-scrollbar px-6 py-4 ">
             {/* Name task*/}
             {!checkManager && (
               <div className=" w-full min-h-10 max-h-[20vh] overflow-y-auto no-scrollbar text-left ">
@@ -298,7 +328,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
 
             {showName && checkManager && (
               <button
-                className=" w-full min-h-10 max-h-[20vh] overflow-y-auto no-scrollbar text-left hover:bg-gray-200"
+                className="rounded-md text-left hover:bg-gray-200"
                 onClick={() => {
                   setShowName(!showName);
                   setTimeout(() => {
@@ -332,7 +362,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
                     <FaCheck />
                   </button>
                   <button
-                    className="p-2   border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
+                    className="p-2  border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
                     onClick={() => setShowName(true)}
                   >
                     <IoCloseOutline />
@@ -342,12 +372,12 @@ const TaskDetail = ({ item, event, checkManager }) => {
             )}
 
             {/* Description */}
-            <div className="mt-8">
+            <div className="mt-2">
               <h3 className="font-semibold text-black">Description</h3>
 
               {!checkManager && (
-                <div className="w-5/6 mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar border-2 rounded-lg">
-                  <p className="w-full text-left">{description}</p>
+                <div className=" mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar border-2 rounded-lg">
+                  <p className="w-full text-left ">{description}</p>
                 </div>
               )}
 
@@ -356,7 +386,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
                   className="w-5/6 mt-1  flex justify-start items-start min-h-20 max-h-[30vh] overflow-y-auto no-scrollbar hover:bg-gray-200 border-2 rounded-lg"
                   onClick={() => setShowDescription(!showDescription)}
                 >
-                  <p className="w-full text-left">{description}</p>
+                  <p className="w-full p-2 text-left">{description}</p>
                 </button>
               )}
               {!showDescription && checkManager && (
@@ -369,25 +399,9 @@ const TaskDetail = ({ item, event, checkManager }) => {
                         : ""
                     }
                     defaultValue={description || ""}
-                    onChange={(e) => setInputDescription(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
-                  <div>
-                    <button
-                      className="p-2 w-20 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
-                      onClick={() => {
-                        setShowDescription(true);
-                        setDescription(inputDescription);
-                      }}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="p-2 ml-4 w-20 border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
-                      onClick={() => setShowDescription(true)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <div></div>
                 </div>
               )}
             </div>
@@ -405,6 +419,7 @@ const TaskDetail = ({ item, event, checkManager }) => {
                     setStartDate(value.toDate());
                   }}
                   disabled={!checkManager}
+                  allowClear={false} //
                 />
               </div>
 
@@ -419,13 +434,15 @@ const TaskDetail = ({ item, event, checkManager }) => {
                     setEndDate(value.toDate());
                   }}
                   disabled={!checkManager}
+                  allowClear={false} //
                 />
               </div>
             </div>
 
-            {/* Priority */}
-            <div className="flex gap-12 mt-5">
-              <div className="w-36">
+            {/* State */}
+            <div className="flex mt-5 flex-row gap-x-12">
+              {/* Priority */}
+              <div className="w-1/4">
                 <h3 className="font-semibold text-black">Priority</h3>
                 <Select
                   defaultValue={priority !== null ? priority : ""}
@@ -441,170 +458,134 @@ const TaskDetail = ({ item, event, checkManager }) => {
                   }}
                   disabled={!checkManager}
                 >
-                  <Select.Option value="1">1</Select.Option>
-                  <Select.Option value="2">2</Select.Option>
-                  <Select.Option value="3">3</Select.Option>
+                  <Select.Option value="1">
+                    <div className="text-red-500">Critical</div>{" "}
+                  </Select.Option>
+                  <Select.Option value="2">
+                    <div className="text-yellow-500">Important</div>{" "}
+                  </Select.Option>
+                  <Select.Option value="3">
+                    <div className="text-green-500">Normal</div>{" "}
+                  </Select.Option>
                 </Select>
               </div>
-            </div>
-            {/* Report */}
-            <div className="mt-10  border-gray-300">
-              <h3 className="font-semibold text-black">Report</h3>
-              <div className="  pt-4  w-full  overflow-y-auto flex flex-col gap-4">
-                {reportList.map((obj) => {
-                  return (
-                    <div className="flex gap-4 items-start">
-                      <div className="w-10 h-10">
-                        <RxAvatar className="w-10 h-10" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold my-1">{obj.name}</h3>
-                        <div className="bg-gray-200 p-2 rounded-lg min-w-full max-w-full break-words break-all">
-                          <p>
-                            {obj.attachment && (
-                              <p>
-                                File: <strong>{obj.attachment}</strong>
-                              </p>
+              <div className="flex flex-col gap-y-1">
+                <div className="flex justify-start">
+                  <h3 className="font-semibold">
+                    {checkManager ? "Assignee" : "Task members"}
+                  </h3>
+                </div>
+                <div className="flex flex-row gap-x-2 ">
+                  <div className="flex flex-col items-start max-h-16 overflow-y-auto">
+                    {peopleList.map((person) => {
+                      if (!(checkManager || taskmemberList.includes(person.id)))
+                        return <></>;
+                      else
+                        return (
+                          <div
+                            key={person.id}
+                            className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center"
+                          >
+                            {checkManager && (
+                              <input
+                                id={`${person.id}`}
+                                type="checkbox"
+                                onChange={(e) => {
+                                  handleAssignmap(person.id, e.target.checked);
+                                }}
+                                defaultChecked={taskmemberList.includes(
+                                  person.id
+                                )}
+                              />
                             )}
-                          </p>
-                          <p>{obj.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                            <label
+                              htmlFor={`${person.id}`}
+                              className="font-semibold ml-[0.5rem] whitespace-nowrap"
+                            >
+                              {person.value}
+                            </label>
+                          </div>
+                        );
+                    })}
+                  </div>
+                  {checkManager && (
+                    <button
+                      onClick={SaveAssign_handle}
+                      className=" text-center bg-green-500 hover:bg-green-800 rounded-md p-1 text-white font-semibold h-8 mt-1 "
+                    >
+                      Save
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="w-1/3 h-full  overflow-y-auto no-scrollbar px-6 py-4 border-l-2 mt-4 bg-gray-100 rounded-b-md">
-            {/*Assignee */}
-            <div className="flex flex-col max-h-1/2 overflow-y-auto w-full">
-              <div className="flex justify-start">
-                <h3 className="font-semibold">
-                  {checkManager ? "Assignee" : "Task members"}
-                </h3>
+          <div className="ml-6 py-2 font-bold text-xl">Comment</div>
+          <div className=" ml-6 bg-gray-100 rounded-lg w-5/6 h-1/2">
+            <div className="p-6 border-gray-300 overflow-y-scroll flex flex-col gap-4 max-h-36">
+              {/* Add Comment */}
+              <div className="">
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10">
+                    <RxAvatar className="w-10 h-10" />
+                  </div>
+                  <textarea
+                    value={text}
+                    className="bg-gray-200 p-2 rounded-lg w-full break-words"
+                    placeholder="Write a comment..."
+                    onChange={(e) => setText(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  ></textarea>
+                </div>
               </div>
-              <div className="flex flex-col items-start">
-                {peopleList.map((person) => {
-                  if (!(checkManager || taskmemberList.includes(person.id)))
-                    return <></>;
-                  else
-                    return (
-                      <div
-                        key={person.id}
-                        className="mt-[0.3rem] px-[0.5rem] h-[2rem] w-[70%] min-w-[12rem] bg-gray-200 rounded-lg flex items-center"
-                      >
-                        {checkManager && (
-                          <input
-                            id={`${person.id}`}
-                            type="checkbox"
-                            onChange={(e) => {
-                              handleAssignmap(person.id, e.target.checked);
-                            }}
-                            defaultChecked={taskmemberList.includes(person.id)}
-                          />
-                        )}
-                        <label
-                          htmlFor={`${person.id}`}
-                          className="font-semibold ml-[0.5rem] whitespace-nowrap"
-                        >
-                          {person.value}
-                        </label>
-                      </div>
-                    );
-                })}
-                {checkManager && (
-                  <button
-                    onClick={SaveAssign_handle}
-                    className="mt-[1rem] h-[2rem] text-center bg-green-300 hover:bg-green-500 rounded-full w-auto px-[1rem] font-semibold "
-                  >
-                    Save
-                  </button>
-                )}
-              </div>
-            </div>
-            {/* Comment */}
-            <div className="my-[1rem] border-t-2 pt-4 border-gray-300 w-80 h-2/3 overflow-y-auto flex flex-col gap-4">
-              {commentList.map((obj) => {
-                return (
-                  <div className="flex gap-4 items-start">
-                    <div className="w-10 h-10">
-                      <RxAvatar className="w-10 h-10" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold my-1">{obj.name}</h3>
-                      <div className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all">
-                        {obj.comment}
-                      </div>
+              {/* Comment List */}
+              {commentList.map((obj, index) => (
+                <div key={index} className="flex gap-4 items-start">
+                  <div className="w-10 h-10">
+                    <RxAvatar className="w-10 h-10" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold my-1">{obj.name}</h3>
+                    <div className="bg-gray-200 p-2 rounded-lg w-full break-words">
+                      {obj.comment}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-
-            {/* add comment */}
-            <div className="">
-              <div className="flex gap-4 items-start">
-                <div className="w-10 h-10">
-                  <RxAvatar className="w-10 h-10" />
                 </div>
-                <textarea
-                  value={text}
-                  className="bg-gray-200 p-2 rounded-lg min-w-56 max-w-56 break-words break-all"
-                  placeholder="Comment"
-                  onChange={(e) => {
-                    setText(e.target.value);
-                  }}
-                  onKeyDown={handleKeyDown}
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          {/* Save */}
-          <button
-            onClick={UPdateTaskHandle}
-            className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500  absolute bottom-0 right-1/3 mr-10"
-          >
-            Complete
-          </button>
-
-          {/* add report */}
-
-          <div className="flex gap-4 items-end w-1/2 absolute bottom-0 left-4 ">
-            <div className="w-10 h-10">
-              <RxAvatar className="w-10 h-10" />
-            </div>
-            <div className="w-full">
-              {file && (
-                <p className=" text-gray-600 px-4">
-                  File: <strong>{file.name}</strong>
-                </p>
-              )}
-              <div className="w-full  rounded-lg flex bg-gray-200">
-                <label className="flex items-center justify-center w-10 h-10  bg-transparent rounded-md cursor-pointer hover:bg-gray-400">
-                  <IoMdAttach className="text-2xl" />
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </label>
-                <textarea
-                  value={reportText}
-                  className=" p-2  h-10 w-full max-h-36 break-words break-all bg-transparent focus:outline-none"
-                  placeholder="Report"
-                  onChange={(e) => {
-                    setReportText(e.target.value);
-                  }}
-                  onKeyDown={handleReport}
-                ></textarea>
-              </div>
+              ))}
             </div>
           </div>
         </div>
+        <div className="flex flex-col  w-1/3 p-6 border-2">
+          <div className="flex flex-row gap-x-2">
+            <img
+              className="h-10 w-10"
+              src="https://i.imgur.com/6cuneNd.png"
+            ></img>
+            <div className="font-bold text-lg">Report</div>
+          </div>
+          <div className=" flex flex-col gap-y-4 overflow-x-auto h-[500px] pt-4">
+            {dummyData.map((data, index) => (
+              <ReportCard
+                key={index}
+                username={data.username}
+                avatar={data.avatar}
+                description={data.description}
+                label={data.label}
+              />
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+      <div className="flex justify-end mt-2">
+        <button
+          onClick={UPdateTaskHandle}
+          className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
+        >
+          Complete
+        </button>
+      </div>
+    </Modal>
   );
 };
 

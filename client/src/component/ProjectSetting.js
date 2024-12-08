@@ -183,7 +183,7 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
           <div className="flex justify-center p-4 px-10">
             <button
               className="p-2 w-20 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
-              onClick={() => { }}
+              onClick={handleUpdate}
             >
               Save
             </button>

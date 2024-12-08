@@ -89,7 +89,7 @@ function Project() {
     setShowCreate(!showCreate);
   };
   const handleShowJoin = () => {
-    setShowJoin(!showJoin);
+    setShowJoin(true);
   };
   return (
     <div>
@@ -121,7 +121,6 @@ function Project() {
                     <button className="w-24  text-white bg-gradient-to-tr from-blue-700 via-indigo-700 to-purple-500 rounded-md"
                       onClick={handleShowJoin}
                     >
-                      {" "}
                       Join Project
                     </button>
                   </div>
@@ -202,7 +201,7 @@ function Project() {
       )}
       {showJoin && (
         <div>
-          <JoinTeam event={handleShowJoin} />
+          <JoinTeam event={()=>setShowJoin(false)} />
         </div>
       )}
     </div>

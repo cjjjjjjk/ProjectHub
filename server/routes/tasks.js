@@ -149,6 +149,23 @@ router.delete('/delete-task', validateToken, async (req, res) => {
     user_id: 
 }
 */
+router.get('/find',validateToken,async (req, res) => {
+    const { task_id } = req.query
+    try {
+        const task = await Tasks.findByPk(task_id)
+        if (!task) {
+            const err = new Error(`Server: Task with id:${task_id}is not exist !`);
+            err.status = 400;
+            throw err;
+        }
+        return res.json(task)
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            message: err.message
+        });
+    }
+})
+
 router.post('/assign-task', validateToken, async (req, res) => {
     const { task_id, user_id } = req.body
     const manager_id = req.user['user'].id;
@@ -170,25 +187,14 @@ router.post('/assign-task', validateToken, async (req, res) => {
             }
         })
         if (!manager_Joined) {
-            const err = new Error(`Server: Logined user does not as MANAGER in project with ID: ${project_id}, maybe project with this id isnot exist`);
+            const err = new Error(`Server: Logined user is not MANAGER in project with ID: ${project_id}, maybe project with this id isnot exist`);
             err.status = 400;
             throw err;
         }
         //----------------------------------------------
 
         // check isJoiner ------------------------------
-        const joiner_Joined = await ProjectJoineds.findOne({
-            where: {
-                project_id: project_id,
-                participant_id: user_id,
-                isManager: false
-            }
-        })
-        if (!joiner_Joined) {
-            const err = new Error(`User<id:${user_id}> is not in this project<id:${project_id}> as a member <not manager>`);
-            err.status = 400;
-            throw err;
-        }
+        
         // ---------------------------------------------
 
         // check isExist -------------------------------
@@ -299,5 +305,6 @@ router.put('/update', validateToken, async function (req, res) {
         });
     }
 })
+
 
 module.exports = router

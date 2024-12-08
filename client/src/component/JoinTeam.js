@@ -27,6 +27,7 @@ const JoinTeam = ({ event }) => {
     const handleSubmit = () => {
         CallAPI_joinProject()
         console.log(`Join code submitted: ${joinCode}`);
+        event();
     };
 
     return (
