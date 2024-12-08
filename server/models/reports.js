@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    label: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     attachment: {
       type: DataTypes.STRING,
       allowNull: true,

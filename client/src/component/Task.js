@@ -94,7 +94,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
                 {/* Button */}
               </div>
               <div className="pb-2 pr-1 flex justify-between items-center w-full">
-                <div className="flex flex-col text-xs">
+                <div className="flex flex-row text-xs gap-x-2">
                   <p>
                     <span className="">
                       {new Date(item.start_date)
@@ -102,9 +102,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
                           day: "2-digit",
                           month: "2-digit",
                           year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
+                         
                         })
                         .replace(",", "")}
                     </span>
@@ -117,9 +115,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: false,
+
                             })
                             .replace(",", "")
                         : ""}
@@ -143,9 +139,11 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
       {openTaskDetail && (
         <TaskDetail
           item={item}
-          event={(e) => {
+         
+          close={() => {
             setOpenTaskDetail(false);
           }}
+          isOpen={openTaskDetail}
           checkManager={checkManager}
         />
       )}

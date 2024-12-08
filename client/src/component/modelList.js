@@ -22,7 +22,8 @@ const modelList = [
     image1: Kanban1,
     inform2: "Use the board to limit work in progress",
     image2: Kanban2,
-    workflow: ["To do", "In progress", " Done"],
+    workflow: ['Backlog','To do', 'In Progress','Review' ,'Done'],
+   
     recommend: [
       "Teams that control work volume from a backlog",
       "DevOps teams that want to connect work across their tools",
@@ -40,7 +41,7 @@ const modelList = [
     inform2: "Organize cycles of work into sprints",
     image1: Scrum1,
     image2: Scrum2,
-    workflow: ['Backlog','To do', 'In Progress','Review' ,'Done'],
+    workflow: ["To do", "In progress", " Done"],
     recommend: [
       "Teams that deliver work on a regular cadence",
       "DevOps teams that want to connect work across their tools",
