@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {RandomAva} from "../component/RandomAva";
 import axios from "axios";
 function Register() {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ function Register() {
   // Handle register ===================== author: Hai
   const handleRegister = async (e) => {
     e.preventDefault();
-    const newAccount = { name: fullName, username, email, password };
+    const newAccount = { name: fullName, username, email, password, avatar: RandomAva() };
 
     try {
       if (newAccount.name.trim() === "")

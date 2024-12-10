@@ -11,7 +11,7 @@ import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { useEffect } from "react";
 import ReportCard from "./Report";
-const TaskDetail = ({ item, checkManager, close, isOpen }) => {
+const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
   // Danh sach comment cua task tu backend
   const commentFromBackend = [
     {
@@ -182,7 +182,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen }) => {
           },
         }
       );
-
+      update1();
       close();
     } catch (ere) {
       console.log(ere);

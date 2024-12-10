@@ -4,7 +4,7 @@ import { useState } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import TaskDetail from "./TaskDetail";
 
-const Task = ({ item, index, deleteTask, checkManager }) => {
+const Task = ({ item, index, deleteTask, checkManager,update }) => {
   const [openTaskDetail, setOpenTaskDetail] = useState(false);
 
   const moreOptions = [
@@ -54,6 +54,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
       return "Normal";
     }
   };
+ 
   return (
     <div>
       <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -63,7 +64,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <div className="w-64 pl-4 pt-3 rounded-lg bg-slate-200 shadow-sm cursor-pointer text-left">
+            <div className="w-64 pl-4 pt-3 rounded-lg bg-white shadow-sm cursor-pointer text-left">
               <div className="flex flex-row">
                 <div
                   className={`text-xs rounded-r-md  pl-1 w-1/3 text-white ${getPriority(
@@ -145,6 +146,8 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
           }}
           isOpen={openTaskDetail}
           checkManager={checkManager}
+          update1={update}
+          
         />
       )}
     </div>

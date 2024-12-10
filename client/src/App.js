@@ -55,8 +55,8 @@ const MainLayout = () => {
   return (
     <div
       className={`${
-        isHomePage && "bg-custom-pattern bg-cover bg-no-repeat"
-      } flex flex-col h-screen w-screen`}
+        isHomePage && "bg-custom-pattern bg-cover bg-no-repeat h-screen w-screen"
+      } flex flex-col `}
     >
       <nav className={`${isHomePage ? "" : " border-y-2 border-gray-200"}`}>
         <Drawer
@@ -106,7 +106,7 @@ const MainLayout = () => {
           </div>
         </Drawer>
 
-        <div className="max-w-screen-xl flex items-center p-4 justify-between mx-auto ">
+        <div className="max-w-screen flex items-center py-2 justify-between mx-auto ">
           <div className="flex flex-row gap-2 justify-center">
             <button
               onClick={() => {
@@ -134,18 +134,7 @@ const MainLayout = () => {
           </div>
 
           {/* Search bar */}
-          {!isHomePage && (
-            <div className=" flex items-center bg-blue-100 rounded-full">
-              <button className="h-10 w-10 p-2 bg-blue-300 rounded-full">
-                <FaSearch />
-              </button>
-              <input
-                type="text"
-                className=" h-10 w-[35vw] px-4 rounded-full bg-transparent text-lg border-0 focus:outline-none"
-                placeholder="Search"
-              ></input>
-            </div>
-          )}
+         
 
           <div className="flex flex-row gap-4 justify-center font-medium text-lg items-center">
             <NavLink

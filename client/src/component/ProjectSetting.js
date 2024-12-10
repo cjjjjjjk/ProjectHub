@@ -84,12 +84,12 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
 
 
   return (
-    <div className="h-full w-full overflow-y-auto flex gap-10">
-      <div className="h-full w-3/5">
+    <div className="flex flex-row gap-x-2">
+      <div className="w-3/5">
         <div className="p-4">
           <h1 className="text-xl font-bold">Setting</h1>
         </div>
-        <div className="p-4 mt-10 w-full">
+        <div className="">
           <Form
             labelCol={{
               span: 6,
@@ -193,7 +193,7 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
           </div>
         )}
       </div>
-      <div className="h-full w-2/5 p-4 border-l-2 bg-gray-50 flex flex-col gap-5">
+      <div className="p-4 border-l-2 w-1/2 bg-gray-50 flex flex-col ">
         {/* nhung nguoi tham gia */}
         <div className="h-1/2 border-b-2 flex flex-col gap-2">
           <h3 className="font-semibold text-xl">Participant</h3>
@@ -218,7 +218,7 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
                         <RxAvatar className="w-10 h-10" />
                       </div>
                       <div>
-                        <h3 className=" my-1">{obj.name}</h3>
+                        <h3 className=" ">{obj.name}</h3>
                       </div>
                     </div>
                   </Dropdown>
@@ -229,27 +229,27 @@ const ProjectSetting = ({ checkManager, id, project_data }) => {
         </div>
 
         {/* Request */}
-        <div className="h-2/5  flex flex-col gap-2 ">
+        <div className=" flex flex-col gap-2 ">
           <h3 className="font-semibold text-xl">Request</h3>
-          <div className="h-4/5 overflow-y-auto flex flex-col gap-2 ">
+          <div className="overflow-y-auto flex flex-col gap-2 ">
             {request_List.map((obj) => {
               return (
-                <div className="flex  items-center hover:bg-slate-100 justify-between">
+                <div className="flex items-center hover:bg-slate-100 justify-between">
                   <div className="flex gap-4">
-                    <div className="w-10 h-10">
+                    <div className="">
                       <RxAvatar className="w-10 h-10" />
                     </div>
                     <div>
-                      <h3 className=" my-1">{obj.name}</h3>
+                      <h3 className="">{obj.name}</h3>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="p-2  border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
+                    <button className=" border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 "
                       onClick={() => { HandleUpdateRequest("Accepted", obj.request_id); handleUpdate() }}>
                       <FaCheck />
                     </button>
 
-                    <button className="p-2   border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
+                    <button className="border-2 bg-gray-100  text-black rounded-xl hover:shadow-lg hover:shadow-gray-500 "
                       onClick={() => { HandleUpdateRequest("Rejected", obj.request_id); handleUpdate() }}>
                       <IoCloseOutline />
                     </button>
