@@ -6,57 +6,7 @@ import axios from 'axios';
 
 dayjs.extend(isBetween);
 
-const datatask = [
-  {
-    start_date: "2024-11-10T09:00:00",
-    end_date: "2024-11-14T13:00:00",
-    task: "Team Meeting",
-    description: "Discuss project updates and next steps.",
-    priority: "high",
-  },
-  {
-    start_date: "2024-11-12T14:00:00",
-    end_date: "2024-11-18T18:00:00",
-    task: "Design Review",
-    description: "Review the new design prototypes with the team.",
-    priority: "medium",
-  },
-  {
-    start_date: "2024-11-08T10:00:00",
-    end_date: "2024-11-15T14:00:00",
-    task: "Client Call",
-    description: "Call with the client to discuss requirements.",
-    priority: "low",
-  },
-  {
-    start_date: "2024-11-15T13:00:00",
-    end_date: "2024-11-18T17:00:00",
-    task: "Sprint Planning",
-    description: "Plan the tasks for the next sprint.",
-    priority: "high",
-  },
-  {
-    start_date: "2024-11-07T09:00:00",
-    end_date: "2024-11-13T12:00:00",
-    task: "Weekly Standup",
-    description: "Team standup meeting to discuss ongoing tasks.",
-    priority: "medium",
-  },
-  {
-    start_date: "2024-11-20T08:00:00",
-    end_date: "2024-11-23T10:00:00",
-    task: "Team Check-in",
-    description: "Brief check-in with the team to ensure progress.",
-    priority: "low",
-  },
-  {
-    start_date: "2024-11-18T14:30:00",
-    end_date: "2024-11-21T18:00:00",
-    task: "Sprint Review",
-    description: "Review the completed tasks from the sprint.",
-    priority: "high",
-  },
-];
+
 function Timeline({ project_id }) {
   const [tasks, setTasks] = useState([])
   const [filterButtonState, setFilterButtonState] = useState(0);
@@ -171,7 +121,7 @@ function Timeline({ project_id }) {
   };
 
   return (
-    <section className="h-[95%] w-full relative top-2 rounded-md border-2 border-gray-200">
+    <section className="h-[95%]  relative top-2 rounded-md border-2 border-gray-200">
       <Scheduler
         data={data} // Sử dụng state data thay vì filteredData  
         isLoading={false}

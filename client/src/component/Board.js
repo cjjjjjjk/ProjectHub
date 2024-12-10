@@ -291,7 +291,7 @@ const Board = ({ id, model, checkManager }) => {
         >
           {Object.entries(columns).map(([columnId, column], index) => {
             return (
-              <div className="flex flex-col w-72">
+              <div className="flex flex-col ">
                 {/* Tittle column */}
                 <div
                   className={`flex justify-center text-white items-center h-10   ${column.bg}`}

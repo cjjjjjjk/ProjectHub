@@ -81,7 +81,7 @@ function ProjectDetail() {
                 onClick={handleShowTask}
               >
                 <HiOutlineViewBoards className="text-2xl" />
-                <span>Task</span>
+                <span>Task Board</span>
               </button>
             </li>
             <li>
