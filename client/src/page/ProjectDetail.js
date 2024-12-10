@@ -55,6 +55,8 @@ function ProjectDetail() {
     setShowTimeLine(false);
     setShowSetting(true);
   };
+
+ 
   return (
     <div className="flex flex-row ">
       <div className="border-r-2 border-gray-300 flex flex-col w-1/5">
@@ -108,7 +110,7 @@ function ProjectDetail() {
         </div>
       </div>
 
-      <div className="w-[80vw] h-[89vh]">
+      <div className="w-[80vw]  h-[89vh]">
         {showTask && (
           <Board
             id={id}

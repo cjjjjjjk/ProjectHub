@@ -314,6 +314,7 @@ const Board = ({ id, model, checkManager }) => {
                             index={index}
                             deleteTask={deleteTask}
                             checkManager={checkManager}
+                            update={fetchTaskHandle}
                           />
                         ))}
                         {provided.placeholder}
