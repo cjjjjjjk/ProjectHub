@@ -80,7 +80,7 @@ function Profile() {
     <div className="flex h-screen">
       <div className="w-1/4 bg-gray-100 flex flex-col items-center p-6 border-r pt-12">
         <img
-          src="https://th.bing.com/th/id/OIP.te14DcGDGx0pREICZjuyfgHaHa?w=151&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+          src={userData.avatar?userData.avatar:"https://th.bing.com/th/id/OIP.te14DcGDGx0pREICZjuyfgHaHa?w=151&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"}
           alt="Avatar"
           className="w-28 h-28 rounded-full mb-4"
         />

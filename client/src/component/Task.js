@@ -63,7 +63,7 @@ const Task = ({ item, index, deleteTask, checkManager }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <div className="w-64 pl-4 pt-3 rounded-lg bg-slate-200 shadow-sm cursor-pointer text-left">
+            <div className="w-64 pl-4 pt-3 rounded-lg bg-white shadow-sm cursor-pointer text-left">
               <div className="flex flex-row">
                 <div
                   className={`text-xs rounded-r-md  pl-1 w-1/3 text-white ${getPriority(

@@ -41,7 +41,7 @@ router.post('/reset-password/:token', resetPassword)
 // POST: http://localhost:3001/api/users/sign-up
 router.post('/sign-up', async (req, res) => {
     try {
-        const { username, email, name, password } = req.body
+        const { username, email, name, password ,avatar} = req.body
         // hash password -------
         const hashpw = (password) ? await hashPassword(password) : null;
 
@@ -55,7 +55,7 @@ router.post('/sign-up', async (req, res) => {
             social_link: "",
             company: "",
             location: "",
-            avatar: ""
+            avatar: avatar
         })
         return res.json({ success: true, message: "User created successfully!", id: newUser.id });
 

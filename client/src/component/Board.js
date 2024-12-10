@@ -294,7 +294,7 @@ const Board = ({ id, model, checkManager }) => {
               <div className="flex flex-col w-72">
                 {/* Tittle column */}
                 <div
-                  className={`flex justify-center text-white items-center h-10 rounded-t-md border-2 border-b-0 ${column.bg}`}
+                  className={`flex justify-center text-white items-center h-10   ${column.bg}`}
                 >
                   <h2 className="text-xl font-bold"> {column.title}</h2>
                 </div>
@@ -305,7 +305,7 @@ const Board = ({ id, model, checkManager }) => {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="h-80 w-72 overflow-auto pt-3 flex flex-col gap-2 items-center border-2 border-t-0  rounded-b-md"
+                        className="h-80 w-72 overflow-auto pt-3 flex flex-col gap-2 items-center  bg-gray-100  "
                       >
                         {column.items.map((item, index) => (
                           <Task
