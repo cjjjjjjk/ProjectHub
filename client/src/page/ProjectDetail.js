@@ -3,12 +3,15 @@ import { RiTimelineView } from "react-icons/ri";
 import { HiOutlineViewBoards } from "react-icons/hi";
 import Kanban from "../asset/image/kanban.png";
 import { IoIosSettings } from "react-icons/io";
+import { AiFillDatabase } from "react-icons/ai";
+
 import { useEffect, useState } from "react";
 import Board from "../component/Board";
 import Timeline from "../component/Timeline";
 import ProjectSetting from "../component/ProjectSetting";
-
+import Manage from "../component/Manage";
 import axios from "axios";
+
 function ProjectDetail() {
   // CHeck manager
 
@@ -17,7 +20,10 @@ function ProjectDetail() {
   const [showTask, setShowTask] = useState(false);
   const [showTimeline, setShowTimeLine] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
+  const [showManage, setShowManage] = useState(false);
   const [project_data, setProjectData] = useState({});
+  const [tasks, setTasks] = useState([]);
+
   // fetch project ------------------------------ author: Hai
   const fetchCurentProject = async function () {
     const token = sessionStorage.getItem("token");
@@ -36,7 +42,21 @@ function ProjectDetail() {
       console.log(err);
     }
   };
+  const fetchTask = async function () {
+    const token = sessionStorage.getItem("token");
+    const res = await axios.get(`${process.env.REACT_APP_SERVER}/tasks/`, {
+      headers: {
+        token: `${token}`,
+      },
+      params: { project_id:id },
+    });
+    const task_fetched = res.data.tasks;
+    setTasks(task_fetched);
+  }
+
+
   useEffect(() => {
+    fetchTask();
     fetchCurentProject();
   }, []);
   // ----------------------------------------------------------
@@ -44,17 +64,26 @@ function ProjectDetail() {
     setShowTask(true);
     setShowTimeLine(false);
     setShowSetting(false);
+    setShowManage(false);
   };
   const handleShowTimeline = () => {
     setShowTask(false);
     setShowTimeLine(true);
     setShowSetting(false);
+    setShowManage(false);
   };
   const handleShowSetting = () => {
     setShowTask(false);
     setShowTimeLine(false);
     setShowSetting(true);
+    setShowManage(false);
   };
+  const handleShowManage = () => {
+    setShowTask(false);
+    setShowTimeLine(false);
+    setShowSetting(false);
+    setShowManage(true);
+  }
 
  
   return (
@@ -96,6 +125,16 @@ function ProjectDetail() {
                 <span>Timeline</span>
               </button>
             </li>
+            <div>
+            <button
+                className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showManage && "bg-blue-200"
+                  }`}
+                onClick={handleShowManage}
+              >
+                <AiFillDatabase className="text-2xl" />
+                <span>Manage</span>
+              </button>
+            </div>
             <li>
               <button
                 className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showSetting && "bg-blue-200"
@@ -106,6 +145,7 @@ function ProjectDetail() {
                 <span>Settings</span>
               </button>
             </li>
+           
           </ul>
         </div>
       </div>
@@ -120,6 +160,8 @@ function ProjectDetail() {
         )}
         {showTimeline && <Timeline project_id={id} />}
         {showSetting && <ProjectSetting checkManager={checkManager} id={id} project_data={project_data} />}
+        {showManage && <Manage task={tasks} model={project_data.model}/>}
+       
       </div>
     </div>
   );

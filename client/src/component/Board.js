@@ -29,7 +29,6 @@ const Board = ({ id, model, checkManager }) => {
       });
 
       const task_fetched = res.data.tasks;
-      console.log("tasks", task_fetched);
       setTasks(task_fetched);
 
       // Xử lý columns:-------------------------------------------------
@@ -263,7 +262,7 @@ const Board = ({ id, model, checkManager }) => {
           >
             Add Task
           </button>
-          <div className="flex flex-row gap-x-2 justify-end ">
+          <div className="flex flex-row pl-16 gap-x-2 justify-end ">
             <input
               type="text"
               className="rounded-md text-lg border-2 px-2 "
