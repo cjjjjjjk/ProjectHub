@@ -1,20 +1,7 @@
-// Not Started
-// Not Started
-// Not Started
 const express = require("express");
 const router = express.Router();
 const { TaskComments } = require("../models");
-
-// Lấy danh sách tất cả các bình luận
-router.get("/", async (_req, res) => {
-  try {
-    const comments = await TaskComments.findAll();
-    res.json(comments);
-  } catch (error) {
-    console.error("Error fetching comments: ", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+const { validateToken } = require('../middleware/auth')
 
 // Lấy một bình luận theo ID
 router.get("/:id", async (req, res) => {
@@ -33,18 +20,18 @@ router.get("/:id", async (req, res) => {
 });
 
 // Tạo một bình luận mới
-router.post("/", async (req, res) => {
-  const { task_id, user_id, comment } = req.body;
+router.post("/", validateToken, async (req, res) => {
+  const { task_id, comment } = req.body;
+  const user_id = req.user['user'].id
   try {
     const newComment = await TaskComments.create({
       task_id,
       user_id,
       comment,
     });
-    res.status(201).json(newComment);
+    return res.status(201).json(newComment);
   } catch (error) {
-    console.error("Error creating comment: ", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error });
   }
 });
 
