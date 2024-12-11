@@ -3,24 +3,23 @@ const router = express.Router();
 const { TaskComments, Users } = require("../models");
 const { validateToken } = require('../middleware/auth')
 
-// Lấy một bình luận theo ID
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
+// Get all comment from task with taskID --------- author: Hai
+router.get(`/comments-in-task`, async (req, res) => {
+  const { task_id } = req.query
   try {
-    const comment = await TaskComments.findByPk(id);
-    if (comment) {
-      res.json(comment);
-    } else {
-      res.status(404).json({ error: "Comment not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching comment: ", error);
-    res.status(500).json({ error: "Internal server error" });
+    const comments = await TaskComments.findAll({
+      where: {
+        task_id
+      }
+    })
+    return res.json({ success: true, comments })
+  } catch (err) {
+    return res.json({ success: false, commentList: [], err })
   }
-});
+})
 
 // Tạo một bình luận mới
-// update:Hai ------- 
+// update:Hai ------- return with username.
 router.post("/", validateToken, async (req, res) => {
   const { task_id, comment } = req.body;
   const user_id = req.user['user'].id
