@@ -12,47 +12,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import ReportCard from "./Report";
 const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
-  // Danh sach comment cua task tu backend
-  const commentFromBackend = [
-    {
-      id: 1,
-      task_id: 1,
-      user_id: 1,
-      comment:
-        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
-      name: "Nguyen Xuan Truong",
-    },
-    {
-      id: 2,
-      task_id: 1,
-      user_id: 3,
-      comment: "vlluon",
-      name: "Nguyen Xuan Truong",
-    },
-    {
-      id: 3,
-      task_id: 1,
-      user_id: 2,
-      comment: "abcxyz",
-      name: "Nguyen Xuan Truong",
-    },
-    {
-      id: 1,
-      task_id: 1,
-      user_id: 1,
-      comment:
-        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
-      name: "Nguyen Xuan Truong",
-    },
-    {
-      id: 1,
-      task_id: 1,
-      user_id: 1,
-      comment:
-        "ahihi sdFesfawefweahihis dFesfawefwe ahihisdFesf awefweahi hisdF esfawefwe",
-      name: "Nguyen Xuan Truong",
-    },
-  ];
   const dummyData = [
     {
       username: "Achootrain",
@@ -138,28 +97,37 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
   const inputRef = useRef(null);
 
   // Nhap comment
-  const [commentList, setCommentList] = useState(commentFromBackend);
+  const [commentList, setCommentList] = useState([]);
   const [text, setText] = useState("");
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       // Kiểm tra nếu nhấn Enter (không Shift)
       e.preventDefault(); // Ngăn xuống dòng trong textarea
       if (text.trim()) {
-        const newComment = {
-          id: 1,
-          task_id: item.id,
-          user_id: 1,
-          comment: text.trim(),
-          name: "Nguyen Xuan Truong",
-        };
-
-        setCommentList([...commentList, newComment]); // Thêm nội dung vào mảng
-        setText(""); // Xóa nội dung trong textarea
+        // create comment -------------- author: Hai
+        const token = sessionStorage.getItem("token");
+        try {
+          const addCmt_res = await axios.post(
+            `${process.env.REACT_APP_SERVER}/task_comments/`,
+            {
+              task_id: item.id,
+              comment: text.trim(),
+            },
+            {
+              headers: { token },
+            }
+          );
+          let newComment = addCmt_res.data;
+          // ------------------------------------------
+          setCommentList([...commentList, newComment]); // Thêm nội dung vào mảng
+          setText(""); // Xóa nội dung trong textarea
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
   };
   // Cal api : Update task==================================== author : Hai
-
   const UPdateTaskHandle = async () => {
     const updated_task = {
       name,
@@ -292,10 +260,26 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       console.log(err);
     }
   };
+  // fetch task commment -----------------------------------------------------
+  const fetchTaskComment = async function () {
+    try {
+      const fetchCMT_res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/task_comments/comments-in-task`,
+        {
+          params: { task_id: item.id },
+        }
+      );
+      setCommentList(fetchCMT_res.data.comments);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchTaskDetail();
     FetchParticipants();
     fetMemberTask();
+    fetchTaskComment();
   }, []);
   // -------------------------------------------------------------------------
 
@@ -522,8 +506,8 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
           </div>
 
           <div className="ml-6 py-2 font-bold text-xl">Comment</div>
-          <div className=" ml-6 bg-gray-100 rounded-lg w-5/6 h-1/2">
-            <div className="p-6 border-gray-300 overflow-y-scroll flex flex-col gap-4 max-h-36">
+          <div className=" ml-6 bg-gray-100 rounded-lg w-[90%]">
+            <div className="p-6 border-gray-300 overflow-y-scroll flex flex-col gap-4 max-h-40">
               {/* Add Comment */}
               <div className="">
                 <div className="flex gap-4 items-start">
@@ -532,7 +516,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   </div>
                   <textarea
                     value={text}
-                    className="bg-gray-200 p-2 rounded-lg w-full break-words"
+                    className="bg-gray-200 p-2 rounded-lg w-full break-words h-[2.5rem]"
                     placeholder="Write a comment..."
                     onChange={(e) => setText(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -546,7 +530,11 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                     <RxAvatar className="w-10 h-10" />
                   </div>
                   <div>
-                    <h3 className="font-semibold my-1">{obj.name}</h3>
+                    <h3 className="font-semibold my-1">
+                      {" "}
+                      {joinedFromBackend.find((item) => item.id == obj.user_id)
+                        ?.name || "Member"}
+                    </h3>
                     <div className="bg-gray-200 p-2 rounded-lg w-full break-words">
                       {obj.comment}
                     </div>
