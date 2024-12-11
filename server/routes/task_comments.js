@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { TaskComments } = require("../models");
+const { TaskComments, Users } = require("../models");
 const { validateToken } = require('../middleware/auth')
 
 // Lấy một bình luận theo ID
@@ -20,16 +20,18 @@ router.get("/:id", async (req, res) => {
 });
 
 // Tạo một bình luận mới
+// update:Hai ------- 
 router.post("/", validateToken, async (req, res) => {
   const { task_id, comment } = req.body;
   const user_id = req.user['user'].id
+  const user_name = req.user['user'].fullname
   try {
     const newComment = await TaskComments.create({
       task_id,
       user_id,
       comment,
     });
-    return res.status(201).json(newComment);
+    return res.status(201).json({ ...newComment.dataValues, name: user_name });
   } catch (error) {
     return res.status(500).json({ error });
   }

@@ -133,23 +133,17 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       // Kiểm tra nếu nhấn Enter (không Shift)
       e.preventDefault(); // Ngăn xuống dòng trong textarea
       if (text.trim()) {
-        const newComment = {
-          id: 1,
-          task_id: item.id,
-          comment: text.trim(),
-          name: "Nguyen Xuan Truong",
-        };
+        // create comment -------------- author: Hai
         const token = sessionStorage.getItem('token')
         try {
-
           const addCmt_res = await axios.post(`${process.env.REACT_APP_SERVER}/task_comments/`, {
             task_id: item.id,
             comment: text.trim()
           }, {
             headers: { token }
           })
-          console.log("Adding comment: ", addCmt_res)
-
+          let newComment = addCmt_res.data
+          // ------------------------------------------
           setCommentList([...commentList, newComment]); // Thêm nội dung vào mảng
           setText(""); // Xóa nội dung trong textarea
         } catch (err) {

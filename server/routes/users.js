@@ -41,7 +41,7 @@ router.post('/reset-password/:token', resetPassword)
 // POST: http://localhost:3001/api/users/sign-up
 router.post('/sign-up', async (req, res) => {
     try {
-        const { username, email, name, password ,avatar} = req.body
+        const { username, email, name, password, avatar } = req.body
         // hash password -------
         const hashpw = (password) ? await hashPassword(password) : null;
 
@@ -129,7 +129,7 @@ router.post("/login", async (req, res) => {
         // json web token ---------------
         // file .env : SCRET_KEY = <scret_key>
         const secret_key = process.env.SECRET_KEY
-        const token = jwt.sign({ user: { id: user.id, username: user.username } }, (secret_key) ? secret_key : "abcd-1234", { expiresIn: process.env.EXPIRED_TOKEN })
+        const token = jwt.sign({ user: { id: user.id, username: user.username, fullname: user.name } }, (secret_key) ? secret_key : "abcd-1234", { expiresIn: process.env.EXPIRED_TOKEN })
 
         return res.json({ success: true, message: `Login success!`, token: token })
     } catch (err) {
