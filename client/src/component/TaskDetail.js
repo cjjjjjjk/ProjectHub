@@ -4,32 +4,29 @@ import { DatePicker, Select, Modal } from "antd";
 import dayjs from "dayjs";
 import { GrNext } from "react-icons/gr";
 import { IoIosAddCircle } from "react-icons/io";
-import { CgFolderAdd } from "react-icons/cg";
-import {
-  FaCheck,
-  FaLessThanEqual,
-  FaSquareFontAwesomeStroke,
-} from "react-icons/fa6";
+import {FaCheck,} from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { useEffect } from "react";
 import ReportCard from "./Report";
+
 const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
+//dummy data fecth from backend
   const dummyData = [
     {
       username: "Achootrain",
       avatar: "https://i.imgur.com/VAhQIqV.png",
       description:
         "Project manager overseeing multiple teams for successful project execution.",
-      label: "Project Manager",
-      attachment: null,
+      label: "Work Summary Report",
+      attachment: "https://i.imgur",
     },
     {
       username: "Hai",
       avatar: "https://i.imgur.com/btiIFHP.png",
       description:
         "Senior software developer with expertise in backend systems and cloud computing.",
-      label: "Senior Developer",
+      label: "Daily Activity Log",
       attachment: null,
     },
     {
@@ -37,34 +34,36 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       avatar: "https://i.imgur.com/aJKfWLf.png",
       description:
         "Data analyst focusing on extracting insights from complex datasets to guide business decisions.",
-      label: "Data Analyst",
-      attachment: null,
+      label: "Team Performance Overview",
+      attachment: "https://i.imgur",
     },
     {
       username: "Viet",
       avatar: "https://i.imgur.com/padyuTG.png",
       description:
         "Quality assurance specialist dedicated to ensuring product excellence and reliability.",
-      label: "QA Specialist",
-      attachment: null,
+      label: "Operational Efficiency Report",
+      attachment: " https://i.imgur",
     },
     {
       username: "Tuan",
       avatar: "https://i.imgur.com/Sb3bqmw.png",
       description:
         "UI/UX designer crafting intuitive user experiences and engaging interfaces.",
-      label: "UI/UX Designer",
-      attachment: null,
+      label: "Resource Utilization Report",
+      attachment: " https://i.imgur",
     },
     {
       username: "Hieu",
       avatar: "https://i.imgur.com/Aoja6dx.png",
       description:
         "IT support specialist ensuring smooth operations and resolving technical issues efficiently.",
-      label: "IT Support Specialist",
-      attachment: null,
+      label: "Monthly Work Report",
+      attachment: " https://i.imgur",	
     },
   ];
+//------------------------------------------
+
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -98,26 +97,32 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
     }
   };
 
-  //Report
+ 
   const defaultReport = {
     username: "Truong",
     avatar: "https://i.imgur.com/aJKfWLf.png",
     description: null,
-    label: "Data Analyst",
-    attachment: null,
+    label: "",
+    attachment: "https://i.imgur",
   };
   const [showReport, setShowReport] = useState(false);
+
+  //send report to backend
   const handleShowReport = () => {
     setShowReport(!showReport);
   };
+  // report form
   const [selectedReport, setSelectedReport] = useState(null);
-  const [descriptionReport, setDescriptionReport] = useState();
-  const [attachment, setAttachment] = useState();
+  const [descriptionReport, setDescriptionReport] = useState("");
+  const [attachment, setAttachment] = useState("");
+  const [label, setLabel] = useState("");
+  //------------------------------------------------
+
+
+
+  
   const [checkReport, setCheckReport] = useState(false);
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setAttachment(file);
-  };
+  
 
   const [showDescription, setShowDescription] = useState(() => {
     if (description === null || description === "") return false;
@@ -304,6 +309,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       console.log(err);
     }
   };
+ 
 
   useEffect(() => {
     fetchTaskDetail();
@@ -341,6 +347,19 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
               </button>
               <GrNext />
               <button className=" text-blue-500">Report</button>
+              <GrNext />
+              <div className="inline-block bg-slate-200 rounded-md p-1">
+                    <div className="flex flex-row gap-x-2  ">
+                      <img
+                        src={selectedReport.avatar}
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full border-2 border-gray-300"
+                      />
+                      <h2 className=" font-bold text-gray-800 ">
+                        {selectedReport.username}
+                      </h2>
+                    </div>
+                  </div>
             </div>
           )}
         </div>
@@ -621,7 +640,8 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   <IoIosAddCircle className="text-3xl hover:opacity-60 text-blue-400  rounded-full" />
                 </button>
               </div>
-              <div className=" flex flex-col gap-y-4 overflow-x-auto h-[500px] pt-4">
+              <div className="pt-4">
+              <div className=" flex flex-col gap-y-4 overflow-y-auto max-h-96 ">
                 {dummyData.map((data, index) => (
                   <button
                     onClick={() => {
@@ -640,6 +660,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   </button>
                 ))}
               </div>
+              </div>
             </div>
           </div>
           <div className="flex justify-end mt-2">
@@ -655,10 +676,10 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
 
       {showReport && (
         <div className="h-[80vh] overflow-y-auto ">
-          <div className="h-full">
+          <div >
             {!checkReport ? (
-              <div className="h-full">
-                <div className=" p-4 relative h-full">
+              <div>
+                <div className=" p-4 flex flex-col">
                   <div className="flex flex-row gap-x-2 ">
                     <img
                       src={selectedReport.avatar}
@@ -666,44 +687,40 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                       className="w-10 h-10 rounded-full border-2 border-gray-300"
                     />
                     <div className="w-full">
-                      <h2 className="text-md font-bold text-gray-800">
+                      <h2 className="text-lg font-bold text-gray-800">
                         {selectedReport.username}
                       </h2>
-                      <div className="inline-block bg-blue-100 text-blue-600 text-xs font-medium rounded-md p-1">
-                        {selectedReport.label}
-                      </div>
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
-                        Description
+                        Label
+                      </h2>
+                      <textarea
+                        value={label}
+                        className=" pl-2 w-1/5 break-words bg-gray-100 h-8"
+                        placeholder="Short description"
+                        onChange={(e) => setLabel(e.target.value)}
+                      />
+                      <h2 className="text-lg mt-4 mb-1 font-semibold">
+                        Content
                       </h2>
                       <textarea
                         value={descriptionReport}
-                        className=" p-2 w-2/3 break-words h-36 bg-gray-100 rounded-md"
+                        className=" p-2 w-2/3 break-words h-36 bg-gray-100 "
                         placeholder="Write report here"
                         onChange={(e) => setDescriptionReport(e.target.value)}
                       />
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
                         Attachment
                       </h2>
-                      <input
-                        type="file"
-                        id="fileInput"
-                        className="hidden"
-                        onChange={handleFileChange}
+                      <textarea
+                        value={attachment}
+                        className=" p-2 w-1/3 h-10 break-words bg-gray-100 "
+                        placeholder="Link attachment here"
+                        onChange={(e) => setAttachment(e.target.value)}
                       />
-                      <label
-                        htmlFor="fileInput"
-                        className="inline-block cursor-pointer transition duration-300"
-                      >
-                        <CgFolderAdd className="text-2xl hover:text-yellow-500" />
-                      </label>
-                      {attachment && (
-                        <div className="mt-4 ">
-                          <p>{attachment.name}</p>
-                        </div>
-                      )}
-                      <p>{selectedReport.attachment}</p>
-                    </div>
+                    
+                    </div>  
                   </div>
+                 
                   <button
                     onClick={(e) => {
                       handleShowReport();
@@ -714,22 +731,16 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : 
+            (
               <div>
                 <div className=" p-4">
-                  <div className="flex flex-row gap-x-2 ">
-                    <img
-                      src={selectedReport.avatar}
-                      alt="User Avatar"
-                      className="w-10 h-10 rounded-full border-2 border-gray-300"
-                    />
-                    <div>
-                      <h2 className="text-md font-bold text-gray-800">
-                        {selectedReport.username}
-                      </h2>
-                      <div className="inline-block bg-blue-100 text-blue-600 text-xs font-medium rounded-md p-1">
+                  
+                    <div className="pt-8">  
+                      <div className="inline-block bg-blue-100 text-blue-600 font-medium rounded-md p-1">
                         {selectedReport.label}
                       </div>
+
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
                         Description
                       </h2>
@@ -737,11 +748,12 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                         {selectedReport.description}
                       </p>
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
-                        Attachment
+                        Attachment 
                       </h2>
-                      <p>{selectedReport.attachment}</p>
+                      <a  className="text-blue-500 hover:text-blue-300"href={selectedReport.attachment}>{selectedReport.attachment}</a>
                     </div>
-                  </div>
+                    
+               
                 </div>
               </div>
             )}

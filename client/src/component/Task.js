@@ -123,15 +123,7 @@ const Task = ({ item, index, deleteTask, checkManager,update }) => {
                     </span>
                   </p>
                 </div>
-                <button
-                  className="rounded-full bg-blue-200 object-cover h-7 w-7 mr-4"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    console.log("Clicked 2");
-                  }}
-                >
-                  <img></img>
-                </button>
+
               </div>
             </div>
           </div>
