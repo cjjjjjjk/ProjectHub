@@ -1,50 +1,38 @@
-// Not Started
-// Not Started
-// Not Started
 const express = require("express");
 const router = express.Router();
-const { TaskComments } = require("../models");
+const { TaskComments, Users } = require("../models");
+const { validateToken } = require('../middleware/auth')
 
-// Lấy danh sách tất cả các bình luận
-router.get("/", async (_req, res) => {
+// Get all comment from task with taskID --------- author: Hai
+router.get(`/comments-in-task`, async (req, res) => {
+  const { task_id } = req.query
   try {
-    const comments = await TaskComments.findAll();
-    res.json(comments);
-  } catch (error) {
-    console.error("Error fetching comments: ", error);
-    res.status(500).json({ error: "Internal server error" });
+    const comments = await TaskComments.findAll({
+      where: {
+        task_id
+      }
+    })
+    return res.json({ success: true, comments })
+  } catch (err) {
+    return res.json({ success: false, commentList: [], err })
   }
-});
-
-// Lấy một bình luận theo ID
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const comment = await TaskComments.findByPk(id);
-    if (comment) {
-      res.json(comment);
-    } else {
-      res.status(404).json({ error: "Comment not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching comment: ", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+})
 
 // Tạo một bình luận mới
-router.post("/", async (req, res) => {
-  const { task_id, user_id, comment } = req.body;
+// update:Hai ------- return with username.
+router.post("/", validateToken, async (req, res) => {
+  const { task_id, comment } = req.body;
+  const user_id = req.user['user'].id
+  const user_name = req.user['user'].fullname
   try {
     const newComment = await TaskComments.create({
       task_id,
       user_id,
       comment,
     });
-    res.status(201).json(newComment);
+    return res.status(201).json({ ...newComment.dataValues, name: user_name });
   } catch (error) {
-    console.error("Error creating comment: ", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error });
   }
 });
 
