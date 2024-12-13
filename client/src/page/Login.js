@@ -37,6 +37,7 @@ function Login() {
       // Login thành công
       if (res?.data?.success) {
         sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("userFullname", res.data.userFullName)
         navigate("/page/Profile");
       } else throw new Error("Login response err !");
     } catch (err) {

@@ -1,9 +1,7 @@
-// Not Started
-// Not Started
-// Not Started
 const express = require("express");
 const router = express.Router();
 const { Reports } = require("../models");
+const { validateToken } = require("../middleware/auth");
 
 // Lấy danh sách tất cả các báo cáo
 router.get("/", async (req, res) => {
@@ -32,15 +30,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Tạo một báo cáo mới
-router.post("/", async (req, res) => {
-  const { task_id, user_id, description, attachment } = req.body;
+// Create new Report  ==================== author: Hai
+router.post("/create", validateToken, async (req, res) => {
+  const user_id = req.user['user'].id
+  const { task_id, description, attachment, label } = req.body;
   try {
     const newReport = await Reports.create({
       task_id,
       user_id,
       description,
-      attachment,
+      attachment, label,
     });
     res.status(201).json(newReport);
   } catch (error) {

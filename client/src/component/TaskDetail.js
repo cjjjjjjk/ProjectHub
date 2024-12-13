@@ -4,14 +4,14 @@ import { DatePicker, Select, Modal } from "antd";
 import dayjs from "dayjs";
 import { GrNext } from "react-icons/gr";
 import { IoIosAddCircle } from "react-icons/io";
-import {FaCheck,} from "react-icons/fa6";
+import { FaCheck, } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { useEffect } from "react";
 import ReportCard from "./Report";
 
 const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
-//dummy data fecth from backend
+  //dummy data fecth from backend
   const dummyData = [
     {
       username: "Achootrain",
@@ -59,11 +59,10 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       description:
         "IT support specialist ensuring smooth operations and resolving technical issues efficiently.",
       label: "Monthly Work Report",
-      attachment: " https://i.imgur",	
+      attachment: " https://i.imgur",
     },
   ];
-//------------------------------------------
-
+  //------------------------------------------
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -72,6 +71,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
   const [priority, setPriority] = useState("");
   const [inputName, setInputName] = useState("");
   const token = sessionStorage.getItem("token");
+  const userFullname = sessionStorage.getItem('userFullname')
 
   const fetchTaskDetail = async function () {
     try {
@@ -97,9 +97,9 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
     }
   };
 
- 
+
   const defaultReport = {
-    username: "Truong",
+    username: userFullname,
     avatar: "https://i.imgur.com/aJKfWLf.png",
     description: null,
     label: "",
@@ -117,12 +117,27 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
   const [attachment, setAttachment] = useState("");
   const [label, setLabel] = useState("");
   //------------------------------------------------
+  // call api Create report to db ================= author: Hai
+  const CreateReport = async function () {
+    try {
+      const sendReport_res = await axios.post(`${process.env.REACT_APP_SERVER}/reports/create`,
+        {
+          task_id: item.id,
+          description: descriptionReport,
+          attachment,
+          label
+        }, { headers: { token } })
+      console.log('createReport:', sendReport_res)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 
 
-  
+
   const [checkReport, setCheckReport] = useState(false);
-  
+
 
   const [showDescription, setShowDescription] = useState(() => {
     if (description === null || description === "") return false;
@@ -140,7 +155,6 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       e.preventDefault(); // Ngăn xuống dòng trong textarea
       if (text.trim()) {
         // create comment -------------- author: Hai
-        const token = sessionStorage.getItem("token");
         try {
           const addCmt_res = await axios.post(
             `${process.env.REACT_APP_SERVER}/task_comments/`,
@@ -309,7 +323,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
       console.log(err);
     }
   };
- 
+
 
   useEffect(() => {
     fetchTaskDetail();
@@ -349,17 +363,17 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
               <button className=" text-blue-500">Report</button>
               <GrNext />
               <div className="inline-block bg-slate-200 rounded-md p-1">
-                    <div className="flex flex-row gap-x-2  ">
-                      <img
-                        src={selectedReport.avatar}
-                        alt="User Avatar"
-                        className="w-8 h-8 rounded-full border-2 border-gray-300"
-                      />
-                      <h2 className=" font-bold text-gray-800 ">
-                        {selectedReport.username}
-                      </h2>
-                    </div>
-                  </div>
+                <div className="flex flex-row gap-x-2  ">
+                  <img
+                    src={selectedReport.avatar}
+                    alt="User Avatar"
+                    className="w-8 h-8 rounded-full border-2 border-gray-300"
+                  />
+                  <h2 className=" font-bold text-gray-800 ">
+                    {selectedReport.username}
+                  </h2>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -641,25 +655,25 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                 </button>
               </div>
               <div className="pt-4">
-              <div className=" flex flex-col gap-y-4 overflow-y-auto max-h-96 ">
-                {dummyData.map((data, index) => (
-                  <button
-                    onClick={() => {
-                      setSelectedReport(data);
-                      setCheckReport(true);
-                      handleShowReport();
-                    }}
-                  >
-                    <ReportCard
-                      key={index}
-                      username={data.username}
-                      avatar={data.avatar}
-                      description={data.description}
-                      label={data.label}
-                    />
-                  </button>
-                ))}
-              </div>
+                <div className=" flex flex-col gap-y-4 overflow-y-auto max-h-96 ">
+                  {dummyData.map((data, index) => (
+                    <button
+                      onClick={() => {
+                        setSelectedReport(data);
+                        setCheckReport(true);
+                        handleShowReport();
+                      }}
+                    >
+                      <ReportCard
+                        key={index}
+                        username={data.username}
+                        avatar={data.avatar}
+                        description={data.description}
+                        label={data.label}
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -688,7 +702,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                     />
                     <div className="w-full">
                       <h2 className="text-lg font-bold text-gray-800">
-                        {selectedReport.username}
+                        {userFullname}
                       </h2>
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
                         Label
@@ -717,13 +731,14 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                         placeholder="Link attachment here"
                         onChange={(e) => setAttachment(e.target.value)}
                       />
-                    
-                    </div>  
+
+                    </div>
                   </div>
-                 
+
                   <button
                     onClick={(e) => {
                       handleShowReport();
+                      CreateReport()
                     }}
                     className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 absolute right-10 bottom-10 "
                   >
@@ -731,12 +746,12 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   </button>
                 </div>
               </div>
-            ) : 
-            (
-              <div>
-                <div className=" p-4">
-                  
-                    <div className="pt-8">  
+            ) :
+              (
+                <div>
+                  <div className=" p-4">
+
+                    <div className="pt-8">
                       <div className="inline-block bg-blue-100 text-blue-600 font-medium rounded-md p-1">
                         {selectedReport.label}
                       </div>
@@ -748,15 +763,15 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                         {selectedReport.description}
                       </p>
                       <h2 className="text-lg mt-4 mb-1 font-semibold">
-                        Attachment 
+                        Attachment
                       </h2>
-                      <a  className="text-blue-500 hover:text-blue-300"href={selectedReport.attachment}>{selectedReport.attachment}</a>
+                      <a className="text-blue-500 hover:text-blue-300" href={selectedReport.attachment}>{selectedReport.attachment}</a>
                     </div>
-                    
-               
+
+
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       )}
