@@ -3,7 +3,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { DatePicker, Select, Modal } from "antd";
 import dayjs from "dayjs";
 import { GrNext } from "react-icons/gr";
-import { IoIosAddCircle } from "react-icons/io";
+import { IoIosAddCircle, IoMdRefresh } from "react-icons/io";
 import { FaCheck, } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
@@ -128,6 +128,18 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
           label
         }, { headers: { token } })
       console.log('createReport:', sendReport_res)
+      fetchREports()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const [reportList, setReportList] = useState([])
+  const fetchREports = async function () {
+    try {
+      const fetchREport_res = await axios.get(`${process.env.REACT_APP_SERVER}/reports/get-reports`, {
+        params: { task_id: item.id }
+      })
+      setReportList(fetchREport_res.data.reports)
     } catch (err) {
       console.log(err)
     }
@@ -326,6 +338,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
 
 
   useEffect(() => {
+    fetchREports();
     fetchTaskDetail();
     FetchParticipants();
     fetMemberTask();
@@ -362,15 +375,15 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
               <GrNext />
               <button className=" text-blue-500">Report</button>
               <GrNext />
-              <div className="inline-block bg-slate-200 rounded-md p-1">
+              <div className="inline-block bg-slate-200 rounded-md pl-2 pr-4 py-1">
                 <div className="flex flex-row gap-x-2  ">
                   <img
-                    src={selectedReport.avatar}
+                    src={selectedReport.avatar ? selectedReport.avatar : "https://i.imgur.com/aJKfWLf.png"}
                     alt="User Avatar"
                     className="w-8 h-8 rounded-full border-2 border-gray-300"
                   />
                   <h2 className=" font-bold text-gray-800 ">
-                    {selectedReport.username}
+                    {joinedFromBackend.find((item) => item.id == selectedReport.user_id)?.name || selectedReport.username}
                   </h2>
                 </div>
               </div>
@@ -653,10 +666,17 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                 >
                   <IoIosAddCircle className="text-3xl hover:opacity-60 text-blue-400  rounded-full" />
                 </button>
+                <button
+                  onClick={() => {
+                    fetchREports()
+                  }}
+                  className="">
+                  <IoMdRefresh className="text-3xl hover:opacity-60 text-blue-400 rounded-full" />
+                </button>
               </div>
               <div className="pt-4">
                 <div className=" flex flex-col gap-y-4 overflow-y-auto max-h-96 ">
-                  {dummyData.map((data, index) => (
+                  {reportList.map((data, index) => (
                     <button
                       onClick={() => {
                         setSelectedReport(data);
@@ -666,7 +686,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                     >
                       <ReportCard
                         key={index}
-                        username={data.username}
+                        username={joinedFromBackend.find((item) => item.id == data.user_id)?.name || "Member"}
                         avatar={data.avatar}
                         description={data.description}
                         label={data.label}
@@ -700,7 +720,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                       alt="User Avatar"
                       className="w-10 h-10 rounded-full border-2 border-gray-300"
                     />
-                    <div className="w-full">
+                    <div className="w-full mt-2">
                       <h2 className="text-lg font-bold text-gray-800">
                         {userFullname}
                       </h2>
@@ -709,7 +729,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                       </h2>
                       <textarea
                         value={label}
-                        className=" pl-2 w-1/5 break-words bg-gray-100 h-8"
+                        className=" pl-2 w-1/2 break-words bg-gray-100 h-8"
                         placeholder="Short description"
                         onChange={(e) => setLabel(e.target.value)}
                       />
@@ -738,7 +758,7 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                   <button
                     onClick={(e) => {
                       handleShowReport();
-                      CreateReport()
+                      CreateReport();
                     }}
                     className="p-2 w-24 border-2 bg-blue-500 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500 absolute right-10 bottom-10 "
                   >

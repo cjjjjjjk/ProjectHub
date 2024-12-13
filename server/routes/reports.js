@@ -14,22 +14,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Lấy một báo cáo theo ID
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
+// Get reports list by task id
+router.get(`/get-reports`, async (req, res) => {
+  const { task_id } = req.query
   try {
-    const report = await Reports.findByPk(id);
-    if (report) {
-      res.json(report);
-    } else {
-      res.status(404).json({ error: "Report not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching report: ", error);
-    res.status(500).json({ error: "Internal server error" });
+    const reports = await Reports.findAll({ where: { task_id } })
+    return res.json({ success: true, reports })
+  } catch (err) {
+    return res.json({ success: false, reports: [], Err_message: err })
   }
-});
-
+})
 // Create new Report  ==================== author: Hai
 router.post("/create", validateToken, async (req, res) => {
   const user_id = req.user['user'].id
@@ -48,27 +42,6 @@ router.post("/create", validateToken, async (req, res) => {
   }
 });
 
-// Cập nhật một báo cáo theo ID
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { task_id, user_id, description, attachment } = req.body;
-  try {
-    const report = await Reports.findByPk(id);
-    if (report) {
-      report.task_id = task_id;
-      report.user_id = user_id;
-      report.description = description;
-      report.attachment = attachment;
-      await report.save();
-      res.json(report);
-    } else {
-      res.status(404).json({ error: "Report not found" });
-    }
-  } catch (error) {
-    console.error("Error updating report: ", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 // Xóa một báo cáo theo ID
 router.delete("/:id", async (req, res) => {
