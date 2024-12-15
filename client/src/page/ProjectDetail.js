@@ -125,7 +125,7 @@ function ProjectDetail() {
                 <span>Timeline</span>
               </button>
             </li>
-            <div>
+            {checkManager&&(<div>
             <button
                 className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showManage && "bg-blue-200"
                   }`}
@@ -134,7 +134,7 @@ function ProjectDetail() {
                 <AiFillDatabase className="text-2xl" />
                 <span>Manage</span>
               </button>
-            </div>
+            </div>)}
             <li>
               <button
                 className={`p-2 w-full rounded-lg flex items-center gap-2 border-2 border-transparent  hover:bg-blue-300 ${showSetting && "bg-blue-200"
@@ -160,7 +160,7 @@ function ProjectDetail() {
         )}
         {showTimeline && <Timeline project_id={id} />}
         {showSetting && <ProjectSetting checkManager={checkManager} id={id} project_data={project_data} />}
-        {showManage && <Manage task={tasks} project_id={id}/>}
+        {showManage &&checkManager&&( <Manage task={tasks} project_id={id}/>)}
        
       </div>
     </div>
