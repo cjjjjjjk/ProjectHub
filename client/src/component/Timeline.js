@@ -53,14 +53,14 @@ function Timeline({ project_id }) {
     const sortedTasks = [...tasks].sort((a, b) =>
       priorityOrder[a.priority] - priorityOrder[b.priority]
     );
-
+    console.log(tasks)
     const data = sortedTasks.map((item, index) => {
       return {
         id: index,
         label: {
           icon: "",
           title: `Task ${index + 1}`,
-          subtitle: `${item.name}\nPriority: ${item.priority}`,
+          subtitle: `${item.name}`,
         },
         data: [
           {
@@ -69,7 +69,7 @@ function Timeline({ project_id }) {
             endDate: new Date(item.end_date),
             title: item.name,
             subtitle: item.description,
-            bgColor: item.priority === "high" ? "#f84c3b" : item.priority === "medium" ? "#ffcc00" : "#02e585",
+            bgColor: item.priority === "1" ? "#f84c3b" : item.priority === "2" ? "#ffcc00" : "#02e585",
             priority: item.priority,
           },
         ],
@@ -121,7 +121,7 @@ function Timeline({ project_id }) {
   };
 
   return (
-    <section className="h-[95%]  relative top-2 rounded-md border-2 border-gray-200">
+    <section className="h-[99%]  relative top-2 rounded-md border-2 border-gray-200">
       <Scheduler
         data={data} // Sử dụng state data thay vì filteredData  
         isLoading={false}

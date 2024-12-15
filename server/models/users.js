@@ -122,6 +122,10 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models["JoinRequests"], {
             foreignKey: "user_id",
         })
+        // report association -----------------------
+        Users.hasMany(models["Reports"], {
+            foreignKey: 'user_id',
+        });
     }
     // ===============================================
 

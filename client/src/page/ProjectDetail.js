@@ -160,7 +160,7 @@ function ProjectDetail() {
         )}
         {showTimeline && <Timeline project_id={id} />}
         {showSetting && <ProjectSetting checkManager={checkManager} id={id} project_data={project_data} />}
-        {showManage && <Manage task={tasks} model={project_data.model}/>}
+        {showManage && <Manage task={tasks} project_id={id}/>}
        
       </div>
     </div>

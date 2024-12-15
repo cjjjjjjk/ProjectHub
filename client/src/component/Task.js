@@ -1,5 +1,5 @@
 import { Draggable } from "react-beautiful-dnd";
-import { Select, Modal, Form, Button, DatePicker, Input, Dropdown } from "antd";
+import { Dropdown } from "antd";
 import { useState } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import TaskDetail from "./TaskDetail";
@@ -116,7 +116,6 @@ const Task = ({ item, index, deleteTask, checkManager,update }) => {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
-
                             })
                             .replace(",", "")
                         : ""}
@@ -132,7 +131,7 @@ const Task = ({ item, index, deleteTask, checkManager,update }) => {
       {openTaskDetail && (
         <TaskDetail
           item={item}
-         
+        
           close={() => {
             setOpenTaskDetail(false);
           }}

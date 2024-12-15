@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Reports } = require("../models");
+const { Reports,Tasks,Projects,Users} = require("../models");
 const { validateToken } = require("../middleware/auth");
 
 // Lấy danh sách tất cả các báo cáo
@@ -42,6 +42,33 @@ router.post("/create", validateToken, async (req, res) => {
   }
 });
 
+router.get("/allReport", validateToken,async (req, res) => {
+  const { project_id } = req.query;
+  const reports = await Reports.findAll({
+    include: [
+      {
+        model: Tasks,
+        attributes: [], // Exclude Task fields
+        required: true,
+        include: [
+          {
+            model: Projects,
+            attributes: [], // Exclude Project fields
+            required: true,
+            where: { id: project_id }, // Filter by project_id
+          },
+        ],
+      },
+      {
+        model: Users, // Include Users table
+        required: true, // Ensures the join happens on Reports.user_id
+      },
+    ],
+    attributes: ['id', 'description', 'label', 'attachment'], // Only select fields from Reports
+  });
+  res.json(reports);
+
+});
 
 // Xóa một báo cáo theo ID
 router.delete("/:id", async (req, res) => {

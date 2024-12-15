@@ -12,57 +12,6 @@ import ReportCard from "./Report";
 
 const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
   //dummy data fecth from backend
-  const dummyData = [
-    {
-      username: "Achootrain",
-      avatar: "https://i.imgur.com/VAhQIqV.png",
-      description:
-        "Project manager overseeing multiple teams for successful project execution.",
-      label: "Work Summary Report",
-      attachment: "https://i.imgur",
-    },
-    {
-      username: "Hai",
-      avatar: "https://i.imgur.com/btiIFHP.png",
-      description:
-        "Senior software developer with expertise in backend systems and cloud computing.",
-      label: "Daily Activity Log",
-      attachment: null,
-    },
-    {
-      username: "Truong",
-      avatar: "https://i.imgur.com/aJKfWLf.png",
-      description:
-        "Data analyst focusing on extracting insights from complex datasets to guide business decisions.",
-      label: "Team Performance Overview",
-      attachment: "https://i.imgur",
-    },
-    {
-      username: "Viet",
-      avatar: "https://i.imgur.com/padyuTG.png",
-      description:
-        "Quality assurance specialist dedicated to ensuring product excellence and reliability.",
-      label: "Operational Efficiency Report",
-      attachment: " https://i.imgur",
-    },
-    {
-      username: "Tuan",
-      avatar: "https://i.imgur.com/Sb3bqmw.png",
-      description:
-        "UI/UX designer crafting intuitive user experiences and engaging interfaces.",
-      label: "Resource Utilization Report",
-      attachment: " https://i.imgur",
-    },
-    {
-      username: "Hieu",
-      avatar: "https://i.imgur.com/Aoja6dx.png",
-      description:
-        "IT support specialist ensuring smooth operations and resolving technical issues efficiently.",
-      label: "Monthly Work Report",
-      attachment: " https://i.imgur",
-    },
-  ];
-  //------------------------------------------
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -127,7 +76,6 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
           attachment,
           label
         }, { headers: { token } })
-      console.log('createReport:', sendReport_res)
       fetchREports()
     } catch (err) {
       console.log(err)
@@ -284,7 +232,6 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
     }
   };
   const SaveAssign_handle = function () {
-    console.log(assignMap);
     for (const user_id in assignMap) {
       if (assignMap[user_id] === true) {
         AssignTask(user_id);
@@ -486,36 +433,32 @@ const TaskDetail = ({ item, checkManager, close, isOpen, update1 }) => {
                     </div>
                   )}
                 </div>
-
+             
                 {/* Start date */}
                 <div className="flex gap-10 mt-10">
                   <div className="">
                     <h3 className="font-semibold text-black">Start date</h3>
                     <DatePicker
-                      defaultValue={
-                        startDate !== null ? dayjs(startDate, "YYYY-MM-YY") : ""
-                      }
+                      defaultValue={startDate ? dayjs(startDate) : null}
                       format={"DD/MM/YYYY"}
                       onChange={(value) => {
-                        setStartDate(value.toDate());
+                        setStartDate(value ? value.toDate() : null); // Convert dayjs to JS Date
                       }}
                       disabled={!checkManager}
-                      allowClear={false} //
+                      allowClear={false}
                     />
                   </div>
 
                   <div className="">
                     <h3 className="font-semibold text-black">End date</h3>
                     <DatePicker
-                      defaultValue={
-                        endDate !== null ? dayjs(endDate, "YYYY-MM-YY") : ""
-                      }
+                      defaultValue={endDate ? dayjs(endDate) : null}
                       format={"DD/MM/YYYY"}
                       onChange={(value) => {
-                        setEndDate(value.toDate());
+                        setEndDate(value ? value.toDate() : null); // Convert dayjs to JS Date
                       }}
                       disabled={!checkManager}
-                      allowClear={false} //
+                      allowClear={false}
                     />
                   </div>
                 </div>

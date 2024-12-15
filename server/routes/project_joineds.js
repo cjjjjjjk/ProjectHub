@@ -31,6 +31,30 @@ router.get("/participants", validateToken, async (req, res) => {
         });
     }
 })
+router.get("/joiner", validateToken, async (req, res) => {
+    const { project_id } = req.query
+    try {
+        const joineds_Projects = await ProjectJoineds.findAll({
+            where: {
+              project_id: project_id
+            },
+            include: [{
+              model: Users, // User model
+              required: true, // INNER JOIN
+            }],
+            attributes: []  // Exclude fields from the ProjectJoineds table
+
+          });
+
+        res.json(joineds_Projects )
+    
+    } catch (err) {
+        return res.status(err.status || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
+})
 
 // Joined a project with project_id  ================================== author: Hai
 // logined user -<join>--> project ------------------------------------------------
